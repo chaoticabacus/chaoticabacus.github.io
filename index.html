@@ -1,0 +1,885 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kern Hendricks — Documentary Filmmaker & Journalist</title>
+  <meta name="description" content="Documentary filmmaker, photojournalist and humanitarian analyst. Work published by Al Jazeera, Scientific American, DW Documentary, Foreign Policy, Undark.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Suisse+Int%27l:wght@300;400&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+  <!-- Fallback for Suisse Intl -->
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@200;300;400&family=DM+Mono:ital,wght@0,300;1,300&display=swap" rel="stylesheet">
+
+  <style>
+    /* ── TOKENS ── */
+    :root {
+      --bg:        #0a0a08;
+      --bg-2:      #111110;
+      --bg-3:      #1a1a17;
+      --surface:   #1e1e1a;
+      --border:    rgba(255,255,255,0.07);
+      --border-hi: rgba(255,255,255,0.15);
+      --text:      #e8e4dc;
+      --text-dim:  #7a7870;
+      --text-mid:  #b0aca4;
+      --accent:    #c8a96e;
+      --accent-dim:#7a6540;
+      --red:       #b85c4a;
+
+      --font-display: 'Cormorant Garamond', Georgia, serif;
+      --font-body:    'DM Sans', 'Helvetica Neue', sans-serif;
+      --font-mono:    'DM Mono', 'Courier New', monospace;
+
+      --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+      --ease-in-out:   cubic-bezier(0.65, 0, 0.35, 1);
+    }
+
+    /* ── RESET ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-body);
+      font-weight: 300;
+      font-size: 15px;
+      line-height: 1.7;
+      overflow-x: hidden;
+      cursor: none;
+    }
+    a { color: inherit; text-decoration: none; }
+    img { display: block; width: 100%; }
+
+    /* ── CUSTOM CURSOR ── */
+    .cursor {
+      position: fixed;
+      top: 0; left: 0;
+      width: 8px; height: 8px;
+      background: var(--accent);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%, -50%);
+      transition: width 0.2s, height 0.2s, background 0.2s;
+      mix-blend-mode: difference;
+    }
+    .cursor.expand {
+      width: 40px; height: 40px;
+      background: rgba(200,169,110,0.15);
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 24px 48px;
+      mix-blend-mode: normal;
+    }
+    nav::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom, rgba(10,10,8,0.9) 0%, transparent 100%);
+      pointer-events: none;
+    }
+    .nav-logo {
+      font-family: var(--font-display);
+      font-size: 18px;
+      font-weight: 300;
+      letter-spacing: 0.08em;
+      color: var(--text);
+      position: relative;
+      z-index: 1;
+    }
+    .nav-links {
+      display: flex;
+      gap: 40px;
+      list-style: none;
+      position: relative;
+      z-index: 1;
+    }
+    .nav-links a {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      transition: color 0.3s;
+    }
+    .nav-links a:hover { color: var(--accent); }
+
+    /* ── HERO ── */
+    #hero {
+      position: relative;
+      height: 100vh;
+      min-height: 600px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    /* YouTube embed as background */
+    .reel-bg {
+      position: absolute;
+      inset: -10%;
+      pointer-events: none;
+      z-index: 0;
+    }
+    .reel-bg iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      opacity: 0.35;
+      filter: saturate(0.4) brightness(0.6);
+    }
+
+    /* Grain overlay */
+    .grain {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      opacity: 0.04;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+      background-size: 200px;
+    }
+
+    .hero-vignette {
+      position: absolute;
+      inset: 0;
+      z-index: 2;
+      background:
+        radial-gradient(ellipse 80% 60% at 50% 50%, transparent 30%, rgba(10,10,8,0.7) 100%),
+        linear-gradient(to bottom, rgba(10,10,8,0.5) 0%, transparent 20%, transparent 70%, rgba(10,10,8,0.95) 100%);
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 3;
+      text-align: center;
+      padding: 0 24px;
+    }
+
+    .hero-eyebrow {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 28px;
+      opacity: 0;
+      animation: fadeUp 1s var(--ease-out-expo) 0.3s forwards;
+    }
+
+    .hero-name {
+      font-family: var(--font-display);
+      font-size: clamp(64px, 9vw, 130px);
+      font-weight: 300;
+      line-height: 0.92;
+      letter-spacing: -0.01em;
+      color: var(--text);
+      margin-bottom: 32px;
+      opacity: 0;
+      animation: fadeUp 1.2s var(--ease-out-expo) 0.5s forwards;
+    }
+    .hero-name em {
+      font-style: italic;
+      color: var(--text-mid);
+    }
+
+    .hero-descriptor {
+      font-family: var(--font-body);
+      font-size: 13px;
+      font-weight: 300;
+      letter-spacing: 0.06em;
+      color: var(--text-mid);
+      margin-bottom: 56px;
+      opacity: 0;
+      animation: fadeUp 1s var(--ease-out-expo) 0.7s forwards;
+    }
+    .hero-descriptor span {
+      color: var(--text-dim);
+      margin: 0 10px;
+    }
+
+    .hero-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--accent);
+      border: 1px solid var(--accent-dim);
+      padding: 14px 32px;
+      transition: all 0.35s var(--ease-out-expo);
+      opacity: 0;
+      animation: fadeUp 1s var(--ease-out-expo) 0.9s forwards;
+    }
+    .hero-cta:hover {
+      background: var(--accent);
+      color: var(--bg);
+      border-color: var(--accent);
+      gap: 20px;
+    }
+    .hero-cta svg { transition: transform 0.3s; }
+    .hero-cta:hover svg { transform: translateX(4px); }
+
+    .scroll-indicator {
+      position: absolute;
+      bottom: 36px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 3;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      opacity: 0;
+      animation: fadeIn 1s ease 1.4s forwards;
+    }
+    .scroll-indicator span {
+      font-family: var(--font-mono);
+      font-size: 9px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+    }
+    .scroll-line {
+      width: 1px;
+      height: 40px;
+      background: linear-gradient(to bottom, var(--accent-dim), transparent);
+      animation: scrollPulse 2s ease infinite;
+    }
+
+    /* ── SECTIONS SHARED ── */
+    section {
+      padding: 120px 48px;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .section-label {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 64px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .section-label::after {
+      content: '';
+      flex: 1;
+      max-width: 60px;
+      height: 1px;
+      background: var(--accent-dim);
+    }
+
+    /* ── WORK GRID ── */
+    #work { padding-top: 80px; }
+
+    .work-grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 2px;
+    }
+
+    .work-item {
+      position: relative;
+      overflow: hidden;
+      background: var(--bg-3);
+      cursor: none;
+    }
+
+    /* Asymmetric layout */
+    .work-item:nth-child(1) { grid-column: span 7; grid-row: span 2; }
+    .work-item:nth-child(2) { grid-column: span 5; }
+    .work-item:nth-child(3) { grid-column: span 5; }
+    .work-item:nth-child(4) { grid-column: span 4; }
+    .work-item:nth-child(5) { grid-column: span 8; }
+
+    .work-thumb {
+      aspect-ratio: 16/9;
+      width: 100%;
+      height: 100%;
+      position: relative;
+    }
+    .work-item:nth-child(1) .work-thumb { aspect-ratio: unset; height: 100%; min-height: 460px; }
+
+    .work-thumb iframe {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      border: none;
+      pointer-events: none;
+      filter: saturate(0.7) brightness(0.75);
+      transform: scale(1.05);
+      transition: filter 0.6s var(--ease-out-expo), transform 0.6s var(--ease-out-expo);
+    }
+    .work-item:hover .work-thumb iframe {
+      filter: saturate(0.9) brightness(0.9);
+      transform: scale(1.08);
+    }
+
+    .work-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(10,10,8,0.92) 0%, rgba(10,10,8,0.3) 50%, transparent 100%);
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 28px;
+      transition: background 0.4s;
+    }
+    .work-item:hover .work-overlay {
+      background: linear-gradient(to top, rgba(10,10,8,0.97) 0%, rgba(10,10,8,0.5) 60%, rgba(10,10,8,0.1) 100%);
+    }
+
+    .work-outlet {
+      font-family: var(--font-mono);
+      font-size: 9px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 6px;
+    }
+
+    .work-title {
+      font-family: var(--font-display);
+      font-size: clamp(16px, 1.6vw, 22px);
+      font-weight: 400;
+      line-height: 1.2;
+      color: var(--text);
+      margin-bottom: 10px;
+    }
+
+    .work-role {
+      font-size: 11px;
+      color: var(--text-dim);
+      font-weight: 300;
+      transform: translateY(8px);
+      opacity: 0;
+      transition: all 0.35s var(--ease-out-expo);
+    }
+    .work-item:hover .work-role { opacity: 1; transform: translateY(0); }
+
+    .work-play {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0.85);
+      width: 56px; height: 56px;
+      border: 1px solid rgba(200,169,110,0.4);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: all 0.35s var(--ease-out-expo);
+      pointer-events: none;
+    }
+    .work-play svg { margin-left: 3px; }
+    .work-item:hover .work-play {
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(1);
+    }
+
+    .work-link {
+      position: absolute;
+      inset: 0;
+      z-index: 10;
+    }
+
+    /* ── ABOUT ── */
+    #about {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: start;
+      border-top: 1px solid var(--border);
+    }
+
+    .about-left { position: sticky; top: 120px; }
+
+    .about-heading {
+      font-family: var(--font-display);
+      font-size: clamp(42px, 5vw, 72px);
+      font-weight: 300;
+      line-height: 1.05;
+      color: var(--text);
+      margin-bottom: 32px;
+    }
+    .about-heading em {
+      font-style: italic;
+      color: var(--text-mid);
+      display: block;
+    }
+
+    .about-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 32px;
+    }
+    .tag {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      border: 1px solid var(--border);
+      padding: 6px 14px;
+      transition: all 0.3s;
+    }
+    .tag:hover { border-color: var(--accent-dim); color: var(--accent); }
+
+    .about-right { padding-top: 8px; }
+
+    .about-body {
+      font-size: 15px;
+      font-weight: 300;
+      line-height: 1.85;
+      color: var(--text-mid);
+      margin-bottom: 24px;
+    }
+    .about-body strong {
+      color: var(--text);
+      font-weight: 400;
+    }
+
+    .about-publications {
+      margin-top: 48px;
+      padding-top: 40px;
+      border-top: 1px solid var(--border);
+    }
+    .about-publications h3 {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 20px;
+    }
+    .pub-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px 20px;
+    }
+    .pub-list span {
+      font-family: var(--font-display);
+      font-size: 15px;
+      font-style: italic;
+      color: var(--text-mid);
+    }
+
+    /* ── CONTACT ── */
+    #contact {
+      border-top: 1px solid var(--border);
+      text-align: center;
+    }
+
+    .contact-heading {
+      font-family: var(--font-display);
+      font-size: clamp(48px, 7vw, 100px);
+      font-weight: 300;
+      line-height: 0.95;
+      color: var(--text);
+      margin-bottom: 16px;
+      letter-spacing: -0.02em;
+    }
+    .contact-heading em {
+      font-style: italic;
+      color: var(--text-mid);
+    }
+
+    .contact-sub {
+      font-size: 13px;
+      color: var(--text-dim);
+      font-weight: 300;
+      margin-bottom: 56px;
+      letter-spacing: 0.04em;
+    }
+
+    .contact-links {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 48px;
+      flex-wrap: wrap;
+    }
+
+    .contact-link {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.3s;
+    }
+    .contact-link-label {
+      font-family: var(--font-mono);
+      font-size: 9px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+    }
+    .contact-link-value {
+      font-family: var(--font-display);
+      font-size: 17px;
+      font-style: italic;
+      color: var(--text-mid);
+      transition: color 0.3s;
+    }
+    .contact-link:hover .contact-link-value { color: var(--accent); }
+
+    /* ── FOOTER ── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 32px 48px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    footer p {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      color: var(--text-dim);
+    }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+    @keyframes scrollPulse {
+      0%, 100% { opacity: 0.3; transform: scaleY(1); }
+      50%       { opacity: 1;   transform: scaleY(1.2); }
+    }
+
+    /* Reveal on scroll */
+    .reveal {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 0.9s var(--ease-out-expo), transform 0.9s var(--ease-out-expo);
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.3s; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      nav { padding: 20px 24px; }
+      .nav-links { gap: 24px; }
+      section { padding: 80px 24px; }
+
+      .work-item:nth-child(1) { grid-column: span 12; }
+      .work-item:nth-child(2) { grid-column: span 12; }
+      .work-item:nth-child(3) { grid-column: span 12; }
+      .work-item:nth-child(4) { grid-column: span 12; }
+      .work-item:nth-child(5) { grid-column: span 12; }
+
+      #about { grid-template-columns: 1fr; gap: 48px; }
+      .about-left { position: static; }
+
+      footer { flex-direction: column; gap: 12px; text-align: center; }
+    }
+
+    @media (max-width: 600px) {
+      .nav-links { display: none; }
+      .hero-name { font-size: 52px; }
+      .contact-links { gap: 32px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Custom cursor -->
+  <div class="cursor" id="cursor"></div>
+
+  <!-- Navigation -->
+  <nav>
+    <a href="#" class="nav-logo">Kern Hendricks</a>
+    <ul class="nav-links">
+      <li><a href="#work">Work</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- ── HERO ── -->
+  <section id="hero">
+    <!-- Showreel as background -->
+    <div class="reel-bg">
+      <iframe
+        src="https://www.youtube.com/embed/aoZN04k0Y5A?autoplay=1&mute=1&loop=1&playlist=aoZN04k0Y5A&controls=0&showinfo=0&rel=0&modestbranding=1&playsinline=1&enablejsapi=0"
+        allow="autoplay; encrypted-media"
+        allowfullscreen>
+      </iframe>
+    </div>
+
+    <div class="grain"></div>
+    <div class="hero-vignette"></div>
+
+    <div class="hero-content">
+      <p class="hero-eyebrow">Documentary Filmmaker &amp; Journalist</p>
+      <h1 class="hero-name">Kern<br><em>Hendricks</em></h1>
+      <p class="hero-descriptor">
+        Afghanistan <span>·</span> Ukraine <span>·</span> Palestine <span>·</span> Lebanon
+      </p>
+      <a href="#work" class="hero-cta">
+        View Work
+        <svg width="14" height="10" viewBox="0 0 14 10" fill="none">
+          <path d="M1 5h12M9 1l4 4-4 4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+        </svg>
+      </a>
+    </div>
+
+    <div class="scroll-indicator">
+      <div class="scroll-line"></div>
+      <span>Scroll</span>
+    </div>
+  </section>
+
+  <!-- ── WORK ── -->
+  <section id="work">
+    <p class="section-label reveal">Selected Work</p>
+
+    <div class="work-grid">
+
+      <!-- 1: Showreel — large featured -->
+      <div class="work-item reveal">
+        <div class="work-thumb">
+          <iframe
+            src="https://www.youtube.com/embed/aoZN04k0Y5A?mute=1&controls=0&showinfo=0&rel=0&modestbranding=1&playsinline=1"
+            allow="encrypted-media" allowfullscreen loading="lazy">
+          </iframe>
+        </div>
+        <div class="work-overlay">
+          <p class="work-outlet">2025 Showreel</p>
+          <h3 class="work-title">Cinematography Showreel</h3>
+          <p class="work-role">DoP · Editor · Producer</p>
+        </div>
+        <div class="work-play">
+          <svg width="16" height="18" viewBox="0 0 16 18" fill="none">
+            <path d="M1 1l14 8L1 17V1z" stroke="var(--accent)" stroke-width="1.2" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <a href="https://youtu.be/aoZN04k0Y5A" target="_blank" rel="noopener" class="work-link" aria-label="Cinematography Showreel"></a>
+      </div>
+
+      <!-- 2 -->
+      <div class="work-item reveal reveal-delay-1">
+        <div class="work-thumb">
+          <iframe
+            src="https://www.youtube.com/embed/f2q9bI3O-Sc?mute=1&controls=0&showinfo=0&rel=0&modestbranding=1&playsinline=1"
+            allow="encrypted-media" allowfullscreen loading="lazy">
+          </iframe>
+        </div>
+        <div class="work-overlay">
+          <p class="work-outlet">DW Documentary</p>
+          <h3 class="work-title">Arriving in Europe: How Refugees Deal With Their Trauma</h3>
+          <p class="work-role">DoP · Producer · Editor</p>
+        </div>
+        <div class="work-play">
+          <svg width="16" height="18" viewBox="0 0 16 18" fill="none">
+            <path d="M1 1l14 8L1 17V1z" stroke="var(--accent)" stroke-width="1.2" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <a href="https://youtu.be/f2q9bI3O-Sc" target="_blank" rel="noopener" class="work-link" aria-label="DW Documentary: Arriving in Europe"></a>
+      </div>
+
+      <!-- 3 -->
+      <div class="work-item reveal reveal-delay-2">
+        <div class="work-thumb">
+          <iframe
+            src="https://www.youtube.com/embed/hwDByBSuK60?mute=1&controls=0&showinfo=0&rel=0&modestbranding=1&playsinline=1"
+            allow="encrypted-media" allowfullscreen loading="lazy">
+          </iframe>
+        </div>
+        <div class="work-overlay">
+          <p class="work-outlet">Undark</p>
+          <h3 class="work-title">A Mental Health Crisis in the West Bank</h3>
+          <p class="work-role">DoP · Producer · Editor</p>
+        </div>
+        <div class="work-play">
+          <svg width="16" height="18" viewBox="0 0 16 18" fill="none">
+            <path d="M1 1l14 8L1 17V1z" stroke="var(--accent)" stroke-width="1.2" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <a href="https://youtu.be/hwDByBSuK60" target="_blank" rel="noopener" class="work-link" aria-label="A Mental Health Crisis in the West Bank"></a>
+      </div>
+
+      <!-- 4 -->
+      <div class="work-item reveal reveal-delay-1">
+        <div class="work-thumb">
+          <iframe
+            src="https://www.youtube.com/embed/sIFpTlGrddY?mute=1&controls=0&showinfo=0&rel=0&modestbranding=1&playsinline=1"
+            allow="encrypted-media" allowfullscreen loading="lazy">
+          </iframe>
+        </div>
+        <div class="work-overlay">
+          <p class="work-outlet">Field Report</p>
+          <h3 class="work-title">The Toll of Settler Violence in the West Bank</h3>
+          <p class="work-role">DoP · Producer · Editor</p>
+        </div>
+        <div class="work-play">
+          <svg width="16" height="18" viewBox="0 0 16 18" fill="none">
+            <path d="M1 1l14 8L1 17V1z" stroke="var(--accent)" stroke-width="1.2" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <a href="https://youtu.be/sIFpTlGrddY" target="_blank" rel="noopener" class="work-link" aria-label="The Toll of Settler Violence in the West Bank"></a>
+      </div>
+
+      <!-- 5 -->
+      <div class="work-item reveal reveal-delay-2">
+        <div class="work-thumb">
+          <iframe
+            src="https://www.youtube.com/embed/vGo0Xzw0YpU?mute=1&controls=0&showinfo=0&rel=0&modestbranding=1&playsinline=1"
+            allow="encrypted-media" allowfullscreen loading="lazy">
+          </iframe>
+        </div>
+        <div class="work-overlay">
+          <p class="work-outlet">Scientific American</p>
+          <h3 class="work-title">In War-Torn Ukraine, a Doctor Evacuates Children with Cancer</h3>
+          <p class="work-role">DoP · Producer</p>
+        </div>
+        <div class="work-play">
+          <svg width="16" height="18" viewBox="0 0 16 18" fill="none">
+            <path d="M1 1l14 8L1 17V1z" stroke="var(--accent)" stroke-width="1.2" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <a href="https://youtu.be/vGo0Xzw0YpU" target="_blank" rel="noopener" class="work-link" aria-label="In War-Torn Ukraine: Doctor Evacuates Children with Cancer"></a>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ── ABOUT ── -->
+  <section id="about">
+    <div class="about-left reveal">
+      <div class="section-label">About</div>
+      <h2 class="about-heading">Telling<br>stories <em>that<br>matter.</em></h2>
+      <div class="about-tags">
+        <span class="tag">Documentary Film</span>
+        <span class="tag">Photojournalism</span>
+        <span class="tag">Conflict Analysis</span>
+        <span class="tag">Humanitarian</span>
+        <span class="tag">OSINT</span>
+        <span class="tag">Pulitzer Center</span>
+      </div>
+    </div>
+
+    <div class="about-right">
+      <p class="about-body reveal">
+        I'm a <strong>documentary filmmaker, photojournalist, and humanitarian analyst</strong> based in London, with over a decade of field experience covering conflict, displacement, and human rights crises across Afghanistan, Ukraine, Palestine, Lebanon, and Europe.
+      </p>
+      <p class="about-body reveal reveal-delay-1">
+        My work has been published and broadcast by <strong>Al Jazeera, Scientific American, DW Documentary, Foreign Policy, Undark, The New Humanitarian,</strong> and others. I am a <strong>Pulitzer Center Crisis Reporting grant recipient</strong>.
+      </p>
+      <p class="about-body reveal reveal-delay-2">
+        Beyond filmmaking, I work as a conflict analyst and humanitarian adviser — with roles at <strong>Mercy Corps, INSO Afghanistan, and Safer Yemen</strong> — bringing an analytical depth to my storytelling that goes beyond the image.
+      </p>
+      <p class="about-body reveal reveal-delay-3">
+        I operate across the full production pipeline: scripting, solo field production, sound, editing, colour grading, motion graphics, and multilingual delivery. I shoot on <strong>Sony FX3</strong> and fly <strong>DJI</strong> for aerial work.
+      </p>
+
+      <div class="about-publications reveal">
+        <h3>Published in</h3>
+        <div class="pub-list">
+          <span>Al Jazeera</span>
+          <span>Scientific American</span>
+          <span>DW Documentary</span>
+          <span>Foreign Policy</span>
+          <span>Undark</span>
+          <span>The New Humanitarian</span>
+          <span>ProPublica</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── CONTACT ── -->
+  <section id="contact">
+    <h2 class="contact-heading reveal">Let's <em>work</em><br>together.</h2>
+    <p class="contact-sub reveal reveal-delay-1">Available for commissions, consultancies and collaborations.</p>
+    <div class="contact-links reveal reveal-delay-2">
+      <a href="mailto:kernhendricks@gmail.com" class="contact-link">
+        <span class="contact-link-label">Email</span>
+        <span class="contact-link-value">kernhendricks@gmail.com</span>
+      </a>
+      <a href="https://www.youtube.com/@KernHendricks" target="_blank" rel="noopener" class="contact-link">
+        <span class="contact-link-label">YouTube</span>
+        <span class="contact-link-value">@KernHendricks</span>
+      </a>
+      <a href="https://twitter.com/kernhendricks" target="_blank" rel="noopener" class="contact-link">
+        <span class="contact-link-label">Twitter / X</span>
+        <span class="contact-link-value">@kernhendricks</span>
+      </a>
+    </div>
+  </section>
+
+  <!-- ── FOOTER ── -->
+  <footer>
+    <p>© 2026 Kern Hendricks</p>
+    <p>London, UK &nbsp;·&nbsp; Available worldwide</p>
+  </footer>
+
+  <script>
+    // Custom cursor
+    const cursor = document.getElementById('cursor');
+    document.addEventListener('mousemove', e => {
+      cursor.style.left = e.clientX + 'px';
+      cursor.style.top  = e.clientY + 'px';
+    });
+    document.querySelectorAll('a, button, .work-item').forEach(el => {
+      el.addEventListener('mouseenter', () => cursor.classList.add('expand'));
+      el.addEventListener('mouseleave', () => cursor.classList.remove('expand'));
+    });
+
+    // Scroll reveal
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+          observer.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -60px 0px' });
+    reveals.forEach(el => observer.observe(el));
+
+    // Nav hide/show on scroll
+    let lastY = 0;
+    const nav = document.querySelector('nav');
+    window.addEventListener('scroll', () => {
+      const y = window.scrollY;
+      if (y > lastY && y > 100) {
+        nav.style.transform = 'translateY(-100%)';
+        nav.style.transition = 'transform 0.4s cubic-bezier(0.65,0,0.35,1)';
+      } else {
+        nav.style.transform = 'translateY(0)';
+      }
+      lastY = y;
+    });
+  </script>
+</body>
+</html>
