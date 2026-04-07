@@ -398,6 +398,160 @@
       transform: translateY(0);
     }
 
+    /* ── PHOTOGRAPHY (HORIZONTAL SCROLL) ── */
+    #photography {
+      padding: 0;
+      max-width: none;
+      margin: 0;
+      border-top: 1px solid var(--border);
+    }
+
+    .h-scroll-outer {
+      height: 400vh;
+      position: relative;
+    }
+
+    .h-scroll-sticky {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .h-scroll-header {
+      padding: 0 48px;
+      margin-bottom: 32px;
+      flex-shrink: 0;
+    }
+
+    .h-scroll-track {
+      display: flex;
+      gap: 2px;
+      padding: 0 48px;
+      will-change: transform;
+      flex-shrink: 0;
+    }
+
+    .h-photo {
+      flex-shrink: 0;
+      position: relative;
+      overflow: hidden;
+      background: var(--bg-3);
+      cursor: crosshair;
+    }
+    .h-photo.landscape {
+      height: calc(56vh - 32px);
+      width: calc((56vh - 32px) * 3 / 2);
+    }
+    .h-photo.portrait {
+      height: calc(56vh - 32px);
+      width: calc((56vh - 32px) * 2 / 3);
+    }
+
+    .h-photo img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      filter: saturate(0.75) brightness(0.8);
+      transform: scale(1.02);
+      transition: filter 0.5s var(--ease-out-expo), transform 0.5s var(--ease-out-expo);
+      display: block;
+    }
+    .h-photo:hover img {
+      filter: saturate(0.92) brightness(0.96);
+      transform: scale(1.05);
+    }
+
+    .h-photo-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(10,10,8,0.88) 0%, transparent 55%);
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 20px;
+      z-index: 2;
+      transition: background 0.4s;
+    }
+    .h-photo:hover .h-photo-overlay {
+      background: linear-gradient(to top, rgba(10,10,8,0.97) 0%, rgba(10,10,8,0.3) 60%, transparent 100%);
+    }
+
+    .h-photo-region {
+      font-family: var(--font-mono);
+      font-size: 8px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 4px;
+      opacity: 0;
+      transform: translateY(6px);
+      transition: all 0.35s var(--ease-out-expo);
+    }
+    .h-photo-caption {
+      font-family: var(--font-display);
+      font-size: clamp(13px, 1.2vw, 16px);
+      font-style: italic;
+      color: var(--text);
+      line-height: 1.2;
+      opacity: 0;
+      transform: translateY(8px);
+      transition: all 0.4s var(--ease-out-expo) 0.04s;
+    }
+    .h-photo:hover .h-photo-region,
+    .h-photo:hover .h-photo-caption {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .h-progress-wrap {
+      position: absolute;
+      bottom: 32px;
+      left: 48px;
+      right: 48px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .h-progress-track {
+      height: 1px;
+      background: var(--border);
+      position: relative;
+      width: 200px;
+    }
+    .h-progress-fill {
+      position: absolute;
+      left: 0; top: 0;
+      height: 100%;
+      background: var(--accent-dim);
+      width: 0%;
+    }
+    .h-progress-label {
+      font-family: var(--font-mono);
+      font-size: 9px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+    }
+
+    /* Mobile: revert to vertical wrap */
+    @media (max-width: 900px) {
+      .h-scroll-outer { height: auto; }
+      .h-scroll-sticky { position: static; height: auto; overflow: visible; }
+      .h-scroll-header { padding: 80px 24px 32px; }
+      .h-scroll-track { flex-wrap: wrap; padding: 0 24px; gap: 2px; }
+      .h-photo.landscape,
+      .h-photo.portrait { height: auto; width: calc(50% - 1px); aspect-ratio: 3/2; }
+      .h-photo img { position: static; width: 100%; height: 100%; }
+      .h-progress-wrap { display: none; }
+    }
+
     /* ── WORK GRID ── */
     #work { padding-top: 80px; }
 
@@ -1006,6 +1160,127 @@
     </div>
   </section>
 
+  <!-- ── PHOTOGRAPHY ── -->
+  <section id="photography">
+    <div class="h-scroll-outer" id="hScrollOuter">
+      <div class="h-scroll-sticky">
+
+        <div class="h-scroll-header">
+          <p class="section-number">—02</p>
+          <p class="section-label">Photography</p>
+        </div>
+
+        <div class="h-scroll-track" id="hScrollTrack">
+
+          <div class="h-photo landscape">
+            <img src="photos/afghanistan-gems-miners.jpg" alt="Gem miners at break, Nuristan, Afghanistan" loading="lazy">
+            <div class="h-photo-overlay">
+              <span class="h-photo-region">Afghanistan · Nuristan</span>
+              <span class="h-photo-caption">Gem miners at break outside their mine</span>
+            </div>
+          </div>
+
+          <div class="h-photo landscape">
+            <img src="photos/L1001647.jpg" alt="Afghanistan" loading="lazy">
+            <div class="h-photo-overlay">
+              <span class="h-photo-region">Afghanistan</span>
+              <span class="h-photo-caption">Caption to be added</span>
+            </div>
+          </div>
+
+          <div class="h-photo landscape">
+            <img src="photos/ukraine-reactor-lede.jpg" alt="Technicians in reactor hall, Kharkiv, Ukraine" loading="lazy">
+            <div class="h-photo-overlay">
+              <span class="h-photo-region">Ukraine · Kharkiv</span>
+              <span class="h-photo-caption">Technicians ascending into the reactor hall</span>
+            </div>
+          </div>
+
+          <div class="h-photo landscape">
+            <img src="photos/afghanistan-forest-trees.jpg" alt="Forest, Korengal Valley, Afghanistan" loading="lazy">
+            <div class="h-photo-overlay">
+              <span class="h-photo-region">Afghanistan · Korengal Valley</span>
+              <span class="h-photo-caption">Trees as livelihood in Wama district</span>
+            </div>
+          </div>
+
+          <div class="h-photo landscape">
+            <img src="photos/afghanistan-gems-mine-interior.jpg" alt="Inside tourmaline mine, Kunar, Afghanistan" loading="lazy">
+            <div class="h-photo-overlay">
+              <span class="h-photo-region">Afghanistan · Kunar</span>
+              <span class="h-photo-caption">Inside Abid's tourmaline mine near Parun</span>
+            </div>
+          </div>
+
+          <div class="h-photo landscape">
+            <img src="photos/still-field-1.jpg" alt="" loading="lazy">
+            <div class="h-photo-overlay">
+              <span class="h-photo-region">Field</span>
+              <span class="h-photo-caption">Caption to be added</span>
+            </div>
+          </div>
+
+          <div class="h-photo landscape">
+            <img src="photos/ukraine-reactor-core.jpg" alt="Reactor core in darkness, Kharkiv, Ukraine" loading="lazy">
+            <div class="h-photo-overlay">
+              <span class="h-photo-region">Ukraine · Kharkiv</span>
+              <span class="h-photo-caption">Reactor core in darkness</span>
+            </div>
+          </div>
+
+          <div class="h-photo landscape">
+            <img src="photos/afghanistan-forest-loggers.jpg" alt="Loggers in Nuristan, Afghanistan" loading="lazy">
+            <div class="h-photo-overlay">
+              <span class="h-photo-region">Afghanistan · Nuristan</span>
+              <span class="h-photo-caption">Dilaram and Sanaullah, loggers in Wama</span>
+            </div>
+          </div>
+
+          <div class="h-photo landscape">
+            <img src="photos/L1001635.jpg" alt="Afghanistan" loading="lazy">
+            <div class="h-photo-overlay">
+              <span class="h-photo-region">Afghanistan</span>
+              <span class="h-photo-caption">Caption to be added</span>
+            </div>
+          </div>
+
+          <div class="h-photo landscape">
+            <img src="photos/afghanistan-forest-council.jpg" alt="Tribal council meeting, Korengal Valley, Afghanistan" loading="lazy">
+            <div class="h-photo-overlay">
+              <span class="h-photo-region">Afghanistan · Korengal Valley</span>
+              <span class="h-photo-caption">Tribal council meeting</span>
+            </div>
+          </div>
+
+          <div class="h-photo landscape">
+            <img src="photos/ukraine-reactor-crater.jpg" alt="Rocket strike crater, Kharkiv, Ukraine" loading="lazy">
+            <div class="h-photo-overlay">
+              <span class="h-photo-region">Ukraine · Kharkiv</span>
+              <span class="h-photo-caption">Crater from March 2022 rocket strike</span>
+            </div>
+          </div>
+
+          <div class="h-photo landscape">
+            <img src="photos/still-field-2.jpg" alt="" loading="lazy">
+            <div class="h-photo-overlay">
+              <span class="h-photo-region">Field</span>
+              <span class="h-photo-caption">Caption to be added</span>
+            </div>
+          </div>
+
+        </div><!-- /h-scroll-track -->
+
+        <div class="h-progress-wrap">
+          <div class="h-progress-track">
+            <div class="h-progress-fill" id="hProgressFill"></div>
+          </div>
+          <span class="h-progress-label" id="hProgressLabel">Scroll to explore</span>
+        </div>
+
+      </div><!-- /h-scroll-sticky -->
+    </div><!-- /h-scroll-outer -->
+  </section>
+
   <!-- ── WRITING ── -->
   <section id="writing" class="section-fade">
     <p class="section-number reveal">—03</p>
@@ -1217,6 +1492,37 @@
       });
     }, { threshold: 0.05 });
     sectionFades.forEach(el => sectionObserver.observe(el));
+
+    // Photography horizontal scroll
+    const hOuter = document.getElementById('hScrollOuter');
+    const hTrack = document.getElementById('hScrollTrack');
+    const hFill  = document.getElementById('hProgressFill');
+    const hLabel = document.getElementById('hProgressLabel');
+
+    function updateHScroll() {
+      if (!hOuter || !hTrack) return;
+      if (window.innerWidth <= 900) {
+        hTrack.style.transform = '';
+        return;
+      }
+      const scrollY  = window.scrollY;
+      const winH     = window.innerHeight;
+      const start    = hOuter.offsetTop;
+      const end      = hOuter.offsetTop + hOuter.offsetHeight - winH;
+      const progress = Math.max(0, Math.min(1, (scrollY - start) / (end - start)));
+      const maxTx    = hTrack.scrollWidth - window.innerWidth + 96;
+      hTrack.style.transform = `translateX(-${progress * maxTx}px)`;
+      if (hFill)  hFill.style.width = (progress * 100) + '%';
+      if (hLabel) {
+        const total = hTrack.children.length;
+        const cur   = Math.round(progress * total);
+        hLabel.textContent = cur > 0 ? `${cur} / ${total}` : 'Scroll to explore';
+      }
+    }
+
+    window.addEventListener('scroll', updateHScroll, { passive: true });
+    window.addEventListener('resize', updateHScroll, { passive: true });
+    updateHScroll();
 
     // Nav hide/show on scroll
     let lastY = 0;
