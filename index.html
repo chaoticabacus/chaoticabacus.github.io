@@ -306,6 +306,25 @@
       background: var(--accent-dim);
     }
 
+    .section-number {
+      font-family: var(--font-mono);
+      font-size: 9px;
+      letter-spacing: 0.15em;
+      color: var(--text-dim);
+      margin-bottom: 6px;
+    }
+
+    /* ── SECTION FADE ── */
+    .section-fade {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.9s var(--ease-out-expo), transform 0.9s var(--ease-out-expo);
+    }
+    .section-fade.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
     /* ── WORK GRID ── */
     #work { padding-top: 80px; }
 
@@ -686,7 +705,8 @@
   </section>
 
   <!-- ── WORK ── -->
-  <section id="work">
+  <section id="work" class="section-fade">
+    <p class="section-number">—01</p>
     <p class="section-label reveal">Selected Work</p>
 
     <div class="work-grid">
@@ -800,8 +820,9 @@
   </section>
 
   <!-- ── ABOUT ── -->
-  <section id="about">
+  <section id="about" class="section-fade">
     <div class="about-left reveal">
+      <p class="section-number">—04</p>
       <div class="section-label">About</div>
       <h2 class="about-heading">Telling<br>stories <em>that<br>matter.</em></h2>
       <div class="about-tags">
@@ -844,7 +865,8 @@
   </section>
 
   <!-- ── CONTACT ── -->
-  <section id="contact">
+  <section id="contact" class="section-fade">
+    <p class="section-number reveal">—05</p>
     <h2 class="contact-heading reveal">Let's <em>work</em><br>together.</h2>
     <p class="contact-sub reveal reveal-delay-1">Available for commissions, consultancies and collaborations.</p>
     <div class="contact-links reveal reveal-delay-2">
@@ -901,6 +923,18 @@
       });
     }, { threshold: 0.1, rootMargin: '0px 0px -60px 0px' });
     reveals.forEach(el => observer.observe(el));
+
+    // Section-level fades
+    const sectionFades = document.querySelectorAll('.section-fade');
+    const sectionObserver = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+          sectionObserver.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.05 });
+    sectionFades.forEach(el => sectionObserver.observe(el));
 
     // Nav hide/show on scroll
     let lastY = 0;
