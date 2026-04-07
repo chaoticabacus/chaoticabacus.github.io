@@ -514,6 +514,86 @@
       z-index: 10;
     }
 
+    /* ── WRITING ── */
+    #writing {
+      border-top: 1px solid var(--border);
+    }
+
+    .article-list {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .article-row {
+      display: grid;
+      grid-template-columns: 140px 1fr 56px 24px;
+      align-items: center;
+      gap: 24px;
+      padding: 22px 0;
+      border-bottom: 1px solid var(--border);
+      text-decoration: none;
+      color: inherit;
+      transition: border-color 0.3s;
+      position: relative;
+    }
+    .article-row:first-child { border-top: 1px solid var(--border); }
+    .article-row:hover { border-bottom-color: var(--border-hi); }
+
+    .article-row::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: rgba(200,169,110,0.03);
+      opacity: 0;
+      transition: opacity 0.3s;
+      pointer-events: none;
+    }
+    .article-row:hover::before { opacity: 1; }
+
+    .article-outlet {
+      font-family: var(--font-mono);
+      font-size: 9px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+
+    .article-title {
+      font-family: var(--font-display);
+      font-size: clamp(15px, 1.4vw, 19px);
+      font-style: italic;
+      font-weight: 400;
+      color: var(--text-mid);
+      line-height: 1.25;
+      transition: color 0.3s;
+    }
+    .article-row:hover .article-title { color: var(--text); }
+
+    .article-year {
+      font-family: var(--font-mono);
+      font-size: 9px;
+      letter-spacing: 0.1em;
+      color: var(--text-dim);
+      text-align: right;
+      transition: color 0.3s;
+    }
+    .article-row:hover .article-year { color: var(--text-mid); }
+
+    .article-arrow {
+      color: var(--accent);
+      opacity: 0;
+      transform: translateX(-8px);
+      transition: opacity 0.3s var(--ease-out-expo), transform 0.3s var(--ease-out-expo);
+      display: flex;
+      align-items: center;
+    }
+    .article-row:hover .article-arrow { opacity: 1; transform: translateX(0); }
+
+    @media (max-width: 700px) {
+      .article-row { grid-template-columns: 90px 1fr 44px 0; gap: 12px; }
+      .article-arrow { display: none; }
+    }
+
     /* ── ABOUT ── */
     #about {
       display: grid;
@@ -922,6 +1002,86 @@
         </div>
         <a href="https://youtu.be/vGo0Xzw0YpU" target="_blank" rel="noopener" class="work-link" aria-label="In War-Torn Ukraine: Doctor Evacuates Children with Cancer"></a>
       </div>
+
+    </div>
+  </section>
+
+  <!-- ── WRITING ── -->
+  <section id="writing" class="section-fade">
+    <p class="section-number reveal">—03</p>
+    <p class="section-label reveal">Writing</p>
+
+    <div class="article-list">
+
+      <a href="https://www.aljazeera.com/features/2023/8/18/the-former-afghan-soldiers-turning-to-gem-mining-to-survive" target="_blank" rel="noopener" class="article-row reveal">
+        <span class="article-outlet">Al Jazeera</span>
+        <span class="article-title">The Former Afghan Soldiers Turning to Gem Mining to Survive</span>
+        <span class="article-year">2023</span>
+        <span class="article-arrow"><svg width="14" height="10" viewBox="0 0 14 10" fill="none"><path d="M1 5h12M9 1l4 4-4 4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg></span>
+      </a>
+
+      <a href="https://www.aljazeera.com/features/2022/8/19/women-working-inside-an-afghan-chemical-lab-face-uncertain-future" target="_blank" rel="noopener" class="article-row reveal reveal-delay-1">
+        <span class="article-outlet">Al Jazeera</span>
+        <span class="article-title">Women Working Inside an Afghan Chemical Lab Face Uncertain Future</span>
+        <span class="article-year">2022</span>
+        <span class="article-arrow"><svg width="14" height="10" viewBox="0 0 14 10" fill="none"><path d="M1 5h12M9 1l4 4-4 4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg></span>
+      </a>
+
+      <a href="https://undark.org/2023/05/01/keeping-the-lights-on-at-ukraines-research-nuclear-reactor/" target="_blank" rel="noopener" class="article-row reveal reveal-delay-2">
+        <span class="article-outlet">Undark</span>
+        <span class="article-title">Keeping the Lights On at Ukraine's Research Nuclear Reactor</span>
+        <span class="article-year">2023</span>
+        <span class="article-arrow"><svg width="14" height="10" viewBox="0 0 14 10" fill="none"><path d="M1 5h12M9 1l4 4-4 4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg></span>
+      </a>
+
+      <a href="https://undark.org/2023/04/03/in-ukraine-grain-shortages-reverberate-beyond-borders/" target="_blank" rel="noopener" class="article-row reveal reveal-delay-3">
+        <span class="article-outlet">Undark</span>
+        <span class="article-title">In Ukraine, Grain Shortages Reverberate Beyond Borders</span>
+        <span class="article-year">2023</span>
+        <span class="article-arrow"><svg width="14" height="10" viewBox="0 0 14 10" fill="none"><path d="M1 5h12M9 1l4 4-4 4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg></span>
+      </a>
+
+      <a href="https://www.scientificamerican.com/article/a-rare-glimpse-into-afghanistans-spectacular-vanishing-forests/" target="_blank" rel="noopener" class="article-row reveal">
+        <span class="article-outlet">Scientific American</span>
+        <span class="article-title">A Rare Glimpse into Afghanistan's Spectacular, Vanishing Forests</span>
+        <span class="article-year">2023</span>
+        <span class="article-arrow"><svg width="14" height="10" viewBox="0 0 14 10" fill="none"><path d="M1 5h12M9 1l4 4-4 4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg></span>
+      </a>
+
+      <a href="https://www.vice.com/en/article/afghanistan-boys-coal-mining-taliban-child-labor/" target="_blank" rel="noopener" class="article-row reveal reveal-delay-1">
+        <span class="article-outlet">Vice</span>
+        <span class="article-title">Young Boys Work in Dangerous Mines As Afghanistan Prioritizes Coal</span>
+        <span class="article-year">2022</span>
+        <span class="article-arrow"><svg width="14" height="10" viewBox="0 0 14 10" fill="none"><path d="M1 5h12M9 1l4 4-4 4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg></span>
+      </a>
+
+      <a href="https://www.vice.com/en/article/afghanistan-photos-taliban-poppy-harvest-ban/" target="_blank" rel="noopener" class="article-row reveal reveal-delay-2">
+        <span class="article-outlet">Vice</span>
+        <span class="article-title">Look at These Photos of the Taliban's Endless Poppy Fields</span>
+        <span class="article-year">2022</span>
+        <span class="article-arrow"><svg width="14" height="10" viewBox="0 0 14 10" fill="none"><path d="M1 5h12M9 1l4 4-4 4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg></span>
+      </a>
+
+      <a href="https://undark.org/2022/04/20/in-a-cold-winter-afghans-struggle-to-keep-warm/" target="_blank" rel="noopener" class="article-row reveal reveal-delay-3">
+        <span class="article-outlet">Undark</span>
+        <span class="article-title">In a Cold Winter, Afghans Struggle to Keep Warm</span>
+        <span class="article-year">2022</span>
+        <span class="article-arrow"><svg width="14" height="10" viewBox="0 0 14 10" fill="none"><path d="M1 5h12M9 1l4 4-4 4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg></span>
+      </a>
+
+      <a href="https://undark.org/2020/05/20/afghanistan-meth-ephedra/" target="_blank" rel="noopener" class="article-row reveal">
+        <span class="article-outlet">Undark</span>
+        <span class="article-title">The Wild Shrub at the Root of the Afghan Meth Epidemic</span>
+        <span class="article-year">2020</span>
+        <span class="article-arrow"><svg width="14" height="10" viewBox="0 0 14 10" fill="none"><path d="M1 5h12M9 1l4 4-4 4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg></span>
+      </a>
+
+      <a href="https://undark.org/2019/10/28/afghanistan-health-care-disparities/" target="_blank" rel="noopener" class="article-row reveal reveal-delay-1">
+        <span class="article-outlet">Undark</span>
+        <span class="article-title">For Afghan Health Workers, a Gauntlet of Making Do</span>
+        <span class="article-year">2019</span>
+        <span class="article-arrow"><svg width="14" height="10" viewBox="0 0 14 10" fill="none"><path d="M1 5h12M9 1l4 4-4 4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg></span>
+      </a>
 
     </div>
   </section>
