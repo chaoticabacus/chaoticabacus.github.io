@@ -134,6 +134,79 @@
     }
     .nav-links a:hover { color: var(--accent); }
 
+    /* Mobile hamburger */
+    .nav-hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      background: none;
+      border: none;
+      cursor: none;
+      padding: 4px;
+      position: relative;
+      z-index: 1;
+    }
+    .nav-hamburger span {
+      display: block;
+      width: 22px;
+      height: 1px;
+      background: var(--text-dim);
+      transition: background 0.3s;
+    }
+    .nav-hamburger:hover span { background: var(--accent); }
+
+    /* Mobile nav overlay */
+    .mobile-nav {
+      position: fixed;
+      inset: 0;
+      background: rgba(10,10,8,0.97);
+      z-index: 200;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.4s var(--ease-out-expo);
+    }
+    .mobile-nav.open {
+      opacity: 1;
+      pointer-events: all;
+    }
+    .mobile-nav-close {
+      position: absolute;
+      top: 24px; right: 28px;
+      background: none;
+      border: none;
+      color: var(--text-dim);
+      font-size: 22px;
+      cursor: none;
+      font-family: var(--font-mono);
+      transition: color 0.3s;
+    }
+    .mobile-nav-close:hover { color: var(--accent); }
+    .mobile-nav-links {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .mobile-nav-links a {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      padding: 18px 0;
+      display: block;
+      border-bottom: 1px solid var(--border);
+      min-width: 220px;
+      text-align: center;
+      transition: color 0.3s;
+    }
+    .mobile-nav-links li:last-child a { border-bottom: none; }
+    .mobile-nav-links a:hover { color: var(--accent); }
+
     /* ── HERO ── */
     #hero {
       position: relative;
@@ -663,6 +736,7 @@
 
     @media (max-width: 600px) {
       .nav-links { display: none; }
+      .nav-hamburger { display: flex; }
       .hero-name { font-size: 52px; }
       .contact-links { gap: 32px; }
     }
@@ -679,6 +753,9 @@
   <!-- Navigation -->
   <nav>
     <a href="#" class="nav-logo">Kern Hendricks</a>
+    <button class="nav-hamburger" id="navHamburger" aria-label="Open menu">
+      <span></span><span></span><span></span>
+    </button>
     <ul class="nav-links">
       <li><a href="#work">Work</a></li>
       <li><a href="#photography">Photography</a></li>
@@ -687,6 +764,18 @@
       <li><a href="#contact">Contact</a></li>
     </ul>
   </nav>
+
+  <!-- Mobile nav overlay -->
+  <div class="mobile-nav" id="mobileNav" role="dialog" aria-modal="true" aria-label="Navigation menu">
+    <button class="mobile-nav-close" id="mobileNavClose" aria-label="Close menu">✕</button>
+    <ul class="mobile-nav-links">
+      <li><a href="#work">Work</a></li>
+      <li><a href="#photography">Photography</a></li>
+      <li><a href="#writing">Writing</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </div>
 
   <!-- ── HERO ── -->
   <section id="hero">
@@ -932,6 +1021,18 @@
       el.addEventListener('mouseenter', () => cursor.classList.add('expand'));
       el.addEventListener('mouseleave', () => cursor.classList.remove('expand'));
     });
+
+    // Mobile nav
+    const navHamburger   = document.getElementById('navHamburger');
+    const mobileNav      = document.getElementById('mobileNav');
+    const mobileNavClose = document.getElementById('mobileNavClose');
+    function openMobileNav()  { mobileNav.classList.add('open'); }
+    function closeMobileNav() { mobileNav.classList.remove('open'); }
+    if (navHamburger) {
+      navHamburger.addEventListener('click', openMobileNav);
+      mobileNavClose.addEventListener('click', closeMobileNav);
+      mobileNav.querySelectorAll('a').forEach(a => a.addEventListener('click', closeMobileNav));
+    }
 
     // Scroll reveal
     const reveals = document.querySelectorAll('.reveal');
