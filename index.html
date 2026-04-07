@@ -452,6 +452,24 @@
 
     .about-left { position: sticky; top: 120px; }
 
+    .portrait-placeholder {
+      width: 100%;
+      aspect-ratio: 3/4;
+      background: var(--bg-3);
+      border: 1px dashed rgba(200,169,110,0.25);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 32px;
+    }
+    .portrait-placeholder span {
+      font-family: var(--font-mono);
+      font-size: 9px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--accent-dim);
+    }
+
     .about-heading {
       font-family: var(--font-display);
       font-size: clamp(42px, 5vw, 72px);
@@ -822,6 +840,9 @@
   <!-- ── ABOUT ── -->
   <section id="about" class="section-fade">
     <div class="about-left reveal">
+      <div class="portrait-placeholder">
+        <span>Photo — coming soon</span>
+      </div>
       <p class="section-number">—04</p>
       <div class="section-label">About</div>
       <h2 class="about-heading">Telling<br>stories <em>that<br>matter.</em></h2>
