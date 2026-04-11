@@ -16,10 +16,9 @@
   <meta name="twitter:title" content="Kern Hendricks — Documentary Filmmaker & Journalist">
   <meta name="twitter:description" content="Documentary filmmaker, photojournalist and humanitarian analyst covering conflict, displacement and human rights.">
   <meta name="twitter:image" content="https://kernhendricks.com/photos/afghanistan-gems-miners.jpg">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='4' fill='%230a0a08'/><text x='16' y='22' font-family='serif' font-size='18' font-weight='300' fill='%23c8a96e' text-anchor='middle'>KH</text></svg>">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Suisse+Int%27l:wght@300;400&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
-  <!-- Fallback for Suisse Intl -->
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@200;300;400&family=DM+Mono:ital,wght@0,300;1,300&display=swap" rel="stylesheet">
 
   <style>
@@ -61,6 +60,27 @@
     }
     a { color: inherit; text-decoration: none; }
     img { display: block; width: 100%; }
+
+    /* ── ACCESSIBILITY ── */
+    .skip-link {
+      position: fixed;
+      top: -100%;
+      left: 16px;
+      z-index: 10001;
+      background: var(--accent);
+      color: var(--bg);
+      padding: 8px 16px;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      transition: top 0.2s;
+    }
+    .skip-link:focus { top: 16px; }
+    a:focus-visible, button:focus-visible, .work-item:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+    }
 
     /* ── SCROLL PROGRESS ── */
     #progress-line {
@@ -138,10 +158,14 @@
     .nav-hamburger {
       display: none;
       flex-direction: column;
+      align-items: center;
+      justify-content: center;
       gap: 5px;
       background: none;
       border: none;
       cursor: none;
+      min-width: 44px;
+      min-height: 44px;
       padding: 4px;
       position: relative;
       z-index: 1;
@@ -485,7 +509,7 @@
 
     .h-photo-region {
       font-family: var(--font-mono);
-      font-size: 8px;
+      font-size: 9px;
       letter-spacing: 0.2em;
       text-transform: uppercase;
       color: var(--accent);
@@ -496,7 +520,7 @@
     }
     .h-photo-caption {
       font-family: var(--font-display);
-      font-size: clamp(13px, 1.2vw, 16px);
+      font-size: clamp(14px, 1.3vw, 17px);
       font-style: italic;
       color: var(--text);
       line-height: 1.2;
@@ -568,36 +592,42 @@
       cursor: none;
     }
 
-    /* Asymmetric layout */
-    .work-item:nth-child(1) { grid-column: span 7; grid-row: span 2; }
-    .work-item:nth-child(2) { grid-column: span 5; }
-    .work-item:nth-child(3) { grid-column: span 5; }
-    .work-item:nth-child(4) { grid-column: span 4; }
-    .work-item:nth-child(5) { grid-column: span 8; }
+    /* 3-column grid, bottom row balanced as equal pair */
+    .work-item { grid-column: span 4; }
+    .work-item:nth-child(4),
+    .work-item:nth-child(5) { grid-column: span 6; }
 
     .work-thumb {
       aspect-ratio: 16/9;
       width: 100%;
-      height: 100%;
       position: relative;
     }
-    .work-item:nth-child(1) .work-thumb { aspect-ratio: unset; height: 100%; min-height: 460px; }
 
-    .work-thumb iframe {
+    .work-thumb img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border: none;
+      filter: saturate(0.7) brightness(0.75);
+      transform: scale(1.05);
+      transition: filter 0.6s var(--ease-out-expo), transform 0.6s var(--ease-out-expo);
+    }
+    .work-item:hover .work-thumb img {
+      filter: saturate(0.9) brightness(0.9);
+      transform: scale(1.08);
+    }
+    .work-item.playing .work-thumb iframe {
       position: absolute;
       inset: 0;
       width: 100%;
       height: 100%;
       border: none;
-      pointer-events: none;
-      filter: saturate(0.7) brightness(0.75);
-      transform: scale(1.05);
-      transition: filter 0.6s var(--ease-out-expo), transform 0.6s var(--ease-out-expo);
+      pointer-events: all;
     }
-    .work-item:hover .work-thumb iframe {
-      filter: saturate(0.9) brightness(0.9);
-      transform: scale(1.08);
-    }
+    .work-item.playing .work-overlay,
+    .work-item.playing .work-play { opacity: 0; pointer-events: none; }
 
     .work-overlay {
       position: absolute;
@@ -662,11 +692,6 @@
       transform: translate(-50%, -50%) scale(1);
     }
 
-    .work-link {
-      position: absolute;
-      inset: 0;
-      z-index: 10;
-    }
 
     /* ── WRITING ── */
     #writing {
@@ -956,11 +981,7 @@
       .nav-links { gap: 24px; }
       section { padding: 80px 24px; }
 
-      .work-item:nth-child(1) { grid-column: span 12; }
-      .work-item:nth-child(2) { grid-column: span 12; }
-      .work-item:nth-child(3) { grid-column: span 12; }
-      .work-item:nth-child(4) { grid-column: span 12; }
-      .work-item:nth-child(5) { grid-column: span 12; }
+      .work-thumb { aspect-ratio: 16/9; }
 
       #about { grid-template-columns: 1fr; gap: 48px; }
       .about-left { position: static; }
@@ -968,15 +989,28 @@
       footer { flex-direction: column; gap: 12px; text-align: center; }
     }
 
+    @media (max-width: 768px) {
+      .work-item { grid-column: span 6; }
+      .work-item:nth-child(4),
+      .work-item:nth-child(5) { grid-column: span 6; }
+    }
+
     @media (max-width: 600px) {
       .nav-links { display: none; }
       .nav-hamburger { display: flex; }
       .hero-name { font-size: 52px; }
+      .work-item { grid-column: span 12; }
+      .work-item:nth-child(4),
+      .work-item:nth-child(5) { grid-column: span 12; }
       .contact-links { gap: 32px; }
+      .article-row:active .article-title { color: var(--text); }
+      .article-row:active::before { opacity: 1; }
     }
   </style>
 </head>
 <body>
+
+  <a href="#work" class="skip-link">Skip to content</a>
 
   <!-- Scroll progress line -->
   <div id="progress-line"></div>
@@ -1053,12 +1087,9 @@
     <div class="work-grid">
 
       <!-- 1: Showreel — large featured -->
-      <div class="work-item reveal">
+      <div class="work-item reveal" data-vid="aoZN04k0Y5A">
         <div class="work-thumb">
-          <iframe
-            src="https://www.youtube.com/embed/aoZN04k0Y5A?mute=1&controls=0&showinfo=0&rel=0&modestbranding=1&playsinline=1"
-            allow="encrypted-media" allowfullscreen loading="lazy">
-          </iframe>
+          <img src="https://img.youtube.com/vi/aoZN04k0Y5A/maxresdefault.jpg" alt="Cinematography Showreel" loading="lazy">
         </div>
         <div class="work-overlay">
           <p class="work-outlet">2025 Showreel</p>
@@ -1070,16 +1101,12 @@
             <path d="M1 1l14 8L1 17V1z" stroke="var(--accent)" stroke-width="1.2" stroke-linejoin="round"/>
           </svg>
         </div>
-        <a href="https://youtu.be/aoZN04k0Y5A" target="_blank" rel="noopener" class="work-link" aria-label="Cinematography Showreel"></a>
       </div>
 
       <!-- 2 -->
-      <div class="work-item reveal reveal-delay-1">
+      <div class="work-item reveal reveal-delay-1" data-vid="f2q9bI3O-Sc">
         <div class="work-thumb">
-          <iframe
-            src="https://www.youtube.com/embed/f2q9bI3O-Sc?mute=1&controls=0&showinfo=0&rel=0&modestbranding=1&playsinline=1"
-            allow="encrypted-media" allowfullscreen loading="lazy">
-          </iframe>
+          <img src="https://img.youtube.com/vi/f2q9bI3O-Sc/maxresdefault.jpg" alt="Arriving in Europe: How Refugees Deal With Their Trauma" loading="lazy">
         </div>
         <div class="work-overlay">
           <p class="work-outlet">DW Documentary</p>
@@ -1091,16 +1118,12 @@
             <path d="M1 1l14 8L1 17V1z" stroke="var(--accent)" stroke-width="1.2" stroke-linejoin="round"/>
           </svg>
         </div>
-        <a href="https://youtu.be/f2q9bI3O-Sc" target="_blank" rel="noopener" class="work-link" aria-label="DW Documentary: Arriving in Europe"></a>
       </div>
 
       <!-- 3 -->
-      <div class="work-item reveal reveal-delay-2">
+      <div class="work-item reveal reveal-delay-2" data-vid="hwDByBSuK60">
         <div class="work-thumb">
-          <iframe
-            src="https://www.youtube.com/embed/hwDByBSuK60?mute=1&controls=0&showinfo=0&rel=0&modestbranding=1&playsinline=1"
-            allow="encrypted-media" allowfullscreen loading="lazy">
-          </iframe>
+          <img src="https://img.youtube.com/vi/hwDByBSuK60/maxresdefault.jpg" alt="A Mental Health Crisis in the West Bank" loading="lazy">
         </div>
         <div class="work-overlay">
           <p class="work-outlet">Undark</p>
@@ -1112,16 +1135,12 @@
             <path d="M1 1l14 8L1 17V1z" stroke="var(--accent)" stroke-width="1.2" stroke-linejoin="round"/>
           </svg>
         </div>
-        <a href="https://youtu.be/hwDByBSuK60" target="_blank" rel="noopener" class="work-link" aria-label="A Mental Health Crisis in the West Bank"></a>
       </div>
 
       <!-- 4 -->
-      <div class="work-item reveal reveal-delay-1">
+      <div class="work-item reveal reveal-delay-1" data-vid="sIFpTlGrddY">
         <div class="work-thumb">
-          <iframe
-            src="https://www.youtube.com/embed/sIFpTlGrddY?mute=1&controls=0&showinfo=0&rel=0&modestbranding=1&playsinline=1"
-            allow="encrypted-media" allowfullscreen loading="lazy">
-          </iframe>
+          <img src="https://img.youtube.com/vi/sIFpTlGrddY/maxresdefault.jpg" alt="The Toll of Settler Violence in the West Bank" loading="lazy">
         </div>
         <div class="work-overlay">
           <p class="work-outlet">Field Report</p>
@@ -1133,16 +1152,12 @@
             <path d="M1 1l14 8L1 17V1z" stroke="var(--accent)" stroke-width="1.2" stroke-linejoin="round"/>
           </svg>
         </div>
-        <a href="https://youtu.be/sIFpTlGrddY" target="_blank" rel="noopener" class="work-link" aria-label="The Toll of Settler Violence in the West Bank"></a>
       </div>
 
       <!-- 5 -->
-      <div class="work-item reveal reveal-delay-2">
+      <div class="work-item reveal reveal-delay-2" data-vid="vGo0Xzw0YpU">
         <div class="work-thumb">
-          <iframe
-            src="https://www.youtube.com/embed/vGo0Xzw0YpU?mute=1&controls=0&showinfo=0&rel=0&modestbranding=1&playsinline=1"
-            allow="encrypted-media" allowfullscreen loading="lazy">
-          </iframe>
+          <img src="https://img.youtube.com/vi/vGo0Xzw0YpU/maxresdefault.jpg" alt="In War-Torn Ukraine, a Doctor Evacuates Children with Cancer" loading="lazy">
         </div>
         <div class="work-overlay">
           <p class="work-outlet">Scientific American</p>
@@ -1154,7 +1169,6 @@
             <path d="M1 1l14 8L1 17V1z" stroke="var(--accent)" stroke-width="1.2" stroke-linejoin="round"/>
           </svg>
         </div>
-        <a href="https://youtu.be/vGo0Xzw0YpU" target="_blank" rel="noopener" class="work-link" aria-label="In War-Torn Ukraine: Doctor Evacuates Children with Cancer"></a>
       </div>
 
     </div>
@@ -1213,7 +1227,7 @@
           </div>
 
           <div class="h-photo landscape">
-            <img src="photos/still-field-1.jpg" alt="" loading="lazy">
+            <img src="photos/still-field-1.jpg" alt="Field still from documentary production" loading="lazy">
             <div class="h-photo-overlay">
               <span class="h-photo-region">Field</span>
               <span class="h-photo-caption">Caption to be added</span>
@@ -1261,7 +1275,7 @@
           </div>
 
           <div class="h-photo landscape">
-            <img src="photos/still-field-2.jpg" alt="" loading="lazy">
+            <img src="photos/still-field-2.jpg" alt="Field still from documentary production" loading="lazy">
             <div class="h-photo-overlay">
               <span class="h-photo-region">Field</span>
               <span class="h-photo-caption">Caption to be added</span>
@@ -1437,6 +1451,20 @@
   </footer>
 
   <script>
+    // ── rAF throttle utility ──
+    let scrollTicking = false;
+    function onScroll() {
+      if (!scrollTicking) {
+        requestAnimationFrame(() => {
+          updateProgress();
+          updateHScroll();
+          updateNav();
+          scrollTicking = false;
+        });
+        scrollTicking = true;
+      }
+    }
+
     // Scroll progress line
     const progressLine = document.getElementById('progress-line');
     function updateProgress() {
@@ -1444,17 +1472,41 @@
       const docH = document.documentElement.scrollHeight - window.innerHeight;
       progressLine.style.width = (docH > 0 ? (scrollY / docH) * 100 : 0) + '%';
     }
-    window.addEventListener('scroll', updateProgress, { passive: true });
 
-    // Custom cursor
+    // Custom cursor (rAF-throttled)
     const cursor = document.getElementById('cursor');
+    let cursorX = 0, cursorY = 0, cursorTicking = false;
     document.addEventListener('mousemove', e => {
-      cursor.style.left = e.clientX + 'px';
-      cursor.style.top  = e.clientY + 'px';
+      cursorX = e.clientX;
+      cursorY = e.clientY;
+      if (!cursorTicking) {
+        requestAnimationFrame(() => {
+          cursor.style.left = cursorX + 'px';
+          cursor.style.top  = cursorY + 'px';
+          cursorTicking = false;
+        });
+        cursorTicking = true;
+      }
     });
     document.querySelectorAll('a, button, .work-item').forEach(el => {
       el.addEventListener('mouseenter', () => cursor.classList.add('expand'));
       el.addEventListener('mouseleave', () => cursor.classList.remove('expand'));
+    });
+
+    // Work item — facade click-to-play
+    document.querySelectorAll('.work-item[data-vid]').forEach(item => {
+      item.addEventListener('click', function() {
+        if (this.classList.contains('playing')) return;
+        const vid = this.dataset.vid;
+        const thumb = this.querySelector('.work-thumb');
+        const iframe = document.createElement('iframe');
+        iframe.src = `https://www.youtube.com/embed/${vid}?autoplay=1&rel=0&modestbranding=1`;
+        iframe.allow = 'autoplay; encrypted-media';
+        iframe.allowFullscreen = true;
+        thumb.innerHTML = '';
+        thumb.appendChild(iframe);
+        this.classList.add('playing');
+      });
     });
 
     // Mobile nav
@@ -1520,14 +1572,13 @@
       }
     }
 
-    window.addEventListener('scroll', updateHScroll, { passive: true });
-    window.addEventListener('resize', updateHScroll, { passive: true });
+    window.addEventListener('resize', () => updateHScroll(), { passive: true });
     updateHScroll();
 
     // Nav hide/show on scroll
     let lastY = 0;
     const nav = document.querySelector('nav');
-    window.addEventListener('scroll', () => {
+    function updateNav() {
       const y = window.scrollY;
       if (y > lastY && y > 100) {
         nav.style.transform = 'translateY(-100%)';
@@ -1536,7 +1587,10 @@
         nav.style.transform = 'translateY(0)';
       }
       lastY = y;
-    });
+    }
+
+    // Single scroll listener for all scroll-driven updates
+    window.addEventListener('scroll', onScroll, { passive: true });
   </script>
 </body>
 </html>
