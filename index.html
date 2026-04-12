@@ -576,71 +576,78 @@
       .h-progress-wrap { display: none; }
     }
 
-    /* ── WORK GRID ── */
-    #work { padding-top: 80px; }
+    /* ── WORK (FULL-BLEED STACKED) ── */
+    #work {
+      padding: 0;
+      max-width: none;
+      margin: 0;
+    }
+
+    .work-header {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 80px 48px 40px;
+    }
 
     .work-grid {
-      display: grid;
-      grid-template-columns: repeat(12, 1fr);
+      display: flex;
+      flex-direction: column;
       gap: 2px;
     }
 
     .work-item {
       position: relative;
+      width: 100%;
+      height: 75vh;
+      min-height: 450px;
       overflow: hidden;
       background: var(--bg-3);
       cursor: none;
     }
 
-    /* 3-column grid, bottom row balanced as equal pair */
-    .work-item { grid-column: span 4; }
-    .work-item:nth-child(4),
-    .work-item:nth-child(5) { grid-column: span 6; }
-
-    .work-thumb {
-      aspect-ratio: 16/9;
-      width: 100%;
-      position: relative;
-    }
-
-    .work-thumb img {
+    .work-poster {
       position: absolute;
       inset: 0;
       width: 100%;
       height: 100%;
       object-fit: cover;
-      border: none;
-      filter: saturate(0.7) brightness(0.75);
-      transform: scale(1.05);
-      transition: filter 0.6s var(--ease-out-expo), transform 0.6s var(--ease-out-expo);
+      filter: saturate(0.4) brightness(0.5);
+      z-index: 0;
     }
-    .work-item:hover .work-thumb img {
-      filter: saturate(0.9) brightness(0.9);
-      transform: scale(1.08);
-    }
-    .work-item.playing .work-thumb iframe {
+
+    .work-vid-bg {
       position: absolute;
-      inset: 0;
+      inset: -10%;
+      pointer-events: none;
+      z-index: 1;
+    }
+    .work-vid-bg iframe {
       width: 100%;
       height: 100%;
       border: none;
-      pointer-events: all;
+      opacity: 0.4;
+      filter: saturate(0.4) brightness(0.6);
     }
-    .work-item.playing .work-overlay,
-    .work-item.playing .work-play { opacity: 0; pointer-events: none; }
+
+    .work-vignette {
+      position: absolute;
+      inset: 0;
+      z-index: 2;
+      background:
+        radial-gradient(ellipse 80% 60% at 50% 50%, transparent 30%, rgba(10,10,8,0.5) 100%),
+        linear-gradient(to bottom, rgba(10,10,8,0.3) 0%, transparent 30%, transparent 55%, rgba(10,10,8,0.9) 100%);
+    }
 
     .work-overlay {
       position: absolute;
-      inset: 0;
-      background: linear-gradient(to top, rgba(10,10,8,0.92) 0%, rgba(10,10,8,0.3) 50%, transparent 100%);
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 3;
+      padding: 48px;
       display: flex;
       flex-direction: column;
       justify-content: flex-end;
-      padding: 28px;
-      transition: background 0.4s;
-    }
-    .work-item:hover .work-overlay {
-      background: linear-gradient(to top, rgba(10,10,8,0.97) 0%, rgba(10,10,8,0.5) 60%, rgba(10,10,8,0.1) 100%);
     }
 
     .work-outlet {
@@ -649,48 +656,61 @@
       letter-spacing: 0.2em;
       text-transform: uppercase;
       color: var(--accent);
-      margin-bottom: 6px;
+      margin-bottom: 8px;
     }
 
     .work-title {
       font-family: var(--font-display);
-      font-size: clamp(16px, 1.6vw, 22px);
-      font-weight: 400;
-      line-height: 1.2;
+      font-size: clamp(28px, 4vw, 52px);
+      font-weight: 300;
+      line-height: 1.1;
       color: var(--text);
-      margin-bottom: 10px;
+      margin-bottom: 12px;
     }
 
     .work-role {
-      font-size: 11px;
+      font-size: 12px;
       color: var(--text-dim);
       font-weight: 300;
-      transform: translateY(8px);
-      opacity: 0;
-      transition: all 0.35s var(--ease-out-expo);
+      letter-spacing: 0.04em;
     }
-    .work-item:hover .work-role { opacity: 1; transform: translateY(0); }
 
     .work-play {
       position: absolute;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%) scale(0.85);
-      width: 56px; height: 56px;
-      border: 1px solid rgba(200,169,110,0.4);
+      width: 72px; height: 72px;
+      border: 1px solid rgba(200,169,110,0.3);
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
+      z-index: 3;
       opacity: 0;
-      transition: all 0.35s var(--ease-out-expo);
+      transition: all 0.4s var(--ease-out-expo);
       pointer-events: none;
     }
     .work-play svg { margin-left: 3px; }
     .work-item:hover .work-play {
       opacity: 1;
       transform: translate(-50%, -50%) scale(1);
+      border-color: rgba(200,169,110,0.6);
     }
+
+    .work-item.playing .work-vid-bg {
+      inset: 0;
+      z-index: 4;
+    }
+    .work-item.playing .work-vid-bg iframe {
+      opacity: 1;
+      filter: none;
+      pointer-events: all;
+    }
+    .work-item.playing .work-overlay,
+    .work-item.playing .work-play,
+    .work-item.playing .work-vignette { opacity: 0; pointer-events: none; }
+    .work-item.playing .work-poster { display: none; }
 
 
     /* ── WRITING ── */
@@ -981,7 +1001,7 @@
       .nav-links { gap: 24px; }
       section { padding: 80px 24px; }
 
-      .work-thumb { aspect-ratio: 16/9; }
+      .work-header { padding: 60px 24px 32px; }
 
       #about { grid-template-columns: 1fr; gap: 48px; }
       .about-left { position: static; }
@@ -989,19 +1009,12 @@
       footer { flex-direction: column; gap: 12px; text-align: center; }
     }
 
-    @media (max-width: 768px) {
-      .work-item { grid-column: span 6; }
-      .work-item:nth-child(4),
-      .work-item:nth-child(5) { grid-column: span 6; }
-    }
-
     @media (max-width: 600px) {
       .nav-links { display: none; }
       .nav-hamburger { display: flex; }
       .hero-name { font-size: 52px; }
-      .work-item { grid-column: span 12; }
-      .work-item:nth-child(4),
-      .work-item:nth-child(5) { grid-column: span 12; }
+      .work-item { height: 60vh; min-height: 350px; }
+      .work-overlay { padding: 28px 24px; }
       .contact-links { gap: 32px; }
       .article-row:active .article-title { color: var(--text); }
       .article-row:active::before { opacity: 1; }
@@ -1081,16 +1094,18 @@
 
   <!-- ── WORK ── -->
   <section id="work" class="section-fade">
-    <p class="section-number">—01</p>
-    <p class="section-label reveal">Selected Work</p>
+    <div class="work-header">
+      <p class="section-number">—01</p>
+      <p class="section-label reveal">Selected Work</p>
+    </div>
 
     <div class="work-grid">
 
-      <!-- 1: Showreel — large featured -->
+      <!-- 1: Showreel -->
       <div class="work-item reveal" data-vid="aoZN04k0Y5A">
-        <div class="work-thumb">
-          <img src="https://img.youtube.com/vi/aoZN04k0Y5A/maxresdefault.jpg" alt="Cinematography Showreel" loading="lazy">
-        </div>
+        <img class="work-poster" src="https://img.youtube.com/vi/aoZN04k0Y5A/maxresdefault.jpg" alt="Cinematography Showreel" loading="lazy">
+        <div class="work-vid-bg"></div>
+        <div class="work-vignette"></div>
         <div class="work-overlay">
           <p class="work-outlet">2025 Showreel</p>
           <h3 class="work-title">Cinematography Showreel</h3>
@@ -1104,10 +1119,10 @@
       </div>
 
       <!-- 2 -->
-      <div class="work-item reveal reveal-delay-1" data-vid="f2q9bI3O-Sc">
-        <div class="work-thumb">
-          <img src="https://img.youtube.com/vi/f2q9bI3O-Sc/maxresdefault.jpg" alt="Arriving in Europe: How Refugees Deal With Their Trauma" loading="lazy">
-        </div>
+      <div class="work-item reveal" data-vid="f2q9bI3O-Sc">
+        <img class="work-poster" src="https://img.youtube.com/vi/f2q9bI3O-Sc/maxresdefault.jpg" alt="Arriving in Europe: How Refugees Deal With Their Trauma" loading="lazy">
+        <div class="work-vid-bg"></div>
+        <div class="work-vignette"></div>
         <div class="work-overlay">
           <p class="work-outlet">DW Documentary</p>
           <h3 class="work-title">Arriving in Europe: How Refugees Deal With Their Trauma</h3>
@@ -1121,10 +1136,10 @@
       </div>
 
       <!-- 3 -->
-      <div class="work-item reveal reveal-delay-2" data-vid="hwDByBSuK60">
-        <div class="work-thumb">
-          <img src="https://img.youtube.com/vi/hwDByBSuK60/maxresdefault.jpg" alt="A Mental Health Crisis in the West Bank" loading="lazy">
-        </div>
+      <div class="work-item reveal" data-vid="hwDByBSuK60">
+        <img class="work-poster" src="https://img.youtube.com/vi/hwDByBSuK60/maxresdefault.jpg" alt="A Mental Health Crisis in the West Bank" loading="lazy">
+        <div class="work-vid-bg"></div>
+        <div class="work-vignette"></div>
         <div class="work-overlay">
           <p class="work-outlet">Undark</p>
           <h3 class="work-title">A Mental Health Crisis in the West Bank</h3>
@@ -1138,10 +1153,10 @@
       </div>
 
       <!-- 4 -->
-      <div class="work-item reveal reveal-delay-1" data-vid="sIFpTlGrddY">
-        <div class="work-thumb">
-          <img src="https://img.youtube.com/vi/sIFpTlGrddY/maxresdefault.jpg" alt="The Toll of Settler Violence in the West Bank" loading="lazy">
-        </div>
+      <div class="work-item reveal" data-vid="sIFpTlGrddY">
+        <img class="work-poster" src="https://img.youtube.com/vi/sIFpTlGrddY/maxresdefault.jpg" alt="The Toll of Settler Violence in the West Bank" loading="lazy">
+        <div class="work-vid-bg"></div>
+        <div class="work-vignette"></div>
         <div class="work-overlay">
           <p class="work-outlet">Field Report</p>
           <h3 class="work-title">The Toll of Settler Violence in the West Bank</h3>
@@ -1155,10 +1170,10 @@
       </div>
 
       <!-- 5 -->
-      <div class="work-item reveal reveal-delay-2" data-vid="vGo0Xzw0YpU">
-        <div class="work-thumb">
-          <img src="https://img.youtube.com/vi/vGo0Xzw0YpU/maxresdefault.jpg" alt="In War-Torn Ukraine, a Doctor Evacuates Children with Cancer" loading="lazy">
-        </div>
+      <div class="work-item reveal" data-vid="vGo0Xzw0YpU">
+        <img class="work-poster" src="https://img.youtube.com/vi/vGo0Xzw0YpU/maxresdefault.jpg" alt="In War-Torn Ukraine, a Doctor Evacuates Children with Cancer" loading="lazy">
+        <div class="work-vid-bg"></div>
+        <div class="work-vignette"></div>
         <div class="work-overlay">
           <p class="work-outlet">Scientific American</p>
           <h3 class="work-title">In War-Torn Ukraine, a Doctor Evacuates Children with Cancer</h3>
@@ -1493,19 +1508,45 @@
       el.addEventListener('mouseleave', () => cursor.classList.remove('expand'));
     });
 
-    // Work item — facade click-to-play
-    document.querySelectorAll('.work-item[data-vid]').forEach(item => {
+    // Work item — lazy-load muted background videos via IntersectionObserver
+    const workItems = document.querySelectorAll('.work-item[data-vid]');
+    const vidObserver = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        const item = entry.target;
+        const vidBg = item.querySelector('.work-vid-bg');
+        if (!vidBg) return;
+        if (entry.isIntersecting) {
+          if (!vidBg.querySelector('iframe') && !item.classList.contains('playing')) {
+            const vid = item.dataset.vid;
+            const iframe = document.createElement('iframe');
+            iframe.src = `https://www.youtube.com/embed/${vid}?autoplay=1&mute=1&loop=1&playlist=${vid}&controls=0&showinfo=0&rel=0&modestbranding=1&playsinline=1&enablejsapi=0`;
+            iframe.allow = 'autoplay; encrypted-media';
+            iframe.setAttribute('tabindex', '-1');
+            vidBg.appendChild(iframe);
+          }
+        } else {
+          if (!item.classList.contains('playing')) {
+            vidBg.innerHTML = '';
+          }
+        }
+      });
+    }, { rootMargin: '300px 0px' });
+    workItems.forEach(item => vidObserver.observe(item));
+
+    // Work item — click to play with sound
+    workItems.forEach(item => {
       item.addEventListener('click', function() {
         if (this.classList.contains('playing')) return;
         const vid = this.dataset.vid;
-        const thumb = this.querySelector('.work-thumb');
+        const vidBg = this.querySelector('.work-vid-bg');
+        vidBg.innerHTML = '';
         const iframe = document.createElement('iframe');
         iframe.src = `https://www.youtube.com/embed/${vid}?autoplay=1&rel=0&modestbranding=1`;
         iframe.allow = 'autoplay; encrypted-media';
         iframe.allowFullscreen = true;
-        thumb.innerHTML = '';
-        thumb.appendChild(iframe);
+        vidBg.appendChild(iframe);
         this.classList.add('playing');
+        vidObserver.unobserve(this);
       });
     });
 
