@@ -40,7 +40,7 @@ The site is a single-page HTML/CSS/JS application with no frameworks, no build p
 ├── index.html          ← entire site lives here (single file)
 ├── photos/             ← photography section images (JPEG originals + WebP versions)
 ├── previews/           ← muted MP4 preview clips + local poster JPEGs
-├── kern-portrait.jpg   ← about section portrait (1024×790, cropped)
+├── kern-portrait.jpg   ← about section portrait (1024×900, cropped)
 ├── og-image.jpg        ← dedicated 1200x630 social share image
 ├── .gitignore          ← ignores .DS_Store, .superpowers/
 ├── CNAME               ← kernhendricks.com (GitHub Pages custom domain)
@@ -232,7 +232,9 @@ Editorial article list. 10 articles in `.article-list`, each an `.article-row` a
 
 Two-column sticky layout, with the section header (`—04 / About`) spanning both columns above. Left column (sticky): portrait photo + skill tags. Right column: body copy + publications list + contact links.
 
-**Portrait:** `<img class="portrait" src="kern-portrait.jpg" alt="Kern Hendricks" loading="lazy">` in `.about-left`. `width: 100%; height: auto;` — frame matches the image's native aspect ratio (1024×790) so nothing gets cropped. `margin-top: 6px` compensates for line-leading so the top of the image sits flush with the first text line. No rounded corners.
+**Portrait:** `<img class="portrait" src="kern-portrait.jpg" alt="Kern Hendricks" loading="lazy">` in `.about-left`. `width: 100%; height: auto;` — frame matches the image's native aspect ratio (1024×900) so nothing gets cropped. `margin-top: 6px` compensates for line-leading so the top of the image sits flush with the first text line. No rounded corners.
+
+**Bio slide-in:** Children of `.about-right` use the `.about-slide` class (initial state: `opacity: 0; translateX(48px)`). An IntersectionObserver watches `.portrait` with `rootMargin: -45% 0px -45% 0px` (a thin band around viewport centre); when the portrait enters that band, `slide-in` is added to `.about-right` and the children fade/slide into place with a staggered transition delay. Triggers once. Disabled under `prefers-reduced-motion`.
 
 ---
 

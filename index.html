@@ -851,6 +851,24 @@
 
     .about-right { padding-top: 0; }
 
+    /* Slide-in triggered when the portrait hits the vertical centre of the viewport */
+    .about-slide {
+      opacity: 0;
+      transform: translateX(48px);
+      transition: opacity 0.9s var(--ease-out-expo), transform 0.9s var(--ease-out-expo);
+      will-change: opacity, transform;
+    }
+    .about-right.slide-in .about-slide { opacity: 1; transform: translateX(0); }
+    .about-right.slide-in .about-slide:nth-child(1) { transition-delay: 0ms; }
+    .about-right.slide-in .about-slide:nth-child(2) { transition-delay: 80ms; }
+    .about-right.slide-in .about-slide:nth-child(3) { transition-delay: 160ms; }
+    .about-right.slide-in .about-slide:nth-child(4) { transition-delay: 240ms; }
+    .about-right.slide-in .about-slide:nth-child(5) { transition-delay: 320ms; }
+    .about-right.slide-in .about-slide:nth-child(6) { transition-delay: 400ms; }
+    @media (prefers-reduced-motion: reduce) {
+      .about-slide { opacity: 1; transform: none; transition: none; }
+    }
+
     .about-body {
       font-size: 15px;
       font-weight: 300;
@@ -1417,20 +1435,20 @@
     </div>
 
     <div class="about-right">
-      <p class="about-body reveal">
+      <p class="about-body about-slide">
         I'm a <strong>documentary filmmaker, photojournalist, and humanitarian analyst</strong> with over a decade of field experience covering conflict, displacement, and human rights crises across Afghanistan, Ukraine, Palestine, Lebanon, Iraq, Syria, Yemen, and Europe.
       </p>
-      <p class="about-body reveal reveal-delay-1">
+      <p class="about-body about-slide">
         My work has been published and broadcast by <strong>Al Jazeera, Scientific American, DW Documentary, Foreign Policy, Undark, The New Humanitarian,</strong> and others. I'm also a <strong>Pulitzer Center Crisis Reporting grant recipient</strong>.
       </p>
-      <p class="about-body reveal reveal-delay-2">
+      <p class="about-body about-slide">
         Beyond filmmaking, I work as a conflict analyst and humanitarian adviser — with roles at multiple INGOs — bringing an analytical depth to my storytelling that goes beyond the image.
       </p>
-      <p class="about-body reveal reveal-delay-3">
+      <p class="about-body about-slide">
         I operate across the full production pipeline: scripting, solo field production, sound, editing, colour grading, motion graphics, and multilingual delivery. I've worked in numerous conflict zones, and have <strong>HEFAT training</strong> with full PPE.
       </p>
 
-      <div class="about-publications reveal">
+      <div class="about-publications about-slide">
         <h3>Published in</h3>
         <div class="pub-list">
           <span>Al Jazeera</span>
@@ -1443,7 +1461,7 @@
         </div>
       </div>
 
-      <div class="contact-links reveal">
+      <div class="contact-links about-slide">
         <a href="mailto:kernhendricks@gmail.com" class="contact-link">
           <span class="contact-link-label">Email</span>
           <span class="contact-link-value">kernhendricks@gmail.com</span>
@@ -1614,6 +1632,21 @@
       });
     }, { threshold: 0.05 });
     sectionFades.forEach(el => sectionObserver.observe(el));
+
+    // ── About — slide bio text in from the right when portrait hits viewport centre ──
+    const aboutPortrait = document.querySelector('.about-left .portrait');
+    const aboutRight    = document.querySelector('.about-right');
+    if (aboutPortrait && aboutRight) {
+      const aboutSlideObserver = new IntersectionObserver(entries => {
+        entries.forEach(e => {
+          if (e.isIntersecting) {
+            aboutRight.classList.add('slide-in');
+            aboutSlideObserver.unobserve(e.target);
+          }
+        });
+      }, { rootMargin: '-45% 0px -45% 0px', threshold: 0 });
+      aboutSlideObserver.observe(aboutPortrait);
+    }
 
     // ── Photography horizontal scroll ──
     const hOuter = document.getElementById('hScrollOuter');
