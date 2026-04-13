@@ -39,7 +39,9 @@ The site is a single-page HTML/CSS/JS application with no frameworks, no build p
 ```
 /
 ├── index.html        ← entire site lives here (single file)
-├── photos/           ← photography section images (18 files, compressed for web)
+├── photos/           ← photography section images (12 files, compressed for web)
+├── previews/         ← muted MP4 preview clips for the film grid + hero background
+├── og-image.jpg      ← dedicated 1200x630 social share image
 ├── .gitignore        ← ignores .DS_Store, .superpowers/
 ├── CNAME             ← kernhendricks.com (GitHub Pages custom domain)
 └── README.md         ← deployment and DNS instructions
@@ -83,15 +85,16 @@ Dark, editorial, cinematic. Inspired by high-end documentary and photojournalism
 - Scroll-triggered reveal animations (IntersectionObserver)
 
 ### Key UI Patterns
+- **Intro splash** — page loads with a full-viewport solid-black section (`.intro-section`) showing "Kern Hendricks" + "Documentary Filmmaker & Journalist". A fixed `.intro-bg` layer behind it (z-index 50) fades out on first scroll (>50px), revealing the hero video beneath. The intro text itself is a normal in-flow section so it scrolls up naturally with the page.
 - **Custom cursor** — small gold dot, expands on hover over interactive elements (rAF-throttled)
 - **Scroll progress line** — 1px gold line at top of viewport, fills left-to-right on scroll (`#progress-line`)
 - **Section numbering** — `—01` through `—05` above each section label, in DM Mono 9px `var(--text-dim)`
 - **Section fades** — `.section-fade` class on all sections, IntersectionObserver adds `.visible`, fades in on scroll
 - **Nav** — hides on scroll down, reappears on scroll up; hamburger on mobile (≤600px, 44px min tap target)
-- **Work items** — YouTube facade: static thumbnail image (`loading="lazy"`) on load, click swaps in iframe with autoplay. Hover reveals gold ring play button and role text. No YouTube chrome visible until clicked.
+- **Film items** — each `.work-item` contains a muted HTML5 `<video>` with a local MP4 preview (`preload="none"`, YouTube thumbnail as `poster`). An IntersectionObserver plays the video when it scrolls into view (threshold 0.3) and pauses it when it leaves. Clicking a film item opens the full YouTube video in a new tab (`window.open`).
 - **Section labels** — DM Mono, uppercase, gold, with short gold line suffix (`::after`)
 - **Reveal animation** — `.reveal` class, triggered by IntersectionObserver, stagger via `.reveal-delay-1/2/3`
-- **Hero** — full-viewport, showreel playing muted as background with grain overlay and vignette
+- **Hero** — full-viewport, showreel MP4 (`previews/showreel-preview.mp4`) playing muted as background with grain overlay and vignette. Only shows regions + "View Films" CTA + scroll indicator — the name itself lives in the intro splash above.
 - **Skip-to-content link** — hidden until focused, appears top-left for keyboard navigation
 - **Focus styles** — `:focus-visible` gold outline on all interactive elements
 - **Favicon** — inline SVG "KH" monogram (gold on dark)
@@ -101,34 +104,53 @@ Dark, editorial, cinematic. Inspired by high-end documentary and photojournalism
 ## Page Flow
 
 ```
-Hero → Work (—01) → Photography (—02) → Writing (—03) → About (—04) → Contact (—05)
+Intro splash → Hero → Film (—01) → Photography (—02) → Writing (—03) → About (—04) → Contact (—05)
 ```
 
-Nav links: Work · Photography · Writing · About · Contact
+Nav links: Film · Photography · Writing · About · Contact
 
 ---
 
-## Current Work Grid
+## Current Film Grid
 
 Layout: 3-column grid (items 1–3 at `span 4`, items 4–5 at `span 6`). All thumbnails 16:9. Responsive: 2-column at ≤768px, full-width at ≤600px.
 
-The work items use a **facade pattern** — each item has `data-vid="YOUTUBE_ID"` and shows a static `<img src="https://img.youtube.com/vi/VIDEO_ID/maxresdefault.jpg">` on load. Clicking injects an autoplay iframe. No iframes load on page load.
+Each `.work-item` contains an HTML5 `<video>` element pointing at a local MP4 in `previews/`, with `muted loop playsinline preload="none"` and a YouTube `maxresdefault.jpg` as the `poster`. An IntersectionObserver plays the video when the item scrolls into view (threshold 0.3) and pauses it when it leaves. Clicking the item opens the full YouTube video in a new tab.
 
-| # | Grid span | Title | Outlet | YouTube ID | Role |
-|---|-----------|-------|--------|------------|------|
-| 1 | span 4 | Cinematography Showreel | 2025 Showreel | `aoZN04k0Y5A` | DoP · Editor · Producer |
-| 2 | span 4 | Arriving in Europe: How Refugees Deal With Their Trauma | DW Documentary | `f2q9bI3O-Sc` | DoP · Producer · Editor |
-| 3 | span 4 | A Mental Health Crisis in the West Bank | Undark | `hwDByBSuK60` | DoP · Producer · Editor |
-| 4 | span 6 | The Toll of Settler Violence in the West Bank | Field Report | `sIFpTlGrddY` | DoP · Producer · Editor |
-| 5 | span 6 | In War-Torn Ukraine, a Doctor Evacuates Children with Cancer | Scientific American | `vGo0Xzw0YpU` | DoP · Producer |
+| # | Grid span | Title | Outlet | YouTube ID | Preview file | Role |
+|---|-----------|-------|--------|------------|--------------|------|
+| 1 | span 4 | 2026 Showreel | 2026 Showreel | `aoZN04k0Y5A` | `previews/showreel-preview.mp4` | DoP · Editor · Producer |
+| 2 | span 4 | Arriving in Europe: How Refugees Deal With Their Trauma | DW Documentary | `f2q9bI3O-Sc` | `previews/dw-refugees-preview.mp4` | DoP · Producer · Editor |
+| 3 | span 4 | A Mental Health Crisis in the West Bank | Undark | `hwDByBSuK60` | `previews/mental-health-preview.mp4` | DoP · Producer · Editor |
+| 4 | span 6 | The Toll of Settler Violence in the West Bank | Field Report | `sIFpTlGrddY` | `previews/settler-violence-preview.mp4` | DoP · Producer · Editor |
+| 5 | span 6 | In War-Torn Ukraine, a Doctor Evacuates Children with Cancer | Scientific American | `vGo0Xzw0YpU` | `previews/ukraine-cancer-preview.mp4` | DoP · Producer |
 
-**Hero background video:** `aoZN04k0Y5A` (same as showreel)
+**Hero background video:** `previews/showreel-preview.mp4` (same file as item 1)
 
-### Adding a new work item
-1. Add a new `.work-item` div with `data-vid="YOUTUBE_ID"` inside `.work-grid`
-2. Thumbnail: `<img src="https://img.youtube.com/vi/YOUTUBE_ID/maxresdefault.jpg" alt="TITLE">`
-3. Update CSS grid spans so rows balance to 12 columns total
-4. The JS facade handler auto-applies to all `.work-item[data-vid]` — no extra JS needed
+### Preview clip generation
+
+Preview clips are generated from the YouTube source via `yt-dlp` + `ffmpeg`. Typical recipe:
+
+```bash
+# Download at ≤480p
+yt-dlp -f "best[height<=480]" -o raw.mp4 "https://youtube.com/watch?v=VIDEO_ID"
+
+# Trim, strip audio, optional crop (for letterboxed 2.39:1 masters), re-encode
+ffmpeg -y -i raw.mp4 -ss START_SECONDS -t 12 -an \
+  -vf "crop=W:H:X:Y,scale=854:480" \
+  -c:v libx264 -crf 32 -preset slow -movflags +faststart output.mp4
+```
+
+- `-ss` before `-i` for fast seek; use `ffmpeg -i raw.mp4 -vf cropdetect -f null -` to auto-detect crop values when black bars are baked in
+- Target ~500 KB per clip; current 5 clips total ~700 KB
+- All outputs are 854x480, 12 seconds, no audio
+
+### Adding a new film item
+1. Generate a preview clip (see recipe above) and drop it in `previews/`
+2. Add a new `.work-item` div with `data-vid="YOUTUBE_ID"` inside `.work-grid`
+3. Thumbnail: `<video src="previews/YOUR_CLIP.mp4" muted loop playsinline preload="none" poster="https://img.youtube.com/vi/YOUTUBE_ID/maxresdefault.jpg"></video>`
+4. Update CSS grid spans so rows balance to 12 columns total
+5. The IntersectionObserver + click-to-open-YouTube handlers auto-apply to all `.work-item[data-vid]` — no extra JS needed
 
 ---
 
@@ -216,18 +238,31 @@ python3 -m http.server 8080
 
 ### To deploy changes
 ```bash
-git add index.html photos/
+git add index.html photos/ previews/
 git commit -m "describe what changed"
 git push origin main
 ```
+
+### Version tags (for rollback)
+
+Annotated git tags mark notable versions of the site. Use `git tag -l -n1` to list them. To roll back to a tagged version:
+
+```bash
+git revert TAG..HEAD && git push       # safe: new commit undoes the changes
+```
+
+Current tags:
+- **`static-thumbs`** (`f8f0a7f`) — static YouTube thumbnails, no intro splash
+- **`black-intro-dynamic-thumbnails`** (`888ccab`) — black intro splash + autoplay MP4 previews on scroll (current live version)
 
 ---
 
 ## Performance Notes
 
 - **Images:** All photos compressed and resized to max 2000px wide, JPEG quality 70 (total ~7.4 MB, down from ~123 MB)
-- **Scroll handling:** All scroll-driven updates (progress line, horizontal scroll, nav hide/show) consolidated into a single `scroll` listener with `requestAnimationFrame` throttling. Cursor mousemove also rAF-throttled.
-- **Lazy loading:** All photography images and work grid thumbnails use `loading="lazy"`
+- **Film previews:** Self-hosted MP4 clips (~700 KB total for all 5) instead of YouTube iframes — avoids ~1.5-2 MB per embed of third-party player JS/CSS. Each video has `preload="none"` so nothing downloads until the IntersectionObserver calls `.play()` on scroll-in, and videos pause when scrolled out of view to free CPU.
+- **Scroll handling:** All scroll-driven updates (intro overlay fade, progress line, horizontal scroll, nav hide/show) consolidated into a single `scroll` listener with `requestAnimationFrame` throttling. Cursor mousemove also rAF-throttled.
+- **Lazy loading:** All photography images use `loading="lazy"`; film preview videos use `preload="none"` with YouTube thumbnail posters
 - **Fonts:** Single Google Fonts stylesheet loads Cormorant Garamond, DM Sans, and DM Mono with `display=swap`
 - **Responsive breakpoints:** 900px (photography + about reflow), 768px (work grid 2-col), 700px (article row compact), 600px (mobile nav + work grid full-width)
 
@@ -255,4 +290,5 @@ git push origin main
 - Do not change the colour accent from gold without discussing it first
 - Do not add autoplay video with sound
 - Do not proxy Cloudflare DNS records for GitHub Pages (must be DNS only / grey cloud)
-- Do not revert the work grid to iframes — the facade pattern (static thumbnail + click-to-play) is intentional
+- Do not revert the film grid to YouTube iframes — the self-hosted MP4 preview pattern (with click-to-open-YouTube in a new tab) is intentional and dramatically lighter
+- Do not remove the intro splash without discussing it first — it's a deliberate editorial framing device
