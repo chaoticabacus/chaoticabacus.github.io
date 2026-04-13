@@ -10,12 +10,12 @@
   <meta property="og:description" content="Documentary filmmaker, photojournalist and humanitarian analyst. Work published by Al Jazeera, Scientific American, DW Documentary, Foreign Policy, Undark.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://kernhendricks.com">
-  <meta property="og:image" content="https://kernhendricks.com/photos/afghanistan-gems-miners.jpg">
+  <meta property="og:image" content="https://kernhendricks.com/og-image.jpg">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:site" content="@kernhendricks">
   <meta name="twitter:title" content="Kern Hendricks — Documentary Filmmaker & Journalist">
   <meta name="twitter:description" content="Documentary filmmaker, photojournalist and humanitarian analyst covering conflict, displacement and human rights.">
-  <meta name="twitter:image" content="https://kernhendricks.com/photos/afghanistan-gems-miners.jpg">
+  <meta name="twitter:image" content="https://kernhendricks.com/og-image.jpg">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='4' fill='%230a0a08'/><text x='16' y='22' font-family='serif' font-size='18' font-weight='300' fill='%23c8a96e' text-anchor='middle'>KH</text></svg>">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -231,6 +231,57 @@
     .mobile-nav-links li:last-child a { border-bottom: none; }
     .mobile-nav-links a:hover { color: var(--accent); }
 
+    /* ── INTRO ── */
+    .intro-bg {
+      position: fixed;
+      inset: 0;
+      z-index: 50;
+      background: var(--bg);
+      pointer-events: none;
+      transition: opacity 1s ease;
+    }
+    .intro-bg.faded { opacity: 0; }
+    .intro-bg.hidden { display: none; }
+
+    .intro-section {
+      position: relative;
+      z-index: 51;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .intro-name {
+      font-family: var(--font-display);
+      font-size: clamp(56px, 8vw, 120px);
+      font-weight: 300;
+      line-height: 0.92;
+      letter-spacing: -0.01em;
+      color: var(--text);
+      text-align: center;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeUp 1.2s var(--ease-out-expo) 0.2s forwards;
+    }
+    .intro-name em {
+      font-style: italic;
+      color: var(--text-mid);
+    }
+
+    .intro-label {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-top: 28px;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeUp 1s var(--ease-out-expo) 0.6s forwards;
+    }
+
     /* ── HERO ── */
     #hero {
       position: relative;
@@ -243,17 +294,17 @@
       overflow: hidden;
     }
 
-    /* YouTube embed as background */
+    /* Video background (hero) */
     .reel-bg {
       position: absolute;
       inset: -10%;
       pointer-events: none;
       z-index: 0;
     }
-    .reel-bg iframe {
+    .reel-bg video {
       width: 100%;
       height: 100%;
-      border: none;
+      object-fit: cover;
       opacity: 0.35;
       filter: saturate(0.4) brightness(0.6);
     }
@@ -603,31 +654,21 @@
       position: relative;
     }
 
-    .work-thumb img {
+    .work-thumb video {
       position: absolute;
       inset: 0;
       width: 100%;
       height: 100%;
       object-fit: cover;
       border: none;
-      filter: saturate(0.7) brightness(0.75);
+      filter: saturate(0.4) brightness(0.6);
       transform: scale(1.05);
       transition: filter 0.6s var(--ease-out-expo), transform 0.6s var(--ease-out-expo);
     }
-    .work-item:hover .work-thumb img {
-      filter: saturate(0.9) brightness(0.9);
+    .work-item:hover .work-thumb video {
+      filter: saturate(0.7) brightness(0.75);
       transform: scale(1.08);
     }
-    .work-item.playing .work-thumb iframe {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      border: none;
-      pointer-events: all;
-    }
-    .work-item.playing .work-overlay,
-    .work-item.playing .work-play { opacity: 0; pointer-events: none; }
 
     .work-overlay {
       position: absolute;
@@ -1025,7 +1066,7 @@
       <span></span><span></span><span></span>
     </button>
     <ul class="nav-links">
-      <li><a href="#work">Work</a></li>
+      <li><a href="#work">Film</a></li>
       <li><a href="#photography">Photography</a></li>
       <li><a href="#writing">Writing</a></li>
       <li><a href="#about">About</a></li>
@@ -1037,7 +1078,7 @@
   <div class="mobile-nav" id="mobileNav" role="dialog" aria-modal="true" aria-label="Navigation menu">
     <button class="mobile-nav-close" id="mobileNavClose" aria-label="Close menu">✕</button>
     <ul class="mobile-nav-links">
-      <li><a href="#work">Work</a></li>
+      <li><a href="#work">Film</a></li>
       <li><a href="#photography">Photography</a></li>
       <li><a href="#writing">Writing</a></li>
       <li><a href="#about">About</a></li>
@@ -1045,28 +1086,29 @@
     </ul>
   </div>
 
+  <!-- ── INTRO ── -->
+  <div class="intro-bg" id="introBg"></div>
+  <section class="intro-section">
+    <h1 class="intro-name">Kern<br><em>Hendricks</em></h1>
+    <p class="intro-label">Documentary Filmmaker &amp; Journalist</p>
+  </section>
+
   <!-- ── HERO ── -->
   <section id="hero">
     <!-- Showreel as background -->
     <div class="reel-bg">
-      <iframe
-        src="https://www.youtube.com/embed/aoZN04k0Y5A?autoplay=1&mute=1&loop=1&playlist=aoZN04k0Y5A&controls=0&showinfo=0&rel=0&modestbranding=1&playsinline=1&enablejsapi=0"
-        allow="autoplay; encrypted-media"
-        allowfullscreen>
-      </iframe>
+      <video src="previews/showreel-preview.mp4" muted loop playsinline autoplay></video>
     </div>
 
     <div class="grain"></div>
     <div class="hero-vignette"></div>
 
     <div class="hero-content">
-      <p class="hero-eyebrow">Documentary Filmmaker &amp; Journalist</p>
-      <h1 class="hero-name">Kern<br><em>Hendricks</em></h1>
       <p class="hero-descriptor">
         Afghanistan <span>·</span> Ukraine <span>·</span> Palestine <span>·</span> Lebanon
       </p>
       <a href="#work" class="hero-cta">
-        View Work
+        View Films
         <svg width="14" height="10" viewBox="0 0 14 10" fill="none">
           <path d="M1 5h12M9 1l4 4-4 4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
         </svg>
@@ -1082,18 +1124,18 @@
   <!-- ── WORK ── -->
   <section id="work" class="section-fade">
     <p class="section-number">—01</p>
-    <p class="section-label reveal">Selected Work</p>
+    <p class="section-label reveal">Selected Films</p>
 
     <div class="work-grid">
 
       <!-- 1: Showreel — large featured -->
       <div class="work-item reveal" data-vid="aoZN04k0Y5A">
         <div class="work-thumb">
-          <img src="https://img.youtube.com/vi/aoZN04k0Y5A/maxresdefault.jpg" alt="Cinematography Showreel" loading="lazy">
+          <video src="previews/showreel-preview.mp4" muted loop playsinline preload="none" poster="https://img.youtube.com/vi/aoZN04k0Y5A/maxresdefault.jpg"></video>
         </div>
         <div class="work-overlay">
-          <p class="work-outlet">2025 Showreel</p>
-          <h3 class="work-title">Cinematography Showreel</h3>
+          <p class="work-outlet">2026 Showreel</p>
+          <h3 class="work-title">2026 Showreel</h3>
           <p class="work-role">DoP · Editor · Producer</p>
         </div>
         <div class="work-play">
@@ -1106,7 +1148,7 @@
       <!-- 2 -->
       <div class="work-item reveal reveal-delay-1" data-vid="f2q9bI3O-Sc">
         <div class="work-thumb">
-          <img src="https://img.youtube.com/vi/f2q9bI3O-Sc/maxresdefault.jpg" alt="Arriving in Europe: How Refugees Deal With Their Trauma" loading="lazy">
+          <video src="previews/dw-refugees-preview.mp4" muted loop playsinline preload="none" poster="https://img.youtube.com/vi/f2q9bI3O-Sc/maxresdefault.jpg"></video>
         </div>
         <div class="work-overlay">
           <p class="work-outlet">DW Documentary</p>
@@ -1123,7 +1165,7 @@
       <!-- 3 -->
       <div class="work-item reveal reveal-delay-2" data-vid="hwDByBSuK60">
         <div class="work-thumb">
-          <img src="https://img.youtube.com/vi/hwDByBSuK60/maxresdefault.jpg" alt="A Mental Health Crisis in the West Bank" loading="lazy">
+          <video src="previews/mental-health-preview.mp4" muted loop playsinline preload="none" poster="https://img.youtube.com/vi/hwDByBSuK60/maxresdefault.jpg"></video>
         </div>
         <div class="work-overlay">
           <p class="work-outlet">Undark</p>
@@ -1140,7 +1182,7 @@
       <!-- 4 -->
       <div class="work-item reveal reveal-delay-1" data-vid="sIFpTlGrddY">
         <div class="work-thumb">
-          <img src="https://img.youtube.com/vi/sIFpTlGrddY/maxresdefault.jpg" alt="The Toll of Settler Violence in the West Bank" loading="lazy">
+          <video src="previews/settler-violence-preview.mp4" muted loop playsinline preload="none" poster="https://img.youtube.com/vi/sIFpTlGrddY/maxresdefault.jpg"></video>
         </div>
         <div class="work-overlay">
           <p class="work-outlet">Field Report</p>
@@ -1157,7 +1199,7 @@
       <!-- 5 -->
       <div class="work-item reveal reveal-delay-2" data-vid="vGo0Xzw0YpU">
         <div class="work-thumb">
-          <img src="https://img.youtube.com/vi/vGo0Xzw0YpU/maxresdefault.jpg" alt="In War-Torn Ukraine, a Doctor Evacuates Children with Cancer" loading="lazy">
+          <video src="previews/ukraine-cancer-preview.mp4" muted loop playsinline preload="none" poster="https://img.youtube.com/vi/vGo0Xzw0YpU/maxresdefault.jpg"></video>
         </div>
         <div class="work-overlay">
           <p class="work-outlet">Scientific American</p>
@@ -1453,9 +1495,20 @@
   <script>
     // ── rAF throttle utility ──
     let scrollTicking = false;
+    // Intro background fade on scroll
+    const introBg = document.getElementById('introBg');
+    function updateIntro() {
+      if (!introBg || introBg.classList.contains('hidden')) return;
+      if (window.scrollY > 50) {
+        introBg.classList.add('faded');
+        setTimeout(() => introBg.classList.add('hidden'), 1000);
+      }
+    }
+
     function onScroll() {
       if (!scrollTicking) {
         requestAnimationFrame(() => {
+          updateIntro();
           updateProgress();
           updateHScroll();
           updateNav();
@@ -1493,19 +1546,26 @@
       el.addEventListener('mouseleave', () => cursor.classList.remove('expand'));
     });
 
-    // Work item — facade click-to-play
+    // Work items — autoplay preview videos on scroll
+    const videoObserver = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        const video = e.target.querySelector('.work-thumb video');
+        if (!video || e.target.classList.contains('playing')) return;
+        if (e.isIntersecting) {
+          video.play().catch(() => {});
+        } else {
+          video.pause();
+        }
+      });
+    }, { threshold: 0.3 });
+    document.querySelectorAll('.work-item[data-vid]').forEach(item => {
+      videoObserver.observe(item);
+    });
+
+    // Work item — click opens YouTube in new tab
     document.querySelectorAll('.work-item[data-vid]').forEach(item => {
       item.addEventListener('click', function() {
-        if (this.classList.contains('playing')) return;
-        const vid = this.dataset.vid;
-        const thumb = this.querySelector('.work-thumb');
-        const iframe = document.createElement('iframe');
-        iframe.src = `https://www.youtube.com/embed/${vid}?autoplay=1&rel=0&modestbranding=1`;
-        iframe.allow = 'autoplay; encrypted-media';
-        iframe.allowFullscreen = true;
-        thumb.innerHTML = '';
-        thumb.appendChild(iframe);
-        this.classList.add('playing');
+        window.open(`https://www.youtube.com/watch?v=${this.dataset.vid}`, '_blank');
       });
     });
 

@@ -240,8 +240,8 @@ git push origin main
 - [ ] Consider adding a CV download link (PDF) in the About section
 - [ ] Add Google Analytics or privacy-friendly analytics (Plausible/Fathom)
 - [ ] Consider adding more work items to the video grid
-- [ ] Lazy-load the hero YouTube background iframe (currently loads on page load)
-- [ ] Create a dedicated OG image (1200x630, <300 KB) — current one uses a full photo
+- [x] Lazy-load the hero YouTube background iframe (currently loads on page load)
+- [x] Create a dedicated OG image (1200x630, <300 KB) — current one uses a full photo
 
 ---
 
