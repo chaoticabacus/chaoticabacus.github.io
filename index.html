@@ -756,6 +756,9 @@
       width: 100%;
       height: auto;
       display: block;
+      /* Nudge down by half the body line-leading so the visual top of the
+         portrait sits flush with the cap-height of the first body line. */
+      margin-top: 6px;
       margin-bottom: 32px;
     }
 
@@ -791,7 +794,7 @@
     }
     .tag:hover { border-color: var(--accent-dim); color: var(--accent); }
 
-    .about-right { padding-top: 8px; }
+    .about-right { padding-top: 0; }
 
     .about-body {
       font-size: 15px;
