@@ -746,6 +746,10 @@
       border-top: 1px solid var(--border);
     }
 
+    .about-section-number,
+    .about-section-label { grid-column: 1 / -1; }
+    .about-section-label { margin-bottom: 32px; }
+
     .about-left { position: sticky; top: 120px; }
 
     .portrait-placeholder {
@@ -1302,12 +1306,13 @@
 
   <!-- ── ABOUT ── -->
   <section id="about" class="section-fade">
+    <p class="section-number about-section-number">—04</p>
+    <p class="section-label about-section-label reveal">About</p>
+
     <div class="about-left reveal">
       <div class="portrait-placeholder">
         <span>Photo — coming soon</span>
       </div>
-      <p class="section-number">—04</p>
-      <div class="section-label">About</div>
       <div class="about-tags">
         <span class="tag">Documentary Film</span>
         <span class="tag">Photojournalism</span>
