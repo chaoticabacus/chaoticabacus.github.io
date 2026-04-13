@@ -14,6 +14,7 @@ The site is a single-page HTML/CSS/JS application with no frameworks, no build p
 - **Based:** London, UK
 - **Contact:** kernhendricks@gmail.com | +44 7541 068 726
 - **Twitter/X:** @kernhendricks
+- **Instagram:** @kernhendricks
 - **YouTube:** @KernHendricks
 - **GitHub:** chaoticabacus
 
