@@ -85,7 +85,6 @@ Dark, editorial, cinematic. Inspired by high-end documentary and photojournalism
 - Scroll-triggered reveal animations (IntersectionObserver)
 
 ### Key UI Patterns
-- **Intro splash** — page loads with a full-viewport solid-black section (`.intro-section`) showing "Kern Hendricks" + "Documentary Filmmaker & Journalist". A fixed `.intro-bg` layer behind it (z-index 50) fades out on first scroll (>50px), revealing the hero video beneath. The intro text itself is a normal in-flow section so it scrolls up naturally with the page.
 - **Custom cursor** — small gold dot, expands on hover over interactive elements (rAF-throttled)
 - **Scroll progress line** — 1px gold line at top of viewport, fills left-to-right on scroll (`#progress-line`)
 - **Section numbering** — `—01` through `—05` above each section label, in DM Mono 9px `var(--text-dim)`
@@ -94,7 +93,7 @@ Dark, editorial, cinematic. Inspired by high-end documentary and photojournalism
 - **Film items** — each `.work-item` contains a muted HTML5 `<video>` with a local MP4 preview (`preload="none"`, YouTube thumbnail as `poster`). An IntersectionObserver plays the video when it scrolls into view (threshold 0.3) and pauses it when it leaves. Clicking a film item opens the full YouTube video in a new tab (`window.open`).
 - **Section labels** — DM Mono, uppercase, gold, with short gold line suffix (`::after`)
 - **Reveal animation** — `.reveal` class, triggered by IntersectionObserver, stagger via `.reveal-delay-1/2/3`
-- **Hero** — full-viewport, showreel MP4 (`previews/showreel-preview.mp4`) playing muted as background with grain overlay and vignette. Only shows regions + "View Films" CTA + scroll indicator — the name itself lives in the intro splash above.
+- **Hero** — full-viewport, showreel MP4 (`previews/showreel-preview.mp4`) playing muted as background with grain overlay and vignette. "Kern Hendricks" display name + "Documentary Filmmaker & Journalist" eyebrow sit centered over the video, with a scroll indicator at the bottom. No regions list, no CTA button.
 - **Skip-to-content link** — hidden until focused, appears top-left for keyboard navigation
 - **Focus styles** — `:focus-visible` gold outline on all interactive elements
 - **Favicon** — inline SVG "KH" monogram (gold on dark)
@@ -104,7 +103,7 @@ Dark, editorial, cinematic. Inspired by high-end documentary and photojournalism
 ## Page Flow
 
 ```
-Intro splash → Hero → Film (—01) → Photography (—02) → Writing (—03) → About (—04) → Contact (—05)
+Hero → Film (—01) → Photography (—02) → Writing (—03) → About (—04) → Contact (—05)
 ```
 
 Nav links: Film · Photography · Writing · About · Contact
@@ -253,7 +252,7 @@ git revert TAG..HEAD && git push       # safe: new commit undoes the changes
 
 Current tags:
 - **`static-thumbs`** (`f8f0a7f`) — static YouTube thumbnails, no intro splash
-- **`black-intro-dynamic-thumbnails`** (`888ccab`) — black intro splash + autoplay MP4 previews on scroll (current live version)
+- **`black-intro-dynamic-thumbnails`** (`888ccab`) — black intro splash + autoplay MP4 previews on scroll
 
 ---
 
@@ -291,4 +290,3 @@ Current tags:
 - Do not add autoplay video with sound
 - Do not proxy Cloudflare DNS records for GitHub Pages (must be DNS only / grey cloud)
 - Do not revert the film grid to YouTube iframes — the self-hosted MP4 preview pattern (with click-to-open-YouTube in a new tab) is intentional and dramatically lighter
-- Do not remove the intro splash without discussing it first — it's a deliberate editorial framing device

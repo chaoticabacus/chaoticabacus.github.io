@@ -231,57 +231,6 @@
     .mobile-nav-links li:last-child a { border-bottom: none; }
     .mobile-nav-links a:hover { color: var(--accent); }
 
-    /* ── INTRO ── */
-    .intro-bg {
-      position: fixed;
-      inset: 0;
-      z-index: 50;
-      background: var(--bg);
-      pointer-events: none;
-      transition: opacity 1s ease;
-    }
-    .intro-bg.faded { opacity: 0; }
-    .intro-bg.hidden { display: none; }
-
-    .intro-section {
-      position: relative;
-      z-index: 51;
-      height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .intro-name {
-      font-family: var(--font-display);
-      font-size: clamp(56px, 8vw, 120px);
-      font-weight: 300;
-      line-height: 0.92;
-      letter-spacing: -0.01em;
-      color: var(--text);
-      text-align: center;
-      opacity: 0;
-      transform: translateY(20px);
-      animation: fadeUp 1.2s var(--ease-out-expo) 0.2s forwards;
-    }
-    .intro-name em {
-      font-style: italic;
-      color: var(--text-mid);
-    }
-
-    .intro-label {
-      font-family: var(--font-mono);
-      font-size: 10px;
-      letter-spacing: 0.25em;
-      text-transform: uppercase;
-      color: var(--accent);
-      margin-top: 28px;
-      opacity: 0;
-      transform: translateY(20px);
-      animation: fadeUp 1s var(--ease-out-expo) 0.6s forwards;
-    }
-
     /* ── HERO ── */
     #hero {
       position: relative;
@@ -341,9 +290,9 @@
       letter-spacing: 0.25em;
       text-transform: uppercase;
       color: var(--accent);
-      margin-bottom: 28px;
+      margin-top: 28px;
       opacity: 0;
-      animation: fadeUp 1s var(--ease-out-expo) 0.3s forwards;
+      animation: fadeUp 1s var(--ease-out-expo) 0.6s forwards;
     }
 
     .hero-name {
@@ -353,53 +302,13 @@
       line-height: 0.92;
       letter-spacing: -0.01em;
       color: var(--text);
-      margin-bottom: 32px;
       opacity: 0;
-      animation: fadeUp 1.2s var(--ease-out-expo) 0.5s forwards;
+      animation: fadeUp 1.2s var(--ease-out-expo) 0.2s forwards;
     }
     .hero-name em {
       font-style: italic;
       color: var(--text-mid);
     }
-
-    .hero-descriptor {
-      font-family: var(--font-body);
-      font-size: 13px;
-      font-weight: 300;
-      letter-spacing: 0.06em;
-      color: var(--text-mid);
-      margin-bottom: 56px;
-      opacity: 0;
-      animation: fadeUp 1s var(--ease-out-expo) 0.7s forwards;
-    }
-    .hero-descriptor span {
-      color: var(--text-dim);
-      margin: 0 10px;
-    }
-
-    .hero-cta {
-      display: inline-flex;
-      align-items: center;
-      gap: 12px;
-      font-family: var(--font-mono);
-      font-size: 11px;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      color: var(--accent);
-      border: 1px solid var(--accent-dim);
-      padding: 14px 32px;
-      transition: all 0.35s var(--ease-out-expo);
-      opacity: 0;
-      animation: fadeUp 1s var(--ease-out-expo) 0.9s forwards;
-    }
-    .hero-cta:hover {
-      background: var(--accent);
-      color: var(--bg);
-      border-color: var(--accent);
-      gap: 20px;
-    }
-    .hero-cta svg { transition: transform 0.3s; }
-    .hero-cta:hover svg { transform: translateX(4px); }
 
     .scroll-indicator {
       position: absolute;
@@ -1086,13 +995,6 @@
     </ul>
   </div>
 
-  <!-- ── INTRO ── -->
-  <div class="intro-bg" id="introBg"></div>
-  <section class="intro-section">
-    <h1 class="intro-name">Kern<br><em>Hendricks</em></h1>
-    <p class="intro-label">Documentary Filmmaker &amp; Journalist</p>
-  </section>
-
   <!-- ── HERO ── -->
   <section id="hero">
     <!-- Showreel as background -->
@@ -1104,15 +1006,8 @@
     <div class="hero-vignette"></div>
 
     <div class="hero-content">
-      <p class="hero-descriptor">
-        Afghanistan <span>·</span> Ukraine <span>·</span> Palestine <span>·</span> Lebanon
-      </p>
-      <a href="#work" class="hero-cta">
-        View Films
-        <svg width="14" height="10" viewBox="0 0 14 10" fill="none">
-          <path d="M1 5h12M9 1l4 4-4 4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
-        </svg>
-      </a>
+      <h1 class="hero-name">Kern<br><em>Hendricks</em></h1>
+      <p class="hero-eyebrow">Documentary Filmmaker &amp; Journalist</p>
     </div>
 
     <div class="scroll-indicator">
@@ -1495,20 +1390,9 @@
   <script>
     // ── rAF throttle utility ──
     let scrollTicking = false;
-    // Intro background fade on scroll
-    const introBg = document.getElementById('introBg');
-    function updateIntro() {
-      if (!introBg || introBg.classList.contains('hidden')) return;
-      if (window.scrollY > 50) {
-        introBg.classList.add('faded');
-        setTimeout(() => introBg.classList.add('hidden'), 1000);
-      }
-    }
-
     function onScroll() {
       if (!scrollTicking) {
         requestAnimationFrame(() => {
-          updateIntro();
           updateProgress();
           updateHScroll();
           updateNav();
