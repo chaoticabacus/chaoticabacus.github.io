@@ -1545,10 +1545,8 @@
     window.addEventListener('scroll', onScroll, { passive: true });
   </script>
 
-  <!-- Cloudflare Web Analytics — privacy-friendly, cookieless, no GDPR consent banner needed.
-       To enable: log in to Cloudflare → Analytics & Logs → Web Analytics → Add a site
-       (kernhendricks.com), copy the generated token, and paste it into the data-cf-beacon
-       attribute below. Until then, this script is harmless (token is empty). -->
-  <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": ""}'></script>
+  <!-- Analytics: handled automatically by Cloudflare Web Analytics via the
+       orange-cloud (proxied) DNS record. Enable in Cloudflare dashboard →
+       Analytics & Logs → Web Analytics. No JS snippet needed. -->
 </body>
 </html>

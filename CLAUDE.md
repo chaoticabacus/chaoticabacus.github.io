@@ -226,8 +226,9 @@ One line. Copyright left, location/availability right.
 - **Repo:** `chaoticabacus/chaoticabacus.github.io` (public)
 - **Branch:** `main`
 - **Hosting:** GitHub Pages — auto-deploys on every push, ~60 second lag
-- **Domain:** kernhendricks.com via Cloudflare DNS (DNS-only / grey cloud — do NOT proxy)
-- **SSL:** GitHub Pages enforced HTTPS (free)
+- **Domain:** kernhendricks.com via Cloudflare DNS, **proxied (orange cloud)** for CDN, analytics, and DDoS protection
+- **SSL:** GitHub Pages enforced HTTPS (free) + Cloudflare SSL/TLS mode set to **Full** (NOT Flexible — Flexible causes infinite redirect loops with GitHub Pages)
+- **Analytics:** Cloudflare Web Analytics, enabled automatically via the proxied DNS record. No JS snippet in the source.
 
 ### To preview locally
 ```bash
@@ -272,7 +273,6 @@ Current tags:
 - [ ] Add portrait photo to About section (Kern to supply)
 - [ ] Add captions/regions for `L1001647.jpg`, `L1001635.jpg`, `still-field-1.jpg`, `still-field-2.jpg` in photography section
 - [ ] Consider adding a CV download link (PDF) in the About section
-- [ ] Paste Cloudflare Web Analytics token into the `data-cf-beacon` attribute at the bottom of `index.html` (script tag is already wired in; just needs the token from Cloudflare → Analytics & Logs → Web Analytics)
 - [ ] Consider adding more work items to the video grid
 - [x] Lazy-load the hero YouTube background iframe (currently loads on page load)
 - [x] Create a dedicated OG image (1200x630, <300 KB) — current one uses a full photo
@@ -288,5 +288,5 @@ Current tags:
 - Do not add rounded corners to images
 - Do not change the colour accent from gold without discussing it first
 - Do not add autoplay video with sound
-- Do not proxy Cloudflare DNS records for GitHub Pages (must be DNS only / grey cloud)
+- Do not switch Cloudflare SSL/TLS mode to "Flexible" — it causes infinite redirect loops with GitHub Pages. Stick with "Full" or "Full (strict)".
 - Do not revert the film grid to YouTube iframes — the self-hosted MP4 preview pattern (with click-to-open-YouTube in a new tab) is intentional and dramatically lighter
