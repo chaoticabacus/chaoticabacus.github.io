@@ -752,22 +752,12 @@
 
     .about-left { position: sticky; top: 120px; }
 
-    .portrait-placeholder {
+    .portrait {
       width: 100%;
       aspect-ratio: 3/4;
-      background: var(--bg-3);
-      border: 1px dashed rgba(200,169,110,0.25);
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      object-fit: cover;
+      display: block;
       margin-bottom: 32px;
-    }
-    .portrait-placeholder span {
-      font-family: var(--font-mono);
-      font-size: 9px;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      color: var(--accent-dim);
     }
 
     .about-heading {
@@ -1310,9 +1300,7 @@
     <p class="section-label about-section-label reveal">About</p>
 
     <div class="about-left reveal">
-      <div class="portrait-placeholder">
-        <span>Photo — coming soon</span>
-      </div>
+      <img class="portrait" src="kern-portrait.jpg" alt="Kern Hendricks" loading="lazy">
       <div class="about-tags">
         <span class="tag">Documentary Film</span>
         <span class="tag">Photojournalism</span>

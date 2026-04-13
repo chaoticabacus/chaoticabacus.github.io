@@ -206,9 +206,9 @@ Editorial article list. 10 articles in `.article-list`, each an `.article-row` a
 
 ## About Section (`#about`)
 
-Two-column sticky layout. Left column (sticky): portrait placeholder + large display heading + skill tags. Right column: body copy + publications list.
+Two-column sticky layout, with the section header (`—04 / About`) spanning both columns above. Left column (sticky): portrait photo + skill tags. Right column: body copy + publications list + contact links.
 
-**Portrait placeholder:** `.portrait-placeholder` div in `.about-left`, `width: 100%; aspect-ratio: 3/4`. When Kern supplies a photo, replace the entire div with `<img src="..." alt="Kern Hendricks" style="width:100%;aspect-ratio:3/4;object-fit:cover;">`. No rounded corners.
+**Portrait:** `<img class="portrait" src="kern-portrait.jpg">` in `.about-left`. `width: 100%; aspect-ratio: 3/4; object-fit: cover;`. No rounded corners.
 
 ---
 
@@ -273,7 +273,6 @@ Current tags:
 
 ## Known Todos / Future Improvements
 
-- [ ] Add portrait photo to About section (Kern to supply)
 - [ ] Add captions/regions for `L1001647.jpg`, `L1001635.jpg`, `still-field-1.jpg`, `still-field-2.jpg` in photography section
 - [ ] Consider adding a CV download link (PDF) in the About section
 - [ ] Consider adding more work items to the video grid
