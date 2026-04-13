@@ -623,10 +623,8 @@
       .work-item { cursor: none; }
     }
 
-    /* 3-column grid, bottom row balanced as equal pair */
+    /* 3-column grid, two equal rows of three */
     .work-item { grid-column: span 4; }
-    .work-item:nth-child(4),
-    .work-item:nth-child(5) { grid-column: span 6; }
 
     .work-thumb {
       aspect-ratio: 16/9;
@@ -984,8 +982,6 @@
 
     @media (max-width: 768px) {
       .work-item { grid-column: span 6; }
-      .work-item:nth-child(4),
-      .work-item:nth-child(5) { grid-column: span 6; }
     }
 
     @media (max-width: 600px) {
@@ -993,8 +989,6 @@
       .nav-hamburger { display: flex; }
       .hero-name { font-size: 52px; }
       .work-item { grid-column: span 12; }
-      .work-item:nth-child(4),
-      .work-item:nth-child(5) { grid-column: span 12; }
       .contact-links { gap: 32px; }
       .article-row:active .article-title { color: var(--text); }
       .article-row:active::before { opacity: 1; }
@@ -1142,6 +1136,23 @@
           <p class="work-outlet">Scientific American</p>
           <h3 class="work-title">In War-Torn Ukraine, a Doctor Evacuates Children with Cancer</h3>
           <p class="work-role">DoP · Producer</p>
+        </div>
+        <div class="work-play">
+          <svg width="16" height="18" viewBox="0 0 16 18" fill="none">
+            <path d="M1 1l14 8L1 17V1z" stroke="var(--accent)" stroke-width="1.2" stroke-linejoin="round"/>
+          </svg>
+        </div>
+      </a>
+
+      <!-- 6 -->
+      <a class="work-item reveal reveal-delay-1" data-vid="992beLXGrMw" href="https://www.youtube.com/watch?v=992beLXGrMw" target="_blank" rel="noopener noreferrer" aria-label="Watch: War in Lebanon (Independent) on YouTube">
+        <div class="work-thumb">
+          <video src="previews/lebanon-preview.mp4" muted loop playsinline preload="none" poster="previews/lebanon-poster.jpg"></video>
+        </div>
+        <div class="work-overlay">
+          <p class="work-outlet">Independent</p>
+          <h3 class="work-title">War in Lebanon</h3>
+          <p class="work-role">DoP · Producer · Editor</p>
         </div>
         <div class="work-play">
           <svg width="16" height="18" viewBox="0 0 16 18" fill="none">
