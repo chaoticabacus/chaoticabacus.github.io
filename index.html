@@ -837,47 +837,23 @@
       color: var(--text-mid);
     }
 
-    /* ── CONTACT ── */
-    #contact {
-      border-top: 1px solid var(--border);
-      text-align: center;
-    }
-
-    .contact-heading {
-      font-family: var(--font-display);
-      font-size: clamp(48px, 7vw, 100px);
-      font-weight: 300;
-      line-height: 0.95;
-      color: var(--text);
-      margin-bottom: 16px;
-      letter-spacing: -0.02em;
-    }
-    .contact-heading em {
-      font-style: italic;
-      color: var(--text-mid);
-    }
-
-    .contact-sub {
-      font-size: 13px;
-      color: var(--text-dim);
-      font-weight: 300;
-      margin-bottom: 56px;
-      letter-spacing: 0.04em;
-    }
-
+    /* ── CONTACT LINKS (nested in About) ── */
     .contact-links {
       display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 48px;
+      align-items: flex-start;
+      justify-content: flex-start;
+      gap: 40px;
       flex-wrap: wrap;
+      margin-top: 48px;
+      padding-top: 32px;
+      border-top: 1px solid var(--border);
     }
 
     .contact-link {
       display: flex;
       flex-direction: column;
-      align-items: center;
-      gap: 8px;
+      align-items: flex-start;
+      gap: 6px;
       transition: all 0.3s;
     }
     .contact-link-label {
@@ -993,7 +969,6 @@
       <li><a href="#photography">Photography</a></li>
       <li><a href="#writing">Writing</a></li>
       <li><a href="#about">About</a></li>
-      <li><a href="#contact">Contact</a></li>
     </ul>
   </nav>
 
@@ -1005,7 +980,6 @@
       <li><a href="#photography">Photography</a></li>
       <li><a href="#writing">Writing</a></li>
       <li><a href="#about">About</a></li>
-      <li><a href="#contact">Contact</a></li>
     </ul>
   </div>
 
@@ -1370,29 +1344,25 @@
           <span>ProPublica</span>
         </div>
       </div>
-    </div>
-  </section>
 
-  <!-- ── CONTACT ── -->
-  <section id="contact" class="section-fade">
-    <p class="section-number reveal">—05</p>
-    <div class="contact-links reveal">
-      <a href="mailto:kernhendricks@gmail.com" class="contact-link">
-        <span class="contact-link-label">Email</span>
-        <span class="contact-link-value">kernhendricks@gmail.com</span>
-      </a>
-      <a href="https://www.youtube.com/@KernHendricks" target="_blank" rel="noopener" class="contact-link">
-        <span class="contact-link-label">YouTube</span>
-        <span class="contact-link-value">@KernHendricks</span>
-      </a>
-      <a href="https://www.instagram.com/kernhendricks/" target="_blank" rel="noopener noreferrer" class="contact-link">
-        <span class="contact-link-label">Instagram</span>
-        <span class="contact-link-value">@kernhendricks</span>
-      </a>
-      <a href="https://twitter.com/kernhendricks" target="_blank" rel="noopener noreferrer" class="contact-link">
-        <span class="contact-link-label">Twitter / X</span>
-        <span class="contact-link-value">@kernhendricks</span>
-      </a>
+      <div class="contact-links reveal">
+        <a href="mailto:kernhendricks@gmail.com" class="contact-link">
+          <span class="contact-link-label">Email</span>
+          <span class="contact-link-value">kernhendricks@gmail.com</span>
+        </a>
+        <a href="https://www.youtube.com/@KernHendricks" target="_blank" rel="noopener noreferrer" class="contact-link">
+          <span class="contact-link-label">YouTube</span>
+          <span class="contact-link-value">@KernHendricks</span>
+        </a>
+        <a href="https://www.instagram.com/kernhendricks/" target="_blank" rel="noopener noreferrer" class="contact-link">
+          <span class="contact-link-label">Instagram</span>
+          <span class="contact-link-value">@kernhendricks</span>
+        </a>
+        <a href="https://twitter.com/kernhendricks" target="_blank" rel="noopener noreferrer" class="contact-link">
+          <span class="contact-link-label">Twitter / X</span>
+          <span class="contact-link-value">@kernhendricks</span>
+        </a>
+      </div>
     </div>
   </section>
 

@@ -88,7 +88,7 @@ Dark, editorial, cinematic. Inspired by high-end documentary and photojournalism
 ### Key UI Patterns
 - **Custom cursor** — small gold dot, expands on hover over interactive elements (rAF-throttled). Gated behind `@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference)` so touch devices and accessibility users get the native cursor.
 - **Scroll progress line** — 1px gold line at top of viewport, fills left-to-right on scroll (`#progress-line`)
-- **Section numbering** — `—01` through `—05` above each section label, in DM Mono 9px `var(--text-dim)`
+- **Section numbering** — `—01` through `—04` above each section label, in DM Mono 9px `var(--text-dim)`
 - **Section fades** — `.section-fade` class on all sections, IntersectionObserver adds `.visible`, fades in on scroll
 - **Nav** — hides on scroll down, reappears on scroll up; hamburger on mobile (≤600px, 44px min tap target)
 - **Film items** — each `.work-item` is an `<a>` element (proper link, keyboard-focusable, opens in a new tab via `target="_blank" rel="noopener noreferrer"`) wrapping a muted HTML5 `<video>` with a local MP4 preview (`preload="none"`, YouTube thumbnail as `poster`). An IntersectionObserver plays the video when it scrolls into view (threshold 0.3) and pauses it when it leaves.
@@ -104,10 +104,12 @@ Dark, editorial, cinematic. Inspired by high-end documentary and photojournalism
 ## Page Flow
 
 ```
-Hero → Film (—01) → Photography (—02) → Writing (—03) → About (—04) → Contact (—05)
+Hero → Film (—01) → Photography (—02) → Writing (—03) → About (—04)
 ```
 
-Nav links: Film · Photography · Writing · About · Contact
+Nav links: Film · Photography · Writing · About
+
+Contact details (email, YouTube, Instagram, Twitter/X) live inside the About section, directly under the "Published in" block — no separate Contact section.
 
 ---
 
@@ -210,9 +212,9 @@ Two-column sticky layout. Left column (sticky): portrait placeholder + large dis
 
 ---
 
-## Contact Section (`#contact`)
+## Contact Links
 
-Centered. Large display heading. Three contact links: email, YouTube, Twitter/X. Keep minimal.
+Live inside the About section's right column, immediately after the `.about-publications` block. Four `<a>` elements (Email, YouTube, Instagram, Twitter/X) inside `.contact-links`, separated from the publications above by a thin top border. There is no longer a standalone Contact section.
 
 ---
 
