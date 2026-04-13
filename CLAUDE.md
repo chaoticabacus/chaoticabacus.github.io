@@ -136,18 +136,19 @@ Each `.work-item` contains an HTML5 `<video>` element pointing at a local MP4 in
 Preview clips are generated from the YouTube source via `yt-dlp` + `ffmpeg`. Typical recipe:
 
 ```bash
-# Download at ≤480p
-yt-dlp -f "best[height<=480]" -o raw.mp4 "https://youtube.com/watch?v=VIDEO_ID"
+# Download best video up to 720p (much sharper downscale to 854x480 than sourcing 480p directly)
+yt-dlp -f "bv*[height<=720]+ba/b[height<=720]" --merge-output-format mp4 -o raw.mp4 "https://youtube.com/watch?v=VIDEO_ID"
 
-# Trim, strip audio, optional crop (for letterboxed 2.39:1 masters), re-encode
-ffmpeg -y -i raw.mp4 -ss START_SECONDS -t 12 -an \
-  -vf "crop=W:H:X:Y,scale=854:480" \
-  -c:v libx264 -crf 32 -preset slow -movflags +faststart output.mp4
+# Trim, strip audio, scale to 854x480 (preserving any letterbox bars), re-encode
+ffmpeg -y -ss START_SECONDS -i raw.mp4 -t 12 -an \
+  -vf "scale=854:480" \
+  -c:v libx264 -crf 26 -preset slow -movflags +faststart output.mp4
 ```
 
-- `-ss` before `-i` for fast seek; use `ffmpeg -i raw.mp4 -vf cropdetect -f null -` to auto-detect crop values when black bars are baked in
-- Target ~500 KB per clip; current 5 clips total ~700 KB
-- All outputs are 854x480, 12 seconds, no audio
+- `-ss` before `-i` for fast seek
+- For cinematic sources where YouTube has already stripped letterbox bars (e.g. 1280×544 for 2.35:1), use `scale=854:H,pad=854:480:0:(480-H)/2:black` to reintroduce them rather than stretching the frame
+- All outputs are 854×480, 12 seconds, no audio
+- CRF 26 (not 32) — yields noticeably sharper background-autoplay thumbnails. Clips typically land between 150–870 KB depending on motion/content; total previews dir ~2.8 MB
 
 ### Poster generation
 
