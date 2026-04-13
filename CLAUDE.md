@@ -208,7 +208,7 @@ Editorial article list. 10 articles in `.article-list`, each an `.article-row` a
 
 Two-column sticky layout, with the section header (`—04 / About`) spanning both columns above. Left column (sticky): portrait photo + skill tags. Right column: body copy + publications list + contact links.
 
-**Portrait:** `<img class="portrait" src="kern-portrait.jpg">` in `.about-left`. `width: 100%; aspect-ratio: 3/4; object-fit: cover;`. No rounded corners.
+**Portrait:** `<img class="portrait" src="kern-portrait.jpg">` in `.about-left`. `width: 100%; height: auto;` — frame matches the image's native aspect ratio so nothing gets cropped. No rounded corners.
 
 ---
 
