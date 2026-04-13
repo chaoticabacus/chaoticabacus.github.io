@@ -56,7 +56,9 @@
       font-size: 15px;
       line-height: 1.7;
       overflow-x: hidden;
-      cursor: none;
+    }
+    @media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+      body { cursor: none; }
     }
     a { color: inherit; text-decoration: none; }
     img { display: block; width: 100%; }
@@ -92,22 +94,29 @@
       z-index: 10000;
     }
 
-    /* ── CUSTOM CURSOR ── */
-    .cursor {
-      position: fixed;
-      top: 0; left: 0;
-      width: 8px; height: 8px;
-      background: var(--accent);
-      border-radius: 50%;
-      pointer-events: none;
-      z-index: 9999;
-      transform: translate(-50%, -50%);
-      transition: width 0.2s, height 0.2s, background 0.2s;
-      mix-blend-mode: difference;
-    }
-    .cursor.expand {
-      width: 40px; height: 40px;
-      background: rgba(200,169,110,0.15);
+    /* ── CUSTOM CURSOR ──
+       Only shown on precise pointing devices (mouse/trackpad) with no
+       reduced-motion preference. Touch devices and accessibility users get
+       the native cursor. */
+    .cursor { display: none; }
+    @media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+      .cursor {
+        display: block;
+        position: fixed;
+        top: 0; left: 0;
+        width: 8px; height: 8px;
+        background: var(--accent);
+        border-radius: 50%;
+        pointer-events: none;
+        z-index: 9999;
+        transform: translate(-50%, -50%);
+        transition: width 0.2s, height 0.2s, background 0.2s;
+        mix-blend-mode: difference;
+      }
+      .cursor.expand {
+        width: 40px; height: 40px;
+        background: rgba(200,169,110,0.15);
+      }
     }
 
     /* ── NAV ── */
@@ -546,10 +555,15 @@
     }
 
     .work-item {
+      display: block;
       position: relative;
       overflow: hidden;
       background: var(--bg-3);
-      cursor: none;
+      color: inherit;
+      text-decoration: none;
+    }
+    @media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+      .work-item { cursor: none; }
     }
 
     /* 3-column grid, bottom row balanced as equal pair */
@@ -1024,7 +1038,7 @@
     <div class="work-grid">
 
       <!-- 1: Showreel — large featured -->
-      <div class="work-item reveal" data-vid="aoZN04k0Y5A">
+      <a class="work-item reveal" data-vid="aoZN04k0Y5A" href="https://www.youtube.com/watch?v=aoZN04k0Y5A" target="_blank" rel="noopener noreferrer" aria-label="Watch: 2026 Showreel on YouTube">
         <div class="work-thumb">
           <video src="previews/showreel-preview.mp4" muted loop playsinline preload="none" poster="https://img.youtube.com/vi/aoZN04k0Y5A/maxresdefault.jpg"></video>
         </div>
@@ -1038,10 +1052,10 @@
             <path d="M1 1l14 8L1 17V1z" stroke="var(--accent)" stroke-width="1.2" stroke-linejoin="round"/>
           </svg>
         </div>
-      </div>
+      </a>
 
       <!-- 2 -->
-      <div class="work-item reveal reveal-delay-1" data-vid="f2q9bI3O-Sc">
+      <a class="work-item reveal reveal-delay-1" data-vid="f2q9bI3O-Sc" href="https://www.youtube.com/watch?v=f2q9bI3O-Sc" target="_blank" rel="noopener noreferrer" aria-label="Watch: Arriving in Europe — How Refugees Deal With Their Trauma (DW Documentary) on YouTube">
         <div class="work-thumb">
           <video src="previews/dw-refugees-preview.mp4" muted loop playsinline preload="none" poster="https://img.youtube.com/vi/f2q9bI3O-Sc/maxresdefault.jpg"></video>
         </div>
@@ -1055,10 +1069,10 @@
             <path d="M1 1l14 8L1 17V1z" stroke="var(--accent)" stroke-width="1.2" stroke-linejoin="round"/>
           </svg>
         </div>
-      </div>
+      </a>
 
       <!-- 3 -->
-      <div class="work-item reveal reveal-delay-2" data-vid="hwDByBSuK60">
+      <a class="work-item reveal reveal-delay-2" data-vid="hwDByBSuK60" href="https://www.youtube.com/watch?v=hwDByBSuK60" target="_blank" rel="noopener noreferrer" aria-label="Watch: A Mental Health Crisis in the West Bank (Undark) on YouTube">
         <div class="work-thumb">
           <video src="previews/mental-health-preview.mp4" muted loop playsinline preload="none" poster="https://img.youtube.com/vi/hwDByBSuK60/maxresdefault.jpg"></video>
         </div>
@@ -1072,10 +1086,10 @@
             <path d="M1 1l14 8L1 17V1z" stroke="var(--accent)" stroke-width="1.2" stroke-linejoin="round"/>
           </svg>
         </div>
-      </div>
+      </a>
 
       <!-- 4 -->
-      <div class="work-item reveal reveal-delay-1" data-vid="sIFpTlGrddY">
+      <a class="work-item reveal reveal-delay-1" data-vid="sIFpTlGrddY" href="https://www.youtube.com/watch?v=sIFpTlGrddY" target="_blank" rel="noopener noreferrer" aria-label="Watch: The Toll of Settler Violence in the West Bank (Field Report) on YouTube">
         <div class="work-thumb">
           <video src="previews/settler-violence-preview.mp4" muted loop playsinline preload="none" poster="https://img.youtube.com/vi/sIFpTlGrddY/maxresdefault.jpg"></video>
         </div>
@@ -1089,10 +1103,10 @@
             <path d="M1 1l14 8L1 17V1z" stroke="var(--accent)" stroke-width="1.2" stroke-linejoin="round"/>
           </svg>
         </div>
-      </div>
+      </a>
 
       <!-- 5 -->
-      <div class="work-item reveal reveal-delay-2" data-vid="vGo0Xzw0YpU">
+      <a class="work-item reveal reveal-delay-2" data-vid="vGo0Xzw0YpU" href="https://www.youtube.com/watch?v=vGo0Xzw0YpU" target="_blank" rel="noopener noreferrer" aria-label="Watch: In War-Torn Ukraine, a Doctor Evacuates Children with Cancer (Scientific American) on YouTube">
         <div class="work-thumb">
           <video src="previews/ukraine-cancer-preview.mp4" muted loop playsinline preload="none" poster="https://img.youtube.com/vi/vGo0Xzw0YpU/maxresdefault.jpg"></video>
         </div>
@@ -1106,7 +1120,7 @@
             <path d="M1 1l14 8L1 17V1z" stroke="var(--accent)" stroke-width="1.2" stroke-linejoin="round"/>
           </svg>
         </div>
-      </div>
+      </a>
 
     </div>
   </section>
@@ -1446,12 +1460,6 @@
       videoObserver.observe(item);
     });
 
-    // Work item — click opens YouTube in new tab
-    document.querySelectorAll('.work-item[data-vid]').forEach(item => {
-      item.addEventListener('click', function() {
-        window.open(`https://www.youtube.com/watch?v=${this.dataset.vid}`, '_blank');
-      });
-    });
 
     // Mobile nav
     const navHamburger   = document.getElementById('navHamburger');
@@ -1536,5 +1544,11 @@
     // Single scroll listener for all scroll-driven updates
     window.addEventListener('scroll', onScroll, { passive: true });
   </script>
+
+  <!-- Cloudflare Web Analytics — privacy-friendly, cookieless, no GDPR consent banner needed.
+       To enable: log in to Cloudflare → Analytics & Logs → Web Analytics → Add a site
+       (kernhendricks.com), copy the generated token, and paste it into the data-cf-beacon
+       attribute below. Until then, this script is harmless (token is empty). -->
+  <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": ""}'></script>
 </body>
 </html>

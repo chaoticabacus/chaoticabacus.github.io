@@ -85,12 +85,12 @@ Dark, editorial, cinematic. Inspired by high-end documentary and photojournalism
 - Scroll-triggered reveal animations (IntersectionObserver)
 
 ### Key UI Patterns
-- **Custom cursor** — small gold dot, expands on hover over interactive elements (rAF-throttled)
+- **Custom cursor** — small gold dot, expands on hover over interactive elements (rAF-throttled). Gated behind `@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference)` so touch devices and accessibility users get the native cursor.
 - **Scroll progress line** — 1px gold line at top of viewport, fills left-to-right on scroll (`#progress-line`)
 - **Section numbering** — `—01` through `—05` above each section label, in DM Mono 9px `var(--text-dim)`
 - **Section fades** — `.section-fade` class on all sections, IntersectionObserver adds `.visible`, fades in on scroll
 - **Nav** — hides on scroll down, reappears on scroll up; hamburger on mobile (≤600px, 44px min tap target)
-- **Film items** — each `.work-item` contains a muted HTML5 `<video>` with a local MP4 preview (`preload="none"`, YouTube thumbnail as `poster`). An IntersectionObserver plays the video when it scrolls into view (threshold 0.3) and pauses it when it leaves. Clicking a film item opens the full YouTube video in a new tab (`window.open`).
+- **Film items** — each `.work-item` is an `<a>` element (proper link, keyboard-focusable, opens in a new tab via `target="_blank" rel="noopener noreferrer"`) wrapping a muted HTML5 `<video>` with a local MP4 preview (`preload="none"`, YouTube thumbnail as `poster`). An IntersectionObserver plays the video when it scrolls into view (threshold 0.3) and pauses it when it leaves.
 - **Section labels** — DM Mono, uppercase, gold, with short gold line suffix (`::after`)
 - **Reveal animation** — `.reveal` class, triggered by IntersectionObserver, stagger via `.reveal-delay-1/2/3`
 - **Hero** — full-viewport, showreel MP4 (`previews/showreel-preview.mp4`) playing muted as background with grain overlay and vignette. "Kern Hendricks" display name + "Documentary Filmmaker & Journalist" eyebrow sit centered over the video, with a scroll indicator at the bottom. No regions list, no CTA button.
@@ -272,7 +272,7 @@ Current tags:
 - [ ] Add portrait photo to About section (Kern to supply)
 - [ ] Add captions/regions for `L1001647.jpg`, `L1001635.jpg`, `still-field-1.jpg`, `still-field-2.jpg` in photography section
 - [ ] Consider adding a CV download link (PDF) in the About section
-- [ ] Add Google Analytics or privacy-friendly analytics (Plausible/Fathom)
+- [ ] Paste Cloudflare Web Analytics token into the `data-cf-beacon` attribute at the bottom of `index.html` (script tag is already wired in; just needs the token from Cloudflare → Analytics & Logs → Web Analytics)
 - [ ] Consider adding more work items to the video grid
 - [x] Lazy-load the hero YouTube background iframe (currently loads on page load)
 - [x] Create a dedicated OG image (1200x630, <300 KB) — current one uses a full photo
