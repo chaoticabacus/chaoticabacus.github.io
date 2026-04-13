@@ -467,9 +467,11 @@
     }
 
     .h-scroll-header {
+      position: absolute;
+      top: 48px;
+      left: 0;
+      right: 0;
       padding: 0 48px;
-      margin-bottom: 32px;
-      flex-shrink: 0;
     }
 
     .h-scroll-track {
@@ -594,7 +596,7 @@
     @media (max-width: 900px) {
       .h-scroll-outer { height: auto; }
       .h-scroll-sticky { position: static; height: auto; overflow: visible; }
-      .h-scroll-header { padding: 80px 24px 32px; }
+      .h-scroll-header { position: static; padding: 80px 24px 32px; }
       .h-scroll-track { flex-wrap: wrap; padding: 0 24px; gap: 2px; }
       .h-photo.landscape,
       .h-photo.portrait { height: auto; width: calc(50% - 1px); aspect-ratio: 3/2; }
