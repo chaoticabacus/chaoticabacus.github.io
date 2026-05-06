@@ -94,7 +94,8 @@ Dark, editorial, cinematic. Inspired by high-end documentary and photojournalism
 - **Film items** — each `.work-item` is an `<a>` element (proper link, keyboard-focusable, opens in a new tab via `target="_blank" rel="noopener noreferrer"`) wrapping a muted HTML5 `<video>` with a local MP4 preview (`preload="none"`, local poster JPEG). An IntersectionObserver plays the video when it scrolls into view (threshold 0.3) and pauses it when it leaves.
 - **Section labels** — DM Mono, uppercase, gold, with short gold line suffix (`::after`)
 - **Reveal animation** — `.reveal` class, triggered by IntersectionObserver, stagger via `.reveal-delay-1/2/3`
-- **Hero** — full-viewport, showreel MP4 (`previews/showreel-preview.mp4`) playing muted as background with grain overlay and vignette. "Kern Hendricks" display name + "Documentary Filmmaker & Journalist" eyebrow sit centered over the video, with a scroll indicator at the bottom. Hero content has a parallax effect: text recedes at 35% scroll speed; scroll indicator fades out as the user starts scrolling.
+- **Hero** — full-viewport, showreel MP4 (`previews/hero-showreel.mp4`) playing muted as background with grain overlay and vignette. "Kern Hendricks" display name (split across two lines as `<span class="hero-name-line">` elements with a 140ms staggered fade-up entrance — Kern lands first, then italic Hendricks) + "Film and reporting from the margins of crisis" eyebrow sit centered over the video, with a scroll indicator at the bottom. Hero content has a parallax effect: text recedes at 35% scroll speed; scroll indicator fades out as the user starts scrolling. A small **Sound off / Sound on** toggle (`#heroSoundToggle`) at bottom-right lets viewers unmute the showreel; clicking toggles the video's `muted` property and swaps the speaker glyph + label + aria-label. Keyboard-focusable, mobile-tappable.
+- **Press strip** — quiet credibility row between hero and film grid (`<section id="press">`). Five inline-SVG outlet wordmarks — Al Jazeera, Scientific American, DW Documentary, Foreign Policy, ProPublica — set in `var(--text-dim)` on a slightly-darker `--bg-2` band. Optically sized (each logo gets a custom CSS height to read at matched optical weight; not all the same height). Non-clickable, decorative, single colour via `currentColor`. Layout: flex `space-between` row above 1100px; 6-column CSS Grid producing a balanced 3+2 layout below 1100px. **Reveal** is scroll-progress-driven (not the standard `.section-fade` IntersectionObserver) — `updatePressHandoff()` adds `.press-revealed` once the user has scrolled past 60% of the hero, so the strip's 0.6s fade + translateY entrance overlaps with the hero parallax exit and reads as a single handoff motion.
 - **Skip-to-content link** — hidden until focused, appears top-left for keyboard navigation
 - **Focus styles** — `:focus-visible` gold outline on all interactive elements
 - **Favicon** — inline SVG "KH" monogram (gold on dark)
@@ -106,7 +107,7 @@ Dark, editorial, cinematic. Inspired by high-end documentary and photojournalism
 ## Page Flow
 
 ```
-Hero → Film (—01) → Photography (—02) → Writing (—03) → About (—04)
+Hero → Press Strip → Film (—01) → Photography (—02) → Writing (—03) → About (—04)
 ```
 
 Nav links: Film · Photography · Writing · About
