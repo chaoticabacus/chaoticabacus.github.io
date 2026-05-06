@@ -478,23 +478,51 @@
       width: auto;
     }
     /* Optical sizing — heights tuned per logo so they read at matched optical weight */
-    .press-logo--aljazeera svg  { height: 26px; }
+    .press-logo--aljazeera svg  { height: 32px; }
     .press-logo--sciam svg      { height: 22px; }
     .press-logo--dw svg         { height: 28px; }
-    .press-logo--fp svg         { height: 30px; }
-    .press-logo--propublica svg { height: 24px; }
+    .press-logo--fp svg         { height: 28px; }
+    .press-logo--propublica svg { height: 22px; }
 
-    @media (max-width: 900px) {
-      .press-section { padding: 48px 32px; }
-      .press-row { gap: 24px 32px; justify-content: center; }
-      .press-logo--aljazeera svg  { height: 21px; }
+    /* Below ~1100px the row can't hold 5 logos cleanly — switch to a balanced 3+2 grid */
+    @media (max-width: 1100px) {
+      .press-section { padding: 56px 32px; }
+      .press-row {
+        display: grid;
+        grid-template-columns: repeat(6, 1fr);
+        column-gap: 16px;
+        row-gap: 28px;
+        justify-items: center;
+        align-items: center;
+      }
+      .press-logo:nth-child(1) { grid-column: 1 / span 2; }
+      .press-logo:nth-child(2) { grid-column: 3 / span 2; }
+      .press-logo:nth-child(3) { grid-column: 5 / span 2; }
+      .press-logo:nth-child(4) { grid-column: 2 / span 2; }
+      .press-logo:nth-child(5) { grid-column: 4 / span 2; }
+      .press-logo--aljazeera svg  { height: 28px; }
+      .press-logo--sciam svg      { height: 20px; }
+      .press-logo--dw svg         { height: 24px; }
+      .press-logo--fp svg         { height: 24px; }
+      .press-logo--propublica svg { height: 20px; }
+    }
+    @media (max-width: 768px) {
+      .press-section { padding: 48px 24px; }
+      .press-row { column-gap: 12px; row-gap: 24px; }
+      .press-logo--aljazeera svg  { height: 26px; }
       .press-logo--sciam svg      { height: 18px; }
       .press-logo--dw svg         { height: 22px; }
-      .press-logo--fp svg         { height: 24px; }
-      .press-logo--propublica svg { height: 19px; }
+      .press-logo--fp svg         { height: 22px; }
+      .press-logo--propublica svg { height: 18px; }
     }
     @media (max-width: 600px) {
-      .press-section { padding: 40px 24px; }
+      .press-section { padding: 40px 20px; }
+      .press-row { column-gap: 8px; row-gap: 20px; }
+      .press-logo--aljazeera svg  { height: 22px; }
+      .press-logo--sciam svg      { height: 15px; }
+      .press-logo--dw svg         { height: 19px; }
+      .press-logo--fp svg         { height: 19px; }
+      .press-logo--propublica svg { height: 15px; }
     }
 
     /* ── PHOTOGRAPHY (HORIZONTAL SCROLL) ── */
@@ -1133,8 +1161,8 @@
   <section id="press" class="section-fade press-section">
     <div class="press-row">
       <div class="press-logo press-logo--aljazeera" role="img" aria-label="Al Jazeera">
-        <svg viewBox="0 0 240 32" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-          <text x="120" y="24" text-anchor="middle" fill="currentColor" font-family="Cormorant Garamond, serif" font-style="italic" font-weight="600" font-size="28" letter-spacing="0.01em">aljazeera</text>
+        <svg viewBox="0 0 220 36" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <text x="110" y="27" text-anchor="middle" dominant-baseline="alphabetic" fill="currentColor" font-family="Cormorant Garamond, serif" font-style="italic" font-weight="600" font-size="34" letter-spacing="0.005em">aljazeera</text>
         </svg>
       </div>
       <div class="press-logo press-logo--sciam" role="img" aria-label="Scientific American">
