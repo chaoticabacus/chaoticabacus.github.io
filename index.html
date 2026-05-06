@@ -458,6 +458,22 @@
       max-width: none;
       margin: 0;
     }
+    /* Scroll-progress-driven entrance overrides .section-fade so the strip's reveal
+       overlaps with the hero's parallax exit, reading as a handoff. */
+    #press.section-fade {
+      transition: opacity 0.6s var(--ease-out-expo), transform 0.6s var(--ease-out-expo);
+    }
+    #press.press-revealed {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    @media (prefers-reduced-motion: reduce) {
+      #press.section-fade {
+        opacity: 1;
+        transform: none;
+        transition: none;
+      }
+    }
     .press-row {
       max-width: 1400px;
       margin: 0 auto;
@@ -1628,6 +1644,7 @@
           updateNav();
           updateActiveNav();
           updateHeroParallax();
+          updatePressHandoff();
           scrollTicking = false;
         });
         scrollTicking = true;
@@ -1656,6 +1673,20 @@
         scrollIndEl.style.opacity   = Math.max(0, 1 - scrollY / 180);
       }
     }
+
+    // ── Press strip scroll-driven handoff ──
+    // Reveals the strip once the user is ~60% through scrolling the hero, so the strip's
+    // 0.6s fade/translate transition overlaps with the hero parallax exit and reads as a
+    // single handoff motion rather than two independent reveals.
+    const pressEl = document.getElementById('press');
+    function updatePressHandoff() {
+      if (!pressEl || pressEl.classList.contains('press-revealed')) return;
+      const heroH = heroSection ? heroSection.offsetHeight : window.innerHeight;
+      if (window.scrollY > heroH * 0.6) {
+        pressEl.classList.add('press-revealed');
+      }
+    }
+    updatePressHandoff();
 
     // ── Active nav highlighting ──
     const sectionIds  = ['work', 'photography', 'writing', 'about'];
