@@ -406,6 +406,49 @@
       animation: scrollPulse 2s ease infinite;
     }
 
+    .hero-sound-toggle {
+      position: absolute;
+      z-index: 3;
+      bottom: 32px;
+      right: 48px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text-dim);
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: color 0.3s, border-color 0.3s;
+      opacity: 0;
+      animation: fadeIn 1s ease 1.2s forwards;
+    }
+    .hero-sound-toggle:hover,
+    .hero-sound-toggle:focus-visible {
+      color: var(--accent);
+      border-color: var(--border-hi);
+    }
+    .hero-sound-toggle:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 4px;
+    }
+    .hero-sound-icon { flex-shrink: 0; }
+    @media (max-width: 600px) {
+      .hero-sound-toggle {
+        bottom: 24px;
+        right: 24px;
+        padding: 6px 10px;
+        font-size: 9px;
+      }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .hero-sound-toggle { opacity: 1; animation: none; }
+    }
+
     /* ── SECTIONS SHARED ── */
     section {
       padding: 120px 48px;
@@ -1171,6 +1214,15 @@
       <div class="scroll-line"></div>
       <span>Scroll</span>
     </div>
+
+    <button id="heroSoundToggle" class="hero-sound-toggle" aria-label="Unmute showreel" type="button">
+      <svg class="hero-sound-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+        <line x1="23" y1="9" x2="17" y2="15"></line>
+        <line x1="17" y1="9" x2="23" y2="15"></line>
+      </svg>
+      <span class="hero-sound-label">Sound off</span>
+    </button>
   </section>
 
   <!-- ── PRESS ── -->
@@ -1687,6 +1739,32 @@
       }
     }
     updatePressHandoff();
+
+    // ── Hero showreel mute toggle ──
+    const heroVideo      = document.querySelector('.reel-bg video');
+    const heroSoundBtn   = document.getElementById('heroSoundToggle');
+    const heroSoundLabel = heroSoundBtn ? heroSoundBtn.querySelector('.hero-sound-label') : null;
+    const heroSoundIcon  = heroSoundBtn ? heroSoundBtn.querySelector('.hero-sound-icon') : null;
+
+    const ICON_MUTED = '<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><line x1="23" y1="9" x2="17" y2="15"></line><line x1="17" y1="9" x2="23" y2="15"></line>';
+    const ICON_UNMUTED = '<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path><path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>';
+
+    if (heroSoundBtn && heroVideo) {
+      heroSoundBtn.addEventListener('click', () => {
+        const wasMuted = heroVideo.muted;
+        heroVideo.muted = !wasMuted;
+        if (wasMuted) {
+          heroVideo.play().catch(() => {});
+          heroSoundLabel.textContent = 'Sound on';
+          heroSoundBtn.setAttribute('aria-label', 'Mute showreel');
+          if (heroSoundIcon) heroSoundIcon.innerHTML = ICON_UNMUTED;
+        } else {
+          heroSoundLabel.textContent = 'Sound off';
+          heroSoundBtn.setAttribute('aria-label', 'Unmute showreel');
+          if (heroSoundIcon) heroSoundIcon.innerHTML = ICON_MUTED;
+        }
+      });
+    }
 
     // ── Active nav highlighting ──
     const sectionIds  = ['work', 'photography', 'writing', 'about'];
