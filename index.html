@@ -363,12 +363,20 @@
       line-height: 0.92;
       letter-spacing: -0.01em;
       color: var(--text);
-      opacity: 0;
-      animation: fadeUp 1.2s var(--ease-out-expo) 0.2s forwards;
     }
+    .hero-name-line {
+      display: block;
+      opacity: 0;
+      animation: fadeUp 1.2s var(--ease-out-expo) forwards;
+    }
+    .hero-name-first  { animation-delay: 0.20s; }
+    .hero-name-second { animation-delay: 0.34s; }
     .hero-name em {
       font-style: italic;
       color: var(--text-mid);
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .hero-name-line { opacity: 1; animation: none; }
     }
 
     .scroll-indicator {
@@ -1062,7 +1070,10 @@
     <div class="hero-vignette"></div>
 
     <div class="hero-content">
-      <h1 class="hero-name">Kern<br><em>Hendricks</em></h1>
+      <h1 class="hero-name">
+        <span class="hero-name-line hero-name-first">Kern</span>
+        <span class="hero-name-line hero-name-second"><em>Hendricks</em></span>
+      </h1>
       <p class="hero-eyebrow">Film and reporting from the margins of crisis</p>
     </div>
 
