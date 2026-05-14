@@ -793,17 +793,14 @@
 
     .work-overlay {
       position: absolute;
-      inset: 0;
-      background: linear-gradient(to top, rgba(10,10,8,0.92) 0%, rgba(10,10,8,0.3) 50%, transparent 100%);
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-end;
-      padding: 28px;
-      transition: background 0.4s;
+      bottom: 24px;
+      left: 24px;
+      pointer-events: none;
+      opacity: 0;
+      transform: translateY(6px);
+      transition: opacity 0.4s var(--ease-out-expo), transform 0.4s var(--ease-out-expo);
     }
-    .work-item:hover .work-overlay {
-      background: linear-gradient(to top, rgba(10,10,8,0.97) 0%, rgba(10,10,8,0.5) 60%, rgba(10,10,8,0.1) 100%);
-    }
+    .work-item:hover .work-overlay { opacity: 1; transform: translateY(0); }
 
     .work-outlet {
       font-family: var(--font-mono);
@@ -811,27 +808,8 @@
       letter-spacing: 0.2em;
       text-transform: uppercase;
       color: var(--accent);
-      margin-bottom: 6px;
+      margin: 0;
     }
-
-    .work-title {
-      font-family: var(--font-display);
-      font-size: clamp(16px, 1.6vw, 22px);
-      font-weight: 400;
-      line-height: 1.2;
-      color: var(--text);
-      margin-bottom: 10px;
-    }
-
-    .work-role {
-      font-size: 11px;
-      color: var(--text-dim);
-      font-weight: 300;
-      transform: translateY(8px);
-      opacity: 0;
-      transition: all 0.35s var(--ease-out-expo);
-    }
-    .work-item:hover .work-role { opacity: 1; transform: translateY(0); }
 
     .work-play {
       position: absolute;
@@ -1573,8 +1551,6 @@
         </div>
         <div class="work-overlay">
           <p class="work-outlet">2026 Showreel</p>
-          <h3 class="work-title">2026 Showreel</h3>
-          <p class="work-role">DoP · Editor · Producer</p>
         </div>
         <div class="work-play">
           <svg width="16" height="18" viewBox="0 0 16 18" fill="none">
@@ -1590,8 +1566,6 @@
         </div>
         <div class="work-overlay">
           <p class="work-outlet">DW Documentary</p>
-          <h3 class="work-title">Arriving in Europe: How Refugees Deal With Their Trauma</h3>
-          <p class="work-role">DoP · Producer · Editor</p>
         </div>
         <div class="work-play">
           <svg width="16" height="18" viewBox="0 0 16 18" fill="none">
@@ -1607,8 +1581,6 @@
         </div>
         <div class="work-overlay">
           <p class="work-outlet">Undark</p>
-          <h3 class="work-title">A Mental Health Crisis in the West Bank</h3>
-          <p class="work-role">DoP · Producer · Editor</p>
         </div>
         <div class="work-play">
           <svg width="16" height="18" viewBox="0 0 16 18" fill="none">
@@ -1624,8 +1596,6 @@
         </div>
         <div class="work-overlay">
           <p class="work-outlet">Independent</p>
-          <h3 class="work-title">The Toll of Settler Violence in the West Bank</h3>
-          <p class="work-role">DoP · Producer · Editor</p>
         </div>
         <div class="work-play">
           <svg width="16" height="18" viewBox="0 0 16 18" fill="none">
@@ -1641,8 +1611,6 @@
         </div>
         <div class="work-overlay">
           <p class="work-outlet">Scientific American</p>
-          <h3 class="work-title">In War-Torn Ukraine, a Doctor Evacuates Children with Cancer</h3>
-          <p class="work-role">DoP · Producer</p>
         </div>
         <div class="work-play">
           <svg width="16" height="18" viewBox="0 0 16 18" fill="none">
@@ -1658,8 +1626,6 @@
         </div>
         <div class="work-overlay">
           <p class="work-outlet">Independent</p>
-          <h3 class="work-title">War in Lebanon</h3>
-          <p class="work-role">DoP · Producer · Editor</p>
         </div>
         <div class="work-play">
           <svg width="16" height="18" viewBox="0 0 16 18" fill="none">
