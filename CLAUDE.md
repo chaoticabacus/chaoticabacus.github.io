@@ -42,7 +42,7 @@ The site is a single-page HTML/CSS/JS application with no frameworks, no build p
 ├── previews/           ← muted MP4 preview clips + local poster JPEGs
 ├── kern-portrait.jpg   ← about section portrait (1024×900, cropped)
 ├── og-image.jpg        ← dedicated 1200x630 social share image
-├── .gitignore          ← ignores .DS_Store, .superpowers/
+├── .gitignore          ← ignores .DS_Store, .superpowers/, raw camera files (*.dng, *.nef, *.raf, *.xmp)
 ├── CNAME               ← kernhendricks.com (GitHub Pages custom domain)
 └── README.md           ← deployment and DNS instructions
 ```
@@ -118,7 +118,7 @@ Contact details (email, YouTube, Instagram, Twitter/X) live inside the About sec
 
 ## Current Film Grid
 
-Layout: 3-column grid (items 1–3 at `span 4`, items 4–5 at `span 6`). All thumbnails 16:9. Responsive: 2-column at ≤768px, full-width at ≤600px.
+Layout: 3-column grid (6 items, all `span 4` for a 3×2 equal grid). All thumbnails 16:9. Responsive: 2-column at ≤768px, full-width at ≤600px.
 
 Each `.work-item` contains an HTML5 `<video>` element pointing at a local MP4 in `previews/`, with `muted loop playsinline preload="none"` and a **local poster JPEG** in `previews/`. An IntersectionObserver plays the video when the item scrolls into view (threshold 0.3) and pauses it when it leaves. Clicking the item opens the full YouTube video in a new tab.
 
@@ -127,8 +127,9 @@ Each `.work-item` contains an HTML5 `<video>` element pointing at a local MP4 in
 | 1 | span 4 | 2026 Showreel | 2026 Showreel | `aoZN04k0Y5A` | `previews/showreel-preview.mp4` | `previews/showreel-poster.jpg` | DoP · Editor · Producer |
 | 2 | span 4 | Arriving in Europe: How Refugees Deal With Their Trauma | DW Documentary | `f2q9bI3O-Sc` | `previews/dw-refugees-preview.mp4` | `previews/dw-refugees-poster.jpg` | DoP · Producer · Editor |
 | 3 | span 4 | A Mental Health Crisis in the West Bank | Undark | `hwDByBSuK60` | `previews/mental-health-preview.mp4` | `previews/mental-health-poster.jpg` | DoP · Producer · Editor |
-| 4 | span 6 | The Toll of Settler Violence in the West Bank | Field Report | `sIFpTlGrddY` | `previews/settler-violence-preview.mp4` | `previews/settler-violence-poster.jpg` | DoP · Producer · Editor |
-| 5 | span 6 | In War-Torn Ukraine, a Doctor Evacuates Children with Cancer | Scientific American | `vGo0Xzw0YpU` | `previews/ukraine-cancer-preview.mp4` | `previews/ukraine-cancer-poster.jpg` | DoP · Producer |
+| 4 | span 4 | The Toll of Settler Violence in the West Bank | Independent | `sIFpTlGrddY` | `previews/settler-violence-preview.mp4` | `previews/settler-violence-poster.jpg` | DoP · Producer · Editor |
+| 5 | span 4 | In War-Torn Ukraine, a Doctor Evacuates Children with Cancer | Scientific American | `vGo0Xzw0YpU` | `previews/ukraine-cancer-preview.mp4` | `previews/ukraine-cancer-poster.jpg` | DoP · Producer |
+| 6 | span 4 | War in Lebanon | Independent | `992beLXGrMw` | `previews/lebanon-preview.mp4` | `previews/lebanon-poster.jpg` | DoP · Producer · Editor |
 
 **Hero background video:** `previews/showreel-preview.mp4` (same file as item 1)
 
@@ -293,7 +294,7 @@ Current tags:
 
 - **Images:** Photos compressed and resized to max 2000px wide, JPEG quality 70. 11 of 12 are served as WebP via `<picture>` elements (~47% smaller on average); `ukraine-reactor-crater.jpg` is kept as JPEG (already smaller than any WebP encoding).
 - **Film posters:** Self-hosted local JPEGs (18–47 KB each) extracted from preview clips at 2s via ffmpeg — eliminates YouTube CDN dependency and loads faster than `maxresdefault.jpg` (~100–200 KB).
-- **Film previews:** Self-hosted MP4 clips (~700 KB total for all 5) instead of YouTube iframes — avoids ~1.5–2 MB per embed of third-party player JS/CSS. Each video has `preload="none"` so nothing downloads until the IntersectionObserver calls `.play()` on scroll-in, and videos pause when scrolled out of view to free CPU.
+- **Film previews:** Self-hosted MP4 clips (~2.8 MB total for all 6) instead of YouTube iframes — avoids ~1.5–2 MB per embed of third-party player JS/CSS. Each video has `preload="none"` so nothing downloads until the IntersectionObserver calls `.play()` on scroll-in, and videos pause when scrolled out of view to free CPU.
 - **Hero video preload:** `<link rel="preload" as="video" href="previews/showreel-preview.mp4" type="video/mp4">` in `<head>` so the browser prioritises it.
 - **Scroll handling:** All scroll-driven updates (progress line, horizontal scroll, nav hide/show, active nav, hero parallax) consolidated into a single `scroll` listener with `requestAnimationFrame` throttling. Cursor mousemove also rAF-throttled.
 - **Lazy loading:** All photography images use `loading="lazy"`; film preview videos use `preload="none"` with local poster images.

@@ -223,7 +223,7 @@
       gap: 5px;
       background: none;
       border: none;
-      cursor: none;
+      cursor: pointer;
       min-width: 44px;
       min-height: 44px;
       padding: 4px;
@@ -264,7 +264,7 @@
       border: none;
       color: var(--text-dim);
       font-size: 22px;
-      cursor: none;
+      cursor: pointer;
       font-family: var(--font-mono);
       transition: color 0.3s;
     }
@@ -1154,6 +1154,275 @@
       .article-row:active .article-title { color: var(--text); }
       .article-row:active::before { opacity: 1; }
     }
+
+    /* ── FILM LIGHTBOX ── */
+    .film-lightbox {
+      position: fixed;
+      inset: 0;
+      z-index: 10002;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      cursor: default;
+    }
+    .film-lightbox.open { display: flex; }
+    .film-lightbox * { cursor: default; }
+    .film-lightbox button,
+    .film-lightbox [role="slider"] { cursor: pointer; }
+
+    .lightbox-backdrop {
+      position: absolute;
+      inset: 0;
+      background: rgba(6, 6, 5, 0.92);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      opacity: 0;
+      transition: opacity 220ms var(--ease-in-out);
+    }
+    .film-lightbox.open .lightbox-backdrop { opacity: 1; }
+
+    .lightbox-frame {
+      position: relative;
+      width: min(90vw, 1400px);
+      aspect-ratio: 16 / 9;
+      max-height: 90vh;
+      background: #000;
+      box-shadow: 0 30px 80px rgba(0,0,0,0.6);
+      transform: scale(0.96);
+      opacity: 0;
+      transition: transform 240ms var(--ease-out-expo), opacity 200ms var(--ease-in-out);
+    }
+    .film-lightbox.open .lightbox-frame {
+      transform: scale(1);
+      opacity: 1;
+    }
+
+    .lightbox-player-wrap {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+    }
+    #ytPlayer,
+    #ytPlayer iframe {
+      width: 100% !important;
+      height: 100% !important;
+      border: 0;
+      display: block;
+    }
+
+    /* Transparent shield: blocks YouTube's hover overlay/tooltips
+       and converts a video click into a play/pause toggle. */
+    .lightbox-shield {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      background: transparent;
+      border: 0;
+      padding: 0;
+      margin: 0;
+      cursor: pointer;
+      z-index: 2;
+    }
+    .lightbox-shield:focus { outline: none; }
+
+    /* Loading dots — visible while YT player initialises */
+    .lightbox-loading {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      display: flex;
+      gap: 8px;
+      pointer-events: none;
+      opacity: 1;
+      transition: opacity 200ms;
+      z-index: 1;
+    }
+    .lightbox-loading.hidden { opacity: 0; }
+    .lightbox-loading span {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--accent);
+      animation: lb-pulse 1.2s ease-in-out infinite;
+    }
+    .lightbox-loading span:nth-child(2) { animation-delay: 0.15s; }
+    .lightbox-loading span:nth-child(3) { animation-delay: 0.3s; }
+    @keyframes lb-pulse {
+      0%, 100% { opacity: 0.25; transform: scale(0.85); }
+      50%      { opacity: 1;    transform: scale(1); }
+    }
+
+    /* Close button */
+    .lightbox-close {
+      position: absolute;
+      top: -44px;
+      right: 0;
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: transparent;
+      border: 0;
+      color: var(--text-mid);
+      transition: color 180ms;
+      z-index: 4;
+    }
+    .lightbox-close:hover { color: var(--accent); }
+    @media (max-width: 768px) {
+      .lightbox-close {
+        top: 8px;
+        right: 8px;
+        background: rgba(10,10,8,0.55);
+        border-radius: 0;
+      }
+    }
+
+    /* Controls bar — auto-hides when idle */
+    .lightbox-controls {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      padding: 14px 20px 16px;
+      background: linear-gradient(to top, rgba(0,0,0,0.6), rgba(0,0,0,0));
+      opacity: 0;
+      transform: translateY(4px);
+      transition: opacity 220ms var(--ease-in-out), transform 220ms var(--ease-in-out);
+      z-index: 3;
+      pointer-events: none;
+    }
+    .lightbox-controls.visible {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+
+    .lb-playpause {
+      flex: 0 0 auto;
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: transparent;
+      border: 0;
+      color: var(--text);
+      transition: color 160ms;
+    }
+    .lb-playpause:hover { color: var(--accent); }
+    .lb-playpause .lb-icon-pause { display: none; }
+    .lb-playpause.is-playing .lb-icon-play { display: none; }
+    .lb-playpause.is-playing .lb-icon-pause { display: block; }
+
+    /* Scrub bar */
+    .lb-scrub {
+      flex: 1 1 auto;
+      height: 28px;
+      display: flex;
+      align-items: center;
+      position: relative;
+    }
+    .lb-scrub:focus { outline: none; }
+    .lb-scrub:focus-visible .lb-scrub-track { box-shadow: 0 0 0 2px var(--accent); }
+    .lb-scrub-track {
+      position: relative;
+      width: 100%;
+      height: 2px;
+      background: rgba(255,255,255,0.18);
+      transition: height 160ms var(--ease-in-out);
+    }
+    .lb-scrub:hover .lb-scrub-track,
+    .lb-scrub.is-dragging .lb-scrub-track { height: 4px; }
+    .lb-scrub-buffer,
+    .lb-scrub-fill {
+      position: absolute;
+      top: 0; left: 0;
+      height: 100%;
+      width: 0%;
+    }
+    .lb-scrub-buffer { background: rgba(255,255,255,0.28); }
+    .lb-scrub-fill   { background: var(--accent); }
+    .lb-scrub-handle {
+      position: absolute;
+      top: 50%;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--accent);
+      transform: translate(-50%, -50%) scale(0);
+      transition: transform 160ms var(--ease-out-expo);
+      left: 0%;
+    }
+    .lb-scrub:hover .lb-scrub-handle,
+    .lb-scrub.is-dragging .lb-scrub-handle { transform: translate(-50%, -50%) scale(1); }
+
+    /* Volume */
+    .lb-volume {
+      flex: 0 0 auto;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .lb-volume-btn {
+      width: 28px;
+      height: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: transparent;
+      border: 0;
+      color: var(--text);
+      transition: color 160ms;
+    }
+    .lb-volume-btn:hover { color: var(--accent); }
+    .lb-volume-btn .lb-icon-vol-off { display: none; }
+    .lb-volume-btn.is-muted .lb-icon-vol-on { display: none; }
+    .lb-volume-btn.is-muted .lb-icon-vol-off { display: block; }
+    .lb-volume-slider {
+      width: 80px;
+      height: 28px;
+      display: flex;
+      align-items: center;
+      position: relative;
+    }
+    .lb-volume-slider:focus { outline: none; }
+    .lb-volume-slider:focus-visible .lb-volume-track { box-shadow: 0 0 0 2px var(--accent); }
+    .lb-volume-track {
+      position: relative;
+      width: 100%;
+      height: 2px;
+      background: rgba(255,255,255,0.18);
+    }
+    .lb-volume-fill {
+      position: absolute;
+      top: 0; left: 0;
+      height: 100%;
+      width: 100%;
+      background: var(--accent);
+    }
+    @media (max-width: 600px) {
+      .lb-volume-slider { width: 56px; }
+      .lightbox-controls { gap: 12px; padding: 10px 14px 12px; }
+    }
+
+    /* Reduced motion */
+    @media (prefers-reduced-motion: reduce) {
+      .lightbox-backdrop,
+      .lightbox-frame,
+      .lightbox-controls { transition: none !important; }
+      .lightbox-frame { transform: none; }
+      .lightbox-loading span { animation: none; opacity: 0.6; }
+    }
+
+    /* Hide custom site cursor when lightbox is open */
+    body.lightbox-open { overflow: hidden; }
+    body.lightbox-open #cursor,
+    body.lightbox-open #cursorLabel { display: none; }
   </style>
 </head>
 <body>
@@ -1694,7 +1963,7 @@
           <span class="contact-link-label">Instagram</span>
           <span class="contact-link-value">@kernhendricks</span>
         </a>
-        <a href="https://twitter.com/kernhendricks" target="_blank" rel="noopener noreferrer" class="contact-link">
+        <a href="https://x.com/kernhendricks" target="_blank" rel="noopener noreferrer" class="contact-link">
           <span class="contact-link-label">Twitter / X</span>
           <span class="contact-link-value">@kernhendricks</span>
         </a>
@@ -1707,6 +1976,59 @@
     <p>© 2026 Kern Hendricks</p>
     <p>London, UK &nbsp;·&nbsp; Available worldwide</p>
   </footer>
+
+  <!-- ── FILM LIGHTBOX ── -->
+  <div id="filmLightbox" class="film-lightbox" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Film player">
+    <div class="lightbox-backdrop" data-lightbox-close></div>
+    <div class="lightbox-frame" role="document">
+      <div class="lightbox-player-wrap">
+        <div id="ytPlayer"></div>
+        <button class="lightbox-shield" type="button" aria-label="Play or pause"></button>
+        <div class="lightbox-loading" aria-hidden="true"><span></span><span></span><span></span></div>
+      </div>
+      <button class="lightbox-close" type="button" aria-label="Close player" data-lightbox-close>
+        <svg width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden="true">
+          <path d="M5 5l12 12M17 5L5 17" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+        </svg>
+      </button>
+      <div class="lightbox-controls" id="lightboxControls">
+        <button class="lb-playpause" type="button" aria-label="Play">
+          <svg class="lb-icon-play" width="14" height="16" viewBox="0 0 14 16" fill="none" aria-hidden="true">
+            <path d="M1 1l12 7L1 15V1z" fill="currentColor"/>
+          </svg>
+          <svg class="lb-icon-pause" width="12" height="16" viewBox="0 0 12 16" fill="none" aria-hidden="true">
+            <rect x="1" y="1" width="3" height="14" fill="currentColor"/>
+            <rect x="8" y="1" width="3" height="14" fill="currentColor"/>
+          </svg>
+        </button>
+        <div class="lb-scrub" role="slider" aria-label="Seek" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" tabindex="0">
+          <div class="lb-scrub-track">
+            <div class="lb-scrub-buffer"></div>
+            <div class="lb-scrub-fill"></div>
+            <div class="lb-scrub-handle"></div>
+          </div>
+        </div>
+        <div class="lb-volume">
+          <button class="lb-volume-btn" type="button" aria-label="Mute">
+            <svg class="lb-icon-vol-on" width="18" height="14" viewBox="0 0 18 14" fill="none" aria-hidden="true">
+              <path d="M1 5v4h3l4 3V2L4 5H1z" fill="currentColor"/>
+              <path d="M11 4c1 .8 1.5 1.8 1.5 3s-.5 2.2-1.5 3" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" fill="none"/>
+              <path d="M14 2c2 1.4 3 3.4 3 5s-1 3.6-3 5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" fill="none"/>
+            </svg>
+            <svg class="lb-icon-vol-off" width="18" height="14" viewBox="0 0 18 14" fill="none" aria-hidden="true">
+              <path d="M1 5v4h3l4 3V2L4 5H1z" fill="currentColor"/>
+              <path d="M11 4l5 6M16 4l-5 6" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+            </svg>
+          </button>
+          <div class="lb-volume-slider" role="slider" aria-label="Volume" aria-valuemin="0" aria-valuemax="100" aria-valuenow="100" tabindex="0">
+            <div class="lb-volume-track">
+              <div class="lb-volume-fill"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <script>
     // ── rAF throttle utility ──
@@ -1998,6 +2320,361 @@
         });
       });
     }
+
+    // ── Film lightbox + custom YouTube IFrame API controls ──
+    (() => {
+      const lightbox       = document.getElementById('filmLightbox');
+      if (!lightbox) return;
+      const frame          = lightbox.querySelector('.lightbox-frame');
+      const controls       = document.getElementById('lightboxControls');
+      const playPauseBtn   = lightbox.querySelector('.lb-playpause');
+      const shield         = lightbox.querySelector('.lightbox-shield');
+      const loading        = lightbox.querySelector('.lightbox-loading');
+      const scrub          = lightbox.querySelector('.lb-scrub');
+      const scrubFill      = lightbox.querySelector('.lb-scrub-fill');
+      const scrubBuffer    = lightbox.querySelector('.lb-scrub-buffer');
+      const scrubHandle    = lightbox.querySelector('.lb-scrub-handle');
+      const volBtn         = lightbox.querySelector('.lb-volume-btn');
+      const volSlider      = lightbox.querySelector('.lb-volume-slider');
+      const volFill        = lightbox.querySelector('.lb-volume-fill');
+      const closeBtns      = lightbox.querySelectorAll('[data-lightbox-close]');
+
+      let player = null;
+      let apiReady = false;
+      let apiLoading = false;
+      let pendingVid = null;
+      let lastFocus = null;
+      let progressTimer = null;
+      let hideControlsTimer = null;
+      let scrubDragging = false;
+      let volDragging = false;
+      let lastVolume = 100;
+
+      // ── Load IFrame API on first open ──
+      function loadAPI() {
+        if (apiReady || apiLoading) return;
+        apiLoading = true;
+        const tag = document.createElement('script');
+        tag.src = 'https://www.youtube.com/iframe_api';
+        document.head.appendChild(tag);
+      }
+      window.onYouTubeIframeAPIReady = () => {
+        apiReady = true;
+        if (pendingVid) {
+          const v = pendingVid;
+          pendingVid = null;
+          createPlayer(v);
+        }
+      };
+
+      function createPlayer(vid) {
+        player = new YT.Player('ytPlayer', {
+          videoId: vid,
+          playerVars: {
+            autoplay: 1,
+            controls: 0,
+            modestbranding: 1,
+            rel: 0,
+            playsinline: 1,
+            iv_load_policy: 3,
+            fs: 0,
+            disablekb: 1,
+            cc_load_policy: 0
+          },
+          events: {
+            onReady: (e) => {
+              if (loading) loading.classList.add('hidden');
+              e.target.playVideo();
+              try { e.target.setVolume(lastVolume); } catch (_) {}
+              startProgress();
+              showControls();
+            },
+            onStateChange: (e) => {
+              const s = e.data;
+              if (s === YT.PlayerState.PLAYING) {
+                playPauseBtn.classList.add('is-playing');
+                playPauseBtn.setAttribute('aria-label', 'Pause');
+                startProgress();
+                scheduleHideControls();
+              } else if (s === YT.PlayerState.PAUSED || s === YT.PlayerState.ENDED) {
+                playPauseBtn.classList.remove('is-playing');
+                playPauseBtn.setAttribute('aria-label', 'Play');
+                showControls();
+                clearTimeout(hideControlsTimer);
+              }
+            }
+          }
+        });
+      }
+
+      function destroyPlayer() {
+        if (player && player.destroy) {
+          try { player.destroy(); } catch (_) {}
+        }
+        player = null;
+        // YT replaces the #ytPlayer div with an iframe; restore the placeholder.
+        const wrap = lightbox.querySelector('.lightbox-player-wrap');
+        const stale = wrap.querySelector('#ytPlayer, iframe');
+        if (stale) {
+          const fresh = document.createElement('div');
+          fresh.id = 'ytPlayer';
+          stale.replaceWith(fresh);
+        }
+      }
+
+      // ── Open / close ──
+      function open(vid, originEl) {
+        lastFocus = originEl || document.activeElement;
+        document.body.classList.add('lightbox-open');
+        lightbox.classList.add('open');
+        lightbox.setAttribute('aria-hidden', 'false');
+        if (loading) loading.classList.remove('hidden');
+        playPauseBtn.classList.remove('is-playing');
+        showControls();
+        // Move keyboard focus into the dialog
+        requestAnimationFrame(() => {
+          const closeBtn = lightbox.querySelector('.lightbox-close');
+          if (closeBtn) closeBtn.focus({ preventScroll: true });
+        });
+        if (apiReady) {
+          createPlayer(vid);
+        } else {
+          pendingVid = vid;
+          loadAPI();
+        }
+      }
+
+      function close() {
+        if (!lightbox.classList.contains('open')) return;
+        lightbox.classList.remove('open');
+        lightbox.setAttribute('aria-hidden', 'true');
+        document.body.classList.remove('lightbox-open');
+        clearInterval(progressTimer);
+        clearTimeout(hideControlsTimer);
+        destroyPlayer();
+        // Reset UI
+        scrubFill.style.width = '0%';
+        scrubBuffer.style.width = '0%';
+        scrubHandle.style.left = '0%';
+        scrub.setAttribute('aria-valuenow', '0');
+        if (lastFocus && typeof lastFocus.focus === 'function') {
+          lastFocus.focus({ preventScroll: true });
+        }
+      }
+
+      // ── Wire up thumbnail clicks ──
+      document.querySelectorAll('.work-item[data-vid]').forEach(item => {
+        item.addEventListener('click', (ev) => {
+          // Allow modifier-clicks (open in new tab etc.) to behave normally
+          if (ev.metaKey || ev.ctrlKey || ev.shiftKey || ev.altKey || ev.button === 1) return;
+          ev.preventDefault();
+          const vid = item.getAttribute('data-vid');
+          if (vid) open(vid, item);
+        });
+      });
+
+      // ── Close handlers ──
+      closeBtns.forEach(b => b.addEventListener('click', close));
+      document.addEventListener('keydown', (e) => {
+        if (!lightbox.classList.contains('open')) return;
+        if (e.key === 'Escape') {
+          e.preventDefault();
+          close();
+        } else if (e.key === ' ' || e.key === 'k') {
+          // Space / k toggles play
+          if (e.target.closest('.lb-scrub, .lb-volume-slider')) return;
+          e.preventDefault();
+          togglePlay();
+        } else if (e.key === 'ArrowLeft') {
+          if (e.target.closest('.lb-volume-slider')) return;
+          if (player && player.getCurrentTime) {
+            player.seekTo(Math.max(0, player.getCurrentTime() - 5), true);
+          }
+        } else if (e.key === 'ArrowRight') {
+          if (e.target.closest('.lb-volume-slider')) return;
+          if (player && player.getCurrentTime && player.getDuration) {
+            player.seekTo(Math.min(player.getDuration(), player.getCurrentTime() + 5), true);
+          }
+        } else if (e.key === 'm') {
+          toggleMute();
+        }
+      });
+
+      // ── Play / pause ──
+      function togglePlay() {
+        if (!player || !player.getPlayerState) return;
+        const s = player.getPlayerState();
+        if (s === 1) player.pauseVideo();
+        else player.playVideo();
+      }
+      playPauseBtn.addEventListener('click', (e) => { e.stopPropagation(); togglePlay(); });
+      shield.addEventListener('click', togglePlay);
+
+      // ── Controls auto-hide ──
+      function showControls() {
+        controls.classList.add('visible');
+        scheduleHideControls();
+      }
+      function scheduleHideControls() {
+        clearTimeout(hideControlsTimer);
+        hideControlsTimer = setTimeout(() => {
+          if (player && player.getPlayerState && player.getPlayerState() === 1 && !scrubDragging && !volDragging) {
+            controls.classList.remove('visible');
+          }
+        }, 2500);
+      }
+      ['mousemove', 'touchstart'].forEach(evt => {
+        frame.addEventListener(evt, showControls, { passive: true });
+      });
+      controls.addEventListener('mousemove', (e) => {
+        e.stopPropagation();
+        showControls();
+      });
+
+      // ── Scrub ──
+      function setScrubFromClientX(clientX) {
+        if (!player || !player.getDuration) return;
+        const rect = scrub.querySelector('.lb-scrub-track').getBoundingClientRect();
+        const pct = Math.max(0, Math.min(1, (clientX - rect.left) / rect.width));
+        const dur = player.getDuration();
+        if (dur > 0) {
+          player.seekTo(dur * pct, true);
+          scrubFill.style.width = (pct * 100) + '%';
+          scrubHandle.style.left = (pct * 100) + '%';
+          scrub.setAttribute('aria-valuenow', String(Math.round(pct * 100)));
+        }
+      }
+      scrub.addEventListener('pointerdown', (e) => {
+        scrubDragging = true;
+        scrub.classList.add('is-dragging');
+        scrub.setPointerCapture(e.pointerId);
+        setScrubFromClientX(e.clientX);
+      });
+      scrub.addEventListener('pointermove', (e) => {
+        if (!scrubDragging) return;
+        setScrubFromClientX(e.clientX);
+      });
+      scrub.addEventListener('pointerup', (e) => {
+        if (!scrubDragging) return;
+        scrubDragging = false;
+        scrub.classList.remove('is-dragging');
+        try { scrub.releasePointerCapture(e.pointerId); } catch (_) {}
+        scheduleHideControls();
+      });
+      scrub.addEventListener('keydown', (e) => {
+        if (!player || !player.getCurrentTime || !player.getDuration) return;
+        const dur = player.getDuration();
+        if (!dur) return;
+        let t = player.getCurrentTime();
+        if (e.key === 'ArrowLeft') { t = Math.max(0, t - 5); }
+        else if (e.key === 'ArrowRight') { t = Math.min(dur, t + 5); }
+        else if (e.key === 'Home') { t = 0; }
+        else if (e.key === 'End') { t = dur; }
+        else return;
+        e.preventDefault();
+        player.seekTo(t, true);
+      });
+
+      function startProgress() {
+        clearInterval(progressTimer);
+        progressTimer = setInterval(() => {
+          if (!player || !player.getCurrentTime || !player.getDuration) return;
+          if (scrubDragging) return;
+          const dur = player.getDuration();
+          if (!dur) return;
+          const pct = (player.getCurrentTime() / dur) * 100;
+          scrubFill.style.width = pct + '%';
+          scrubHandle.style.left = pct + '%';
+          scrub.setAttribute('aria-valuenow', String(Math.round(pct)));
+          if (player.getVideoLoadedFraction) {
+            scrubBuffer.style.width = (player.getVideoLoadedFraction() * 100) + '%';
+          }
+        }, 250);
+      }
+
+      // ── Volume ──
+      function setVolumeFromClientX(clientX) {
+        if (!player) return;
+        const rect = volSlider.querySelector('.lb-volume-track').getBoundingClientRect();
+        const pct = Math.max(0, Math.min(1, (clientX - rect.left) / rect.width));
+        const v = Math.round(pct * 100);
+        applyVolume(v);
+      }
+      function applyVolume(v) {
+        lastVolume = v;
+        volFill.style.width = v + '%';
+        volSlider.setAttribute('aria-valuenow', String(v));
+        if (!player) return;
+        if (v === 0) {
+          player.mute();
+          volBtn.classList.add('is-muted');
+          volBtn.setAttribute('aria-label', 'Unmute');
+        } else {
+          if (player.isMuted && player.isMuted()) player.unMute();
+          player.setVolume(v);
+          volBtn.classList.remove('is-muted');
+          volBtn.setAttribute('aria-label', 'Mute');
+        }
+      }
+      function toggleMute() {
+        if (!player) return;
+        if (player.isMuted && player.isMuted()) {
+          player.unMute();
+          const v = lastVolume || 100;
+          if (v === 0) { applyVolume(80); } else { applyVolume(v); }
+        } else {
+          const cur = player.getVolume ? player.getVolume() : lastVolume;
+          lastVolume = cur && cur > 0 ? cur : 80;
+          player.mute();
+          volBtn.classList.add('is-muted');
+          volBtn.setAttribute('aria-label', 'Unmute');
+          volFill.style.width = '0%';
+          volSlider.setAttribute('aria-valuenow', '0');
+        }
+      }
+      volBtn.addEventListener('click', toggleMute);
+      volSlider.addEventListener('pointerdown', (e) => {
+        volDragging = true;
+        volSlider.setPointerCapture(e.pointerId);
+        setVolumeFromClientX(e.clientX);
+      });
+      volSlider.addEventListener('pointermove', (e) => {
+        if (!volDragging) return;
+        setVolumeFromClientX(e.clientX);
+      });
+      volSlider.addEventListener('pointerup', (e) => {
+        if (!volDragging) return;
+        volDragging = false;
+        try { volSlider.releasePointerCapture(e.pointerId); } catch (_) {}
+        scheduleHideControls();
+      });
+      volSlider.addEventListener('keydown', (e) => {
+        let v = lastVolume;
+        if (e.key === 'ArrowLeft' || e.key === 'ArrowDown')  v = Math.max(0, v - 5);
+        else if (e.key === 'ArrowRight' || e.key === 'ArrowUp') v = Math.min(100, v + 5);
+        else if (e.key === 'Home') v = 0;
+        else if (e.key === 'End')  v = 100;
+        else return;
+        e.preventDefault();
+        applyVolume(v);
+      });
+
+      // ── Focus trap inside dialog ──
+      lightbox.addEventListener('keydown', (e) => {
+        if (e.key !== 'Tab') return;
+        const focusables = lightbox.querySelectorAll(
+          'button:not([disabled]), [role="slider"][tabindex]'
+        );
+        if (!focusables.length) return;
+        const first = focusables[0];
+        const last  = focusables[focusables.length - 1];
+        if (e.shiftKey && document.activeElement === first) {
+          e.preventDefault(); last.focus();
+        } else if (!e.shiftKey && document.activeElement === last) {
+          e.preventDefault(); first.focus();
+        }
+      });
+    })();
 
     // ── Single scroll listener for all scroll-driven updates ──
     window.addEventListener('scroll', onScroll, { passive: true });

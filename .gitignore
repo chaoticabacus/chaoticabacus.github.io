@@ -1,2 +1,8 @@
 .DS_Store
 .superpowers/
+
+# Raw camera files — keep these out of the repo
+*.dng
+*.nef
+*.raf
+*.xmp
