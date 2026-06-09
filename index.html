@@ -2,6 +2,11 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <!-- Content Security Policy (meta form). NOTE: frame-ancestors, X-Content-Type-Options
+       and HSTS cannot be set via <meta> — add those as real response headers (e.g. via a
+       Cloudflare Transform Rule) for full clickjacking/MIME/transport hardening. -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; object-src 'none'; form-action 'none'; img-src 'self' data: https://i.ytimg.com; media-src 'self'; font-src 'self' https://fonts.gstatic.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; script-src 'self' 'unsafe-inline' https://www.youtube.com https://s.ytimg.com; frame-src https://www.youtube-nocookie.com https://www.youtube.com; connect-src 'self' https://www.youtube.com https://www.youtube-nocookie.com; upgrade-insecure-requests">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#0a0a08">
   <title>Kern Hendricks — Documentary Filmmaker & Journalist</title>
@@ -2335,6 +2340,7 @@
 
       function createPlayer(vid) {
         player = new YT.Player('ytPlayer', {
+          host: 'https://www.youtube-nocookie.com',
           videoId: vid,
           playerVars: {
             autoplay: 1,
