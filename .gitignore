@@ -6,3 +6,10 @@
 *.nef
 *.raf
 *.xmp
+
+# Photo working folders — full-res sources, never deployed
+# (only the optimized versions in photos/ are committed)
+new photos/
+new photos jpeg/
+new photos (RAW)/
+new_photos_jpeg/

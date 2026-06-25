@@ -174,40 +174,48 @@ Poster files are ~18–47 KB each — much smaller than YouTube CDN thumbnails (
 
 ## Photography Section (`#photography`)
 
-Horizontal scroll strip. `<section id="photography">` has `padding: 0`.
+Simple grid + click-to-fullscreen lightbox. `<section id="photography" class="section-fade">` is a standard-width section (same `padding`/`max-width` as the others) and uses the normal `.section-fade` IntersectionObserver reveal.
 
-**Mechanic:** `.h-scroll-outer` is `height: 400vh`. Inside is a `.h-scroll-sticky` (sticky, 100vh). JS maps vertical scroll progress through the outer container to `translateX` on `.h-scroll-track`. Progress bar + counter at bottom.
+**Mechanic:** `.photo-grid` is a CSS Grid — `grid-template-columns: repeat(4, 1fr)` (4 columns, a 4×4 layout for the 16 photos) with a 2px gap. Each cell is a `<button class="photo-cell">` with `aspect-ratio: 3 / 2` wrapping a `<picture>`/`<img>`. There are no captions or region overlays on the grid — clicking a cell opens the photo full-screen. To make the grid denser/looser, change the column count in the `.photo-grid` rule (one line). Drops to 2 columns at ≤900px.
 
-**Keyboard navigation:** Left/right arrow keys jump photo-by-photo through the strip when the section is in the scroll zone.
+**Lightbox:** A single `#photoLightbox` (`role="dialog" aria-modal`) overlay near the end of `<body>`, sibling to the film lightbox. Contains a backdrop (`[data-close]`), close button (×), prev/next arrows, and one `<img id="photoLightboxImg">`. JS reads each cell's `data-full` (the JPEG path) into the lightbox image. Open on cell click; close on ×, backdrop click, or Escape; prev/next via the arrows or ←/→ keys (wraps around). Adds `body.lightbox-open` (shared with the film lightbox — locks scroll + hides the custom cursor) and restores focus to the triggering cell on close. Disabled-motion via `prefers-reduced-motion`.
 
-**On mobile (≤900px):** reverts to a vertical grid — `flex-wrap: wrap`, each photo 50% width.
+**Captions:** Currently removed — to be re-added later. The grid cells carry only `alt` text (for accessibility) and a `data-full` path; there are no visible caption/region elements. When re-adding, decide whether captions live on the grid, inside the lightbox, or both.
 
-**Photos (12 items, all in `photos/` directory):**
+**Photos (16 items, all in `photos/` directory):**
 
-Each photo is served as WebP (via `<picture>` element with JPEG fallback) except `ukraine-reactor-crater.jpg` where the JPEG is already smaller than any WebP encoding.
+Each photo is served as WebP (via `<picture>` element with JPEG fallback) except `figure-on-hill.jpg`, where the JPEG is already smaller than any WebP encoding (it uses a plain `<img>`). The lightbox loads the full-size JPEG (`data-full`).
 
-| File | Region | Caption | WebP? |
-|------|--------|---------|-------|
-| `afghanistan-gems-miners.jpg` | Afghanistan · Nuristan | Gem miners at break outside their mine | ✓ |
-| `L1001647.jpg` | Afghanistan | *(caption TBD)* | ✓ |
-| `ukraine-reactor-lede.jpg` | Ukraine · Kharkiv | Technicians ascending into the reactor hall | ✓ |
-| `afghanistan-forest-trees.jpg` | Afghanistan · Korengal Valley | Trees as livelihood in Wama district | ✓ |
-| `afghanistan-gems-mine-interior.jpg` | Afghanistan · Kunar | Inside Abid's tourmaline mine near Parun | ✓ |
-| `still-field-1.jpg` | *(confirm)* | *(caption TBD)* | ✓ |
-| `ukraine-reactor-core.jpg` | Ukraine · Kharkiv | Reactor core in darkness | ✓ |
-| `afghanistan-forest-loggers.jpg` | Afghanistan · Nuristan | Dilaram and Sanaullah, loggers in Wama | ✓ |
-| `L1001635.jpg` | Afghanistan | *(caption TBD)* | ✓ |
-| `afghanistan-forest-council.jpg` | Afghanistan · Korengal Valley | Tribal council meeting | ✓ |
-| `ukraine-reactor-crater.jpg` | Ukraine · Kharkiv | Crater from March 2022 rocket strike | JPEG only |
-| `still-field-2.jpg` | *(confirm)* | *(caption TBD)* | ✓ |
+These 16 are **Kern's own edited JPEG exports** (graded in Lightroom/etc. and exported to the working folder), then resized to 2000px long edge + q70 + WebP for the web. The `alt` text is provisional/descriptive — captions and regions are TBD (to be added by Kern). Order is set in `#photoGrid` for visual rhythm; not chronological/geographic.
 
-To update captions/regions: find the `.h-photo` item in `index.html` and edit `.h-photo-region` and `.h-photo-caption` spans.
+| File | alt (provisional) | WebP? |
+|------|------|-------|
+| `young-man-portrait.jpg` | Portrait of a young man | ✓ |
+| `playground-rubble.jpg` | A children's playground amid rubble | ✓ |
+| `bookshop-reader.jpg` | A man reading in a bookshop lined with shelves | ✓ |
+| `child-mountain-ridge.jpg` | A child on a rocky ridge below snow-capped peaks | ✓ |
+| `poppy-bulb.jpg` | A hand scoring a poppy bulb | ✓ |
+| `child-portrait-gold.jpg` | Portrait of a young miner with a headlamp | ✓ |
+| `coal-worker.jpg` | A man working at a coal seam | ✓ |
+| `figure-on-hill.jpg` | A lone figure crossing a green hillside | JPEG only |
+| `elder-portrait.jpg` | Portrait of an elderly bearded man | ✓ |
+| `clinic-children.jpg` | Children being treated at a clinic | ✓ |
+| `miner-headlamp.jpg` | A miner's headlamp in the dark | ✓ |
+| `vendor-goods.jpg` | A bearded man with sacks of goods | ✓ |
+| `stamped-hand.jpg` | An inked stamp on an open palm | ✓ |
+| `girls-blue-headscarf.jpg` | A girl in a blue headscarf | ✓ |
+| `man-in-blanket.jpg` | A man wrapped in a blanket | ✓ |
+| `hands-exchange.jpg` | Hands exchanging objects | ✓ |
+
+**Processing Kern's edited exports (preferred path):** Kern edits the RAW originals himself and drops full-res sRGB JPEGs into a working folder (e.g. `new photos jpeg/`). These hold his grade — **always use these over a direct RAW conversion**, which would miss the `.xmp` sidecar edits. Resize each to the web with `magick "SRC.jpg" -auto-orient -resize 2000x2000\> -quality 70 photos/NAME.jpg`, then `cwebp -q 82 photos/NAME.jpg -o photos/NAME.webp` (keep WebP only if smaller). Don't apply any colorspace transform — the exports are sRGB (untagged renders as sRGB in browsers). Tools available: `sips`, ImageMagick (`magick`), `cwebp`, `exiftool`. Working folders (`new photos*/`, RAW + edited JPEGs) are git-ignored — only the optimized `photos/` versions are committed.
+
+**Fallback — direct RAW conversion (no edits available):** DNG/NEF embed a full-res rendered JPEG; extract with `exiftool -b -JpgFromRaw FILE.DNG`, then resize as above. Use `sips -s format jpeg FILE --out out.jpg` if the embedded preview is under 2000px. Note this misses any sidecar develop edits.
 
 ### Adding a new photo
 1. Add JPEG to `photos/`, compress to max 2000px wide at quality 70
 2. Generate WebP: `cwebp -q 82 photos/FILE.jpg -o photos/FILE.webp` — check it's actually smaller; if not, omit WebP and use plain `<img>`
-3. Add `.h-photo` div with `<picture>` + `<source>` + `<img>` (see existing items as template)
-4. All photos use `loading="lazy"`
+3. Add a `<button class="photo-cell" type="button" data-full="photos/FILE.jpg" aria-label="View photograph: …">` with `<picture>` + `<source>` + `<img>` inside `#photoGrid` (see existing items as template)
+4. All photos use `loading="lazy"`; the click handler + lightbox auto-apply to every `.photo-cell` — no extra JS needed
 
 ---
 
@@ -296,7 +304,7 @@ Current tags:
 - **Film posters:** Self-hosted local JPEGs (18–47 KB each) extracted from preview clips at 2s via ffmpeg — eliminates YouTube CDN dependency and loads faster than `maxresdefault.jpg` (~100–200 KB).
 - **Film previews:** Self-hosted MP4 clips (~2.8 MB total for all 6) instead of YouTube iframes — avoids ~1.5–2 MB per embed of third-party player JS/CSS. Each video has `preload="none"` so nothing downloads until the IntersectionObserver calls `.play()` on scroll-in, and videos pause when scrolled out of view to free CPU.
 - **Hero video preload:** `<link rel="preload" as="video" href="previews/showreel-preview.mp4" type="video/mp4">` in `<head>` so the browser prioritises it.
-- **Scroll handling:** All scroll-driven updates (progress line, horizontal scroll, nav hide/show, active nav, hero parallax) consolidated into a single `scroll` listener with `requestAnimationFrame` throttling. Cursor mousemove also rAF-throttled.
+- **Scroll handling:** All scroll-driven updates (progress line, nav hide/show, active nav, hero parallax, press handoff) consolidated into a single `scroll` listener with `requestAnimationFrame` throttling. Cursor mousemove also rAF-throttled.
 - **Lazy loading:** All photography images use `loading="lazy"`; film preview videos use `preload="none"` with local poster images.
 - **Fonts:** Single Google Fonts stylesheet loads Cormorant Garamond, DM Sans, and DM Mono with `display=swap`.
 - **Responsive breakpoints:** 900px (photography + about reflow), 768px (work grid 2-col), 700px (article row compact), 600px (mobile nav + work grid full-width)

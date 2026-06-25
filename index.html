@@ -589,165 +589,136 @@
       .press-logo--propublica svg { height: 15px; }
     }
 
-    /* ── PHOTOGRAPHY (HORIZONTAL SCROLL) ── */
+    /* ── PHOTOGRAPHY (GRID) ── */
     #photography {
-      padding: 0;
-      max-width: none;
-      margin: 0;
       border-top: 1px solid var(--border);
     }
 
-    .h-scroll-outer {
-      height: 400vh;
-      position: relative;
-    }
-
-    .h-scroll-sticky {
-      position: sticky;
-      top: 0;
-      height: 100vh;
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-    }
-
-    .h-scroll-header {
-      position: absolute;
-      top: 48px;
-      left: 0;
-      right: 0;
-      padding: 0 48px;
-    }
-
-    .h-scroll-track {
-      display: flex;
+    .photo-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
       gap: 2px;
-      padding: 0 48px;
-      will-change: transform;
-      flex-shrink: 0;
     }
 
-    .h-photo {
-      flex-shrink: 0;
+    .photo-cell {
       position: relative;
+      display: block;
+      width: 100%;
+      aspect-ratio: 3 / 2;
       overflow: hidden;
       background: var(--bg-3);
-      cursor: crosshair;
+      border: none;
+      margin: 0;
+      padding: 0;
+      cursor: pointer;
     }
-    .h-photo.landscape {
-      height: calc(70vh - 32px);
-      width: calc((70vh - 32px) * 3 / 2);
-    }
-    .h-photo.portrait {
-      height: calc(70vh - 32px);
-      width: calc((70vh - 32px) * 2 / 3);
+    @media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+      .photo-cell { cursor: none; }
     }
 
-    .h-photo picture {
+    .photo-cell picture {
       position: absolute;
       inset: 0;
       display: block;
     }
-    .h-photo img {
-      position: absolute;
-      inset: 0;
+    .photo-cell img {
       width: 100%;
       height: 100%;
       object-fit: cover;
       object-position: center;
-      filter: saturate(0.75) brightness(0.8);
+      filter: saturate(0.78) brightness(0.82);
       transform: scale(1.02);
       transition: filter 0.5s var(--ease-out-expo), transform 0.5s var(--ease-out-expo);
       display: block;
     }
-    .h-photo:hover img {
-      filter: saturate(0.92) brightness(0.96);
+    .photo-cell:hover img,
+    .photo-cell:focus-visible img {
+      filter: saturate(0.95) brightness(1);
       transform: scale(1.05);
     }
 
-    .h-photo-overlay {
+    @media (max-width: 900px) {
+      .photo-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    /* ── PHOTO LIGHTBOX ── */
+    .photo-lightbox {
+      position: fixed;
+      inset: 0;
+      z-index: 10002;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 40px;
+    }
+    .photo-lightbox.open { display: flex; }
+
+    .photo-lightbox-backdrop {
       position: absolute;
       inset: 0;
-      background: linear-gradient(to top, rgba(10,10,8,0.88) 0%, transparent 55%);
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-end;
-      padding: 20px;
-      z-index: 2;
-      transition: background 0.4s;
-    }
-    .h-photo:hover .h-photo-overlay {
-      background: linear-gradient(to top, rgba(10,10,8,0.97) 0%, rgba(10,10,8,0.3) 60%, transparent 100%);
-    }
-
-    .h-photo-region {
-      font-family: var(--font-mono);
-      font-size: 9px;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--accent);
-      margin-bottom: 4px;
+      background: rgba(6,6,5,0.94);
       opacity: 0;
-      transform: translateY(6px);
-      transition: all 0.35s var(--ease-out-expo);
+      transition: opacity 0.4s var(--ease-out-expo);
     }
-    .h-photo-caption {
-      font-family: var(--font-display);
-      font-size: clamp(14px, 1.3vw, 17px);
-      font-style: italic;
-      color: var(--text);
-      line-height: 1.2;
-      opacity: 0;
-      transform: translateY(8px);
-      transition: all 0.4s var(--ease-out-expo) 0.04s;
-    }
-    .h-photo:hover .h-photo-region,
-    .h-photo:hover .h-photo-caption {
-      opacity: 1;
-      transform: translateY(0);
-    }
+    .photo-lightbox.open .photo-lightbox-backdrop { opacity: 1; }
 
-    .h-progress-wrap {
-      position: absolute;
-      bottom: 32px;
-      left: 48px;
-      right: 48px;
-      display: flex;
-      align-items: center;
-      gap: 16px;
-    }
-    .h-progress-track {
-      height: 1px;
-      background: var(--border);
+    .photo-lightbox-img {
       position: relative;
-      width: 200px;
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+      box-shadow: 0 24px 80px rgba(0,0,0,0.6);
+      opacity: 0;
+      transform: scale(0.985);
+      transition: opacity 0.4s var(--ease-out-expo), transform 0.4s var(--ease-out-expo);
     }
-    .h-progress-fill {
-      position: absolute;
-      left: 0; top: 0;
-      height: 100%;
-      background: var(--accent-dim);
-      width: 0%;
-    }
-    .h-progress-label {
-      font-family: var(--font-mono);
-      font-size: 9px;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      color: var(--text-dim);
+    .photo-lightbox.open .photo-lightbox-img {
+      opacity: 1;
+      transform: scale(1);
     }
 
-    /* Mobile: revert to vertical wrap */
-    @media (max-width: 900px) {
-      .h-scroll-outer { height: auto; }
-      .h-scroll-sticky { position: static; height: auto; overflow: visible; }
-      .h-scroll-header { position: static; padding: 80px 24px 32px; }
-      .h-scroll-track { flex-wrap: wrap; padding: 0 24px; gap: 2px; }
-      .h-photo.landscape,
-      .h-photo.portrait { height: auto; width: calc(50% - 1px); aspect-ratio: 3/2; }
-      .h-photo img { position: static; width: 100%; height: 100%; }
-      .h-progress-wrap { display: none; }
+    .photo-lightbox-close {
+      position: absolute;
+      top: 20px;
+      right: 24px;
+      z-index: 2;
+      background: none;
+      border: none;
+      color: var(--text-dim);
+      font-size: 28px;
+      line-height: 1;
+      padding: 8px;
+      cursor: pointer;
+      transition: color 0.3s;
+    }
+    .photo-lightbox-close:hover { color: var(--accent); }
+
+    .photo-lightbox-nav {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 2;
+      background: none;
+      border: none;
+      color: var(--text-dim);
+      font-size: 40px;
+      line-height: 1;
+      padding: 16px;
+      cursor: pointer;
+      transition: color 0.3s;
+    }
+    .photo-lightbox-nav:hover { color: var(--accent); }
+    .photo-lightbox-prev { left: 8px; }
+    .photo-lightbox-next { right: 8px; }
+
+    @media (max-width: 600px) {
+      .photo-lightbox { padding: 16px; }
+      .photo-lightbox-nav { font-size: 30px; padding: 10px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .photo-lightbox-backdrop,
+      .photo-lightbox-img { transition: none !important; }
+      .photo-lightbox-img { transform: none; }
     }
 
     /* ── WORK GRID ── */
@@ -1643,159 +1614,133 @@
   </section>
 
   <!-- ── PHOTOGRAPHY ── -->
-  <section id="photography">
-    <div class="h-scroll-outer" id="hScrollOuter">
-      <div class="h-scroll-sticky">
+  <section id="photography" class="section-fade">
+    <p class="section-number reveal">—02</p>
+    <p class="section-label reveal">Photography</p>
 
-        <div class="h-scroll-header">
-          <p class="section-number">—02</p>
-          <p class="section-label">Photography</p>
-        </div>
+    <div class="photo-grid" id="photoGrid">
 
-        <div class="h-scroll-track" id="hScrollTrack">
+      <button class="photo-cell" type="button" data-full="photos/young-man-portrait.jpg" aria-label="View photograph">
+        <picture>
+          <source srcset="photos/young-man-portrait.webp" type="image/webp">
+          <img src="photos/young-man-portrait.jpg" alt="Portrait of a young man" loading="lazy">
+        </picture>
+      </button>
 
-          <div class="h-photo landscape">
-            <picture>
-              <source srcset="photos/afghanistan-gems-miners.webp" type="image/webp">
-              <img src="photos/afghanistan-gems-miners.jpg" alt="Gem miners at break, Nuristan, Afghanistan" loading="lazy">
-            </picture>
-            <div class="h-photo-overlay">
-              <span class="h-photo-region">Afghanistan · Nuristan</span>
-              <span class="h-photo-caption">Gem miners at break outside their mine</span>
-            </div>
-          </div>
+      <button class="photo-cell" type="button" data-full="photos/playground-rubble.jpg" aria-label="View photograph">
+        <picture>
+          <source srcset="photos/playground-rubble.webp" type="image/webp">
+          <img src="photos/playground-rubble.jpg" alt="A children's playground amid rubble" loading="lazy">
+        </picture>
+      </button>
 
-          <div class="h-photo landscape">
-            <picture>
-              <source srcset="photos/L1001647.webp" type="image/webp">
-              <img src="photos/L1001647.jpg" alt="Afghanistan" loading="lazy">
-            </picture>
-            <div class="h-photo-overlay">
-              <span class="h-photo-region">Afghanistan</span>
-              <span class="h-photo-caption">Caption to be added</span>
-            </div>
-          </div>
+      <button class="photo-cell" type="button" data-full="photos/bookshop-reader.jpg" aria-label="View photograph">
+        <picture>
+          <source srcset="photos/bookshop-reader.webp" type="image/webp">
+          <img src="photos/bookshop-reader.jpg" alt="A man reading in a bookshop lined with shelves" loading="lazy">
+        </picture>
+      </button>
 
-          <div class="h-photo landscape">
-            <picture>
-              <source srcset="photos/ukraine-reactor-lede.webp" type="image/webp">
-              <img src="photos/ukraine-reactor-lede.jpg" alt="Technicians in reactor hall, Kharkiv, Ukraine" loading="lazy">
-            </picture>
-            <div class="h-photo-overlay">
-              <span class="h-photo-region">Ukraine · Kharkiv</span>
-              <span class="h-photo-caption">Technicians ascending into the reactor hall</span>
-            </div>
-          </div>
+      <button class="photo-cell" type="button" data-full="photos/child-mountain-ridge.jpg" aria-label="View photograph">
+        <picture>
+          <source srcset="photos/child-mountain-ridge.webp" type="image/webp">
+          <img src="photos/child-mountain-ridge.jpg" alt="A child on a rocky ridge below snow-capped peaks" loading="lazy">
+        </picture>
+      </button>
 
-          <div class="h-photo landscape">
-            <picture>
-              <source srcset="photos/afghanistan-forest-trees.webp" type="image/webp">
-              <img src="photos/afghanistan-forest-trees.jpg" alt="Forest, Korengal Valley, Afghanistan" loading="lazy">
-            </picture>
-            <div class="h-photo-overlay">
-              <span class="h-photo-region">Afghanistan · Korengal Valley</span>
-              <span class="h-photo-caption">Trees as livelihood in Wama district</span>
-            </div>
-          </div>
+      <button class="photo-cell" type="button" data-full="photos/poppy-bulb.jpg" aria-label="View photograph">
+        <picture>
+          <source srcset="photos/poppy-bulb.webp" type="image/webp">
+          <img src="photos/poppy-bulb.jpg" alt="A hand scoring a poppy bulb" loading="lazy">
+        </picture>
+      </button>
 
-          <div class="h-photo landscape">
-            <picture>
-              <source srcset="photos/afghanistan-gems-mine-interior.webp" type="image/webp">
-              <img src="photos/afghanistan-gems-mine-interior.jpg" alt="Inside tourmaline mine, Kunar, Afghanistan" loading="lazy">
-            </picture>
-            <div class="h-photo-overlay">
-              <span class="h-photo-region">Afghanistan · Kunar</span>
-              <span class="h-photo-caption">Inside Abid's tourmaline mine near Parun</span>
-            </div>
-          </div>
+      <button class="photo-cell" type="button" data-full="photos/child-portrait-gold.jpg" aria-label="View photograph">
+        <picture>
+          <source srcset="photos/child-portrait-gold.webp" type="image/webp">
+          <img src="photos/child-portrait-gold.jpg" alt="Portrait of a young miner with a headlamp" loading="lazy">
+        </picture>
+      </button>
 
-          <div class="h-photo landscape">
-            <picture>
-              <source srcset="photos/still-field-1.webp" type="image/webp">
-              <img src="photos/still-field-1.jpg" alt="Field still from documentary production" loading="lazy">
-            </picture>
-            <div class="h-photo-overlay">
-              <span class="h-photo-region">Field</span>
-              <span class="h-photo-caption">Caption to be added</span>
-            </div>
-          </div>
+      <button class="photo-cell" type="button" data-full="photos/coal-worker.jpg" aria-label="View photograph">
+        <picture>
+          <source srcset="photos/coal-worker.webp" type="image/webp">
+          <img src="photos/coal-worker.jpg" alt="A man working at a coal seam" loading="lazy">
+        </picture>
+      </button>
 
-          <div class="h-photo landscape">
-            <picture>
-              <source srcset="photos/ukraine-reactor-core.webp" type="image/webp">
-              <img src="photos/ukraine-reactor-core.jpg" alt="Reactor core in darkness, Kharkiv, Ukraine" loading="lazy">
-            </picture>
-            <div class="h-photo-overlay">
-              <span class="h-photo-region">Ukraine · Kharkiv</span>
-              <span class="h-photo-caption">Reactor core in darkness</span>
-            </div>
-          </div>
+      <button class="photo-cell" type="button" data-full="photos/figure-on-hill.jpg" aria-label="View photograph">
+        <!-- JPEG kept — already smaller than its WebP equivalent -->
+        <img src="photos/figure-on-hill.jpg" alt="A lone figure crossing a green hillside" loading="lazy">
+      </button>
 
-          <div class="h-photo landscape">
-            <picture>
-              <source srcset="photos/afghanistan-forest-loggers.webp" type="image/webp">
-              <img src="photos/afghanistan-forest-loggers.jpg" alt="Loggers in Nuristan, Afghanistan" loading="lazy">
-            </picture>
-            <div class="h-photo-overlay">
-              <span class="h-photo-region">Afghanistan · Nuristan</span>
-              <span class="h-photo-caption">Dilaram and Sanaullah, loggers in Wama</span>
-            </div>
-          </div>
+      <button class="photo-cell" type="button" data-full="photos/elder-portrait.jpg" aria-label="View photograph">
+        <picture>
+          <source srcset="photos/elder-portrait.webp" type="image/webp">
+          <img src="photos/elder-portrait.jpg" alt="Portrait of an elderly bearded man" loading="lazy">
+        </picture>
+      </button>
 
-          <div class="h-photo landscape">
-            <picture>
-              <source srcset="photos/L1001635.webp" type="image/webp">
-              <img src="photos/L1001635.jpg" alt="Afghanistan" loading="lazy">
-            </picture>
-            <div class="h-photo-overlay">
-              <span class="h-photo-region">Afghanistan</span>
-              <span class="h-photo-caption">Caption to be added</span>
-            </div>
-          </div>
+      <button class="photo-cell" type="button" data-full="photos/clinic-children.jpg" aria-label="View photograph">
+        <picture>
+          <source srcset="photos/clinic-children.webp" type="image/webp">
+          <img src="photos/clinic-children.jpg" alt="Children being treated at a clinic" loading="lazy">
+        </picture>
+      </button>
 
-          <div class="h-photo landscape">
-            <picture>
-              <source srcset="photos/afghanistan-forest-council.webp" type="image/webp">
-              <img src="photos/afghanistan-forest-council.jpg" alt="Tribal council meeting, Korengal Valley, Afghanistan" loading="lazy">
-            </picture>
-            <div class="h-photo-overlay">
-              <span class="h-photo-region">Afghanistan · Korengal Valley</span>
-              <span class="h-photo-caption">Tribal council meeting</span>
-            </div>
-          </div>
+      <button class="photo-cell" type="button" data-full="photos/miner-headlamp.jpg" aria-label="View photograph">
+        <picture>
+          <source srcset="photos/miner-headlamp.webp" type="image/webp">
+          <img src="photos/miner-headlamp.jpg" alt="A miner's headlamp in the dark" loading="lazy">
+        </picture>
+      </button>
 
-          <div class="h-photo landscape">
-            <!-- JPEG kept — this image is already smaller than its WebP equivalent -->
-            <img src="photos/ukraine-reactor-crater.jpg" alt="Rocket strike crater, Kharkiv, Ukraine" loading="lazy">
-            <div class="h-photo-overlay">
-              <span class="h-photo-region">Ukraine · Kharkiv</span>
-              <span class="h-photo-caption">Crater from March 2022 rocket strike</span>
-            </div>
-          </div>
+      <button class="photo-cell" type="button" data-full="photos/vendor-goods.jpg" aria-label="View photograph">
+        <picture>
+          <source srcset="photos/vendor-goods.webp" type="image/webp">
+          <img src="photos/vendor-goods.jpg" alt="A bearded man with sacks of goods" loading="lazy">
+        </picture>
+      </button>
 
-          <div class="h-photo landscape">
-            <picture>
-              <source srcset="photos/still-field-2.webp" type="image/webp">
-              <img src="photos/still-field-2.jpg" alt="Field still from documentary production" loading="lazy">
-            </picture>
-            <div class="h-photo-overlay">
-              <span class="h-photo-region">Field</span>
-              <span class="h-photo-caption">Caption to be added</span>
-            </div>
-          </div>
+      <button class="photo-cell" type="button" data-full="photos/stamped-hand.jpg" aria-label="View photograph">
+        <picture>
+          <source srcset="photos/stamped-hand.webp" type="image/webp">
+          <img src="photos/stamped-hand.jpg" alt="An inked stamp on an open palm" loading="lazy">
+        </picture>
+      </button>
 
-        </div><!-- /h-scroll-track -->
+      <button class="photo-cell" type="button" data-full="photos/girls-blue-headscarf.jpg" aria-label="View photograph">
+        <picture>
+          <source srcset="photos/girls-blue-headscarf.webp" type="image/webp">
+          <img src="photos/girls-blue-headscarf.jpg" alt="A girl in a blue headscarf" loading="lazy">
+        </picture>
+      </button>
 
-        <div class="h-progress-wrap">
-          <div class="h-progress-track">
-            <div class="h-progress-fill" id="hProgressFill"></div>
-          </div>
-          <span class="h-progress-label" id="hProgressLabel">Scroll to explore</span>
-        </div>
+      <button class="photo-cell" type="button" data-full="photos/man-in-blanket.jpg" aria-label="View photograph">
+        <picture>
+          <source srcset="photos/man-in-blanket.webp" type="image/webp">
+          <img src="photos/man-in-blanket.jpg" alt="A man wrapped in a blanket" loading="lazy">
+        </picture>
+      </button>
 
-      </div><!-- /h-scroll-sticky -->
-    </div><!-- /h-scroll-outer -->
+      <button class="photo-cell" type="button" data-full="photos/hands-exchange.jpg" aria-label="View photograph">
+        <picture>
+          <source srcset="photos/hands-exchange.webp" type="image/webp">
+          <img src="photos/hands-exchange.jpg" alt="Hands exchanging objects" loading="lazy">
+        </picture>
+      </button>
+
+    </div><!-- /photo-grid -->
   </section>
+
+  <!-- ── PHOTO LIGHTBOX ── -->
+  <div id="photoLightbox" class="photo-lightbox" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Photograph viewer">
+    <div class="photo-lightbox-backdrop" data-close></div>
+    <button class="photo-lightbox-close" type="button" aria-label="Close">&times;</button>
+    <button class="photo-lightbox-nav photo-lightbox-prev" type="button" aria-label="Previous photograph">&#8249;</button>
+    <img class="photo-lightbox-img" id="photoLightboxImg" src="" alt="">
+    <button class="photo-lightbox-nav photo-lightbox-next" type="button" aria-label="Next photograph">&#8250;</button>
+  </div>
 
   <!-- ── WRITING ── -->
   <section id="writing" class="section-fade">
@@ -2008,7 +1953,6 @@
       if (!scrollTicking) {
         requestAnimationFrame(() => {
           updateProgress();
-          updateHScroll();
           updateNav();
           updateActiveNav();
           updateHeroParallax();
@@ -2202,56 +2146,61 @@
       aboutSlideObserver.observe(aboutPortrait);
     }
 
-    // ── Photography horizontal scroll ──
-    const hOuter = document.getElementById('hScrollOuter');
-    const hTrack = document.getElementById('hScrollTrack');
-    const hFill  = document.getElementById('hProgressFill');
-    const hLabel = document.getElementById('hProgressLabel');
+    // ── Photography grid + lightbox ──
+    const photoGrid     = document.getElementById('photoGrid');
+    const photoLightbox = document.getElementById('photoLightbox');
+    const photoLbImg    = document.getElementById('photoLightboxImg');
+    const photoCells    = photoGrid ? Array.from(photoGrid.querySelectorAll('.photo-cell')) : [];
+    let   photoIndex    = 0;
+    let   photoLastFocus = null;
 
-    function getHScrollProgress() {
-      const scrollY = window.scrollY;
-      const winH    = window.innerHeight;
-      const start   = hOuter.offsetTop;
-      const end     = hOuter.offsetTop + hOuter.offsetHeight - winH;
-      return { progress: Math.max(0, Math.min(1, (scrollY - start) / (end - start))), start, end };
+    function showPhoto(i) {
+      if (!photoCells.length) return;
+      photoIndex = (i + photoCells.length) % photoCells.length;
+      const cell = photoCells[photoIndex];
+      const img  = cell.querySelector('img');
+      photoLbImg.src = cell.getAttribute('data-full');
+      photoLbImg.alt = img ? img.alt : '';
     }
 
-    function updateHScroll() {
-      if (!hOuter || !hTrack) return;
-      if (window.innerWidth <= 900) {
-        hTrack.style.transform = '';
-        return;
-      }
-      const { progress } = getHScrollProgress();
-      const maxTx = hTrack.scrollWidth - window.innerWidth + 96;
-      hTrack.style.transform = `translateX(-${progress * maxTx}px)`;
-      if (hFill)  hFill.style.width = (progress * 100) + '%';
-      if (hLabel) {
-        const total = hTrack.children.length;
-        const cur   = Math.round(progress * total);
-        hLabel.textContent = cur > 0 ? `${cur} / ${total}` : 'Scroll to explore';
-      }
+    function openPhoto(i) {
+      if (!photoLightbox) return;
+      photoLastFocus = document.activeElement;
+      showPhoto(i);
+      photoLightbox.classList.add('open');
+      photoLightbox.setAttribute('aria-hidden', 'false');
+      document.body.classList.add('lightbox-open');
+      photoLightbox.querySelector('.photo-lightbox-close').focus();
     }
 
-    // Keyboard navigation for photography horizontal scroll
-    document.addEventListener('keydown', e => {
-      if (!hOuter || !hTrack || window.innerWidth <= 900) return;
-      const rect = hOuter.getBoundingClientRect();
-      // Only intercept if photo section is the active scroll zone
-      if (rect.bottom < 0 || rect.top > window.innerHeight) return;
-      if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
-      e.preventDefault();
-      const total = hTrack.children.length;
-      const { progress, start, end } = getHScrollProgress();
-      const step  = 1 / (total - 1);
-      const cur   = Math.round(progress / step);
-      const next  = e.key === 'ArrowRight' ? Math.min(total - 1, cur + 1) : Math.max(0, cur - 1);
-      const targetY = start + (next * step) * (end - start);
-      window.scrollTo({ top: targetY, behavior: 'smooth' });
+    function closePhoto() {
+      if (!photoLightbox) return;
+      photoLightbox.classList.remove('open');
+      photoLightbox.setAttribute('aria-hidden', 'true');
+      document.body.classList.remove('lightbox-open');
+      photoLbImg.src = '';
+      if (photoLastFocus && photoLastFocus.focus) photoLastFocus.focus();
+    }
+
+    photoCells.forEach((cell, i) => {
+      cell.addEventListener('click', () => openPhoto(i));
     });
 
-    window.addEventListener('resize', () => { updateHScroll(); updateActiveNav(); }, { passive: true });
-    updateHScroll();
+    if (photoLightbox) {
+      photoLightbox.querySelector('.photo-lightbox-close').addEventListener('click', closePhoto);
+      photoLightbox.querySelector('[data-close]').addEventListener('click', closePhoto);
+      photoLightbox.querySelector('.photo-lightbox-prev').addEventListener('click', () => showPhoto(photoIndex - 1));
+      photoLightbox.querySelector('.photo-lightbox-next').addEventListener('click', () => showPhoto(photoIndex + 1));
+
+      document.addEventListener('keydown', e => {
+        if (!photoLightbox.classList.contains('open')) return;
+        if (e.key === 'Escape')      { e.preventDefault(); closePhoto(); }
+        else if (e.key === 'ArrowLeft')  { e.preventDefault(); showPhoto(photoIndex - 1); }
+        else if (e.key === 'ArrowRight') { e.preventDefault(); showPhoto(photoIndex + 1); }
+      });
+    }
+
+    window.addEventListener('resize', () => { updateActiveNav(); }, { passive: true });
 
     // ── Nav hide/show on scroll ──
     let lastY = 0;
